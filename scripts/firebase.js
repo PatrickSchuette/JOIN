@@ -5,7 +5,8 @@ let todos = [];
  * This variable includes the url of firebase where the datas of project are stored
  * 
  */
-const BASE_URL = 'https://remotestorage-162fc-default-rtdb.europe-west1.firebasedatabase.app/';
+// const BASE_URL = 'https://remotestorage-162fc-default-rtdb.europe-west1.firebasedatabase.app/';
+const BASE_URL = 'https://join-cd262-default-rtdb.europe-west1.firebasedatabase.app/';
 
 /** loads all useres that are stored in the database
  * @param {string} path ky of the first Level of database
