@@ -13,13 +13,21 @@
             checkActiveUser();
         }
 
-        function checkActiveUser() {
-            if (sessionStorage.getItem('loggedInUser')) {
-                window.location.href = 'html/summary.html';
-            } else {
-                window.location.href = '/html/login.html';
-            }
-        }
+		function checkActiveUser() {
+			const base = getBasePath(); // z. B. "/JOIN"
+
+			if (sessionStorage.getItem('loggedInUser')) {
+				window.location.href = `${base}/html/summary.html`;
+			} else {
+				window.location.href = `${base}/html/login.html`;
+			}
+		}
+
+		function getBasePath() {
+			const path = window.location.pathname;
+			const parts = path.split('/').filter(Boolean);
+			return '/' + parts[0];
+		}
     </script>
 
 </head>
