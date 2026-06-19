@@ -13,15 +13,15 @@
             checkActiveUser();
         }
 
-		function checkActiveUser() {
-			const base = getBasePath(); // z. B. "/JOIN"
-
-			if (sessionStorage.getItem('loggedInUser')) {
-				window.location.href = `${base}/html/summary.html`;
-			} else {
-				window.location.href = `${base}/html/login.html`;
+			function checkActiveUser() {
+				// Falls das Projekt im Hauptverzeichnis des Live Servers liegt:
+				if (sessionStorage.getItem('loggedInUser')) {
+					window.location.href = "/html/summary.html";
+				} else {
+					window.location.href = "/html/login.html";
+				}
 			}
-		}
+		
 
 		function getBasePath() {
 			const path = window.location.pathname;

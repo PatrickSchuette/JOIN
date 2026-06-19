@@ -34,6 +34,7 @@
   <script src="../scripts/templates.js" defer></script>
 </head>
 <body>
+
   <header>
     <nav>
       <img class="mobile-navbar-logo" src="../assets/img/join_logo.svg" alt="The logo of the application" />
@@ -58,6 +59,7 @@
       </div>
     </nav>
   </header>
+
   <aside>
     <img class="sidebar-logo" src="../assets/img/join_logo_white.svg" alt="The logo of the app JOIN" />
     <div class="sidebar-components">
@@ -84,7 +86,9 @@
       <a href="legal-notice.html">Legal Notice</a>
     </div>
   </aside>
+
   <div id="overlay_container" class="overlay-container"></div>
+
   <main>
     <div class="mainContent">
       <div class="boardHeader">
@@ -108,7 +112,19 @@
           </button>
         </div>
       </div>
+
       <div class="board-content-main" id="board-Content">
+
+        <section id="triage" class="column">
+          <div class="columnHeader">
+            <h2>Triage</h2>
+          </div>
+          <div class="drag-area" id="boardTriage" ondrop="moveTo('boardTriage', event)"
+            ondragleave="removePreview('boardTriage', event)" ondragenter="renderTaskPreview(event)"
+            ondragover="allowDrop(event, 'boardTriage')">
+          </div>
+        </section>
+
         <section id="toDo" class="column">
           <div class="columnHeader">
             <h2>To do</h2>
@@ -119,6 +135,7 @@
             ondragover="allowDrop(event, 'boardToDo')">
           </div>
         </section>
+
         <section id="inProgress" class="column">
           <div class="columnHeader">
             <h2>In progress</h2>
@@ -129,6 +146,7 @@
             ondragover="allowDrop(event, 'boardProgress')">
           </div>
         </section>
+
         <section id="Feedback" class="column">
           <div class="columnHeader">
             <h2>Await Feedback</h2>
@@ -139,6 +157,7 @@
             ondragover="allowDrop(event, 'boardFeedback')">
           </div>
         </section>
+
         <section id="Done" class="column">
           <div class="columnHeader">
             <h2>Done</h2>
@@ -149,7 +168,9 @@
         </section>
       </div>
     </div>
+
      <dialog class="add-task-dialog-board" id="dialaogBoardTask">
+
       <section class="main-DialogContent">
         <div class="header-show-task">
           <div id="taskCategory"></div>
@@ -158,6 +179,7 @@
             <button id="closeDialogBtn" class="close-btn" onclick="closeDialog()">x</button>
           </div>
         </div>
+
         <section class="page-container">
           <section class="task-container">
             <div class="field-description">
@@ -279,7 +301,9 @@
         </div>
       </section>
     </dialog>
+
   </main>
+
   <footer>
     <a id="summary_tab_mobile" href="summary.html" class="footer-menu-elements" onclick="setMobileTabFocus('summary')">
       <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
