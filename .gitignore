@@ -18,3 +18,10 @@ _site/
 Gemfile.lock
 
 .env
+
+
+# Node dependencies (npm)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

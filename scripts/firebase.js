@@ -237,6 +237,33 @@ function getUserData(usersObj) {
  */
 let tasks = [];
 
+/**
+ * Überprüft dynamisch alle Felder eines Objekts (inkl. verschachtelter Objekte/Arrays).
+ * Vergleicht jede Zeichenkette mit der gereinigten Version von DOMPurify.
+ * 
+ * @param {Object|Array|string} input - Das zu prüfende Element.
+ * @returns {boolean} True, wenn alles sauber ist. False, wenn Schadcode entdeckt wurde.
+ */
+function checkDOM(input) {
+  if (typeof input === 'string') {
+    const cleanStr = DOMPurify.sanitize(input);
+    if (input !== cleanStr) {
+      alert("Sicherheits-Check fehlgeschlagen: Unerlaubter Code in den Daten entdeckt!");
+      return false;
+    }
+    return true;
+  }
+  if (input && typeof input === 'object') {
+    for (const key in input) {
+      if (input.hasOwnProperty(key)) {
+        if (!checkDOM(input[key])) {
+          return false;
+        }
+      }
+    }
+  }
+  return true; 
+}
 
 /**
  * Uploads a task object to Firebase using a POST request.
@@ -246,6 +273,11 @@ let tasks = [];
  * @returns {Promise<Object>} A promise resolving to the Firebase response JSON.
  */
 async function uploadTaskToFirebase(path = "", task = {}) {
+
+    if (!checkDOM(task)) {
+        return null;
+      }
+
   let response = await fetch(BASE_URL + path + ".json", {
     method: "POST",
     headers: {
