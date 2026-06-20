@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JOIN</title>
+    <link rel="shortcut icon" href="../assets/img/join_logo.svg" type="image/x-icon" />
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles/login.css" />
+    <link rel="stylesheet" href="../style.css" />
+    <!-- JS files -->
+    <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+    <script src="../script.js" defer></script>
+    <script src="../scripts/firebase.js" defer></script>
+    <script src="../scripts/login.js" defer></script>
+</head>
+
+<body onload="onloadFunc()">
+    <!-- Splash-Logo -->
+    <div class="maxWidth">
+        <div class="splashWrapper">
+            <div class="logoSplash">
+                <img src="../assets/img/join_logo.svg" alt="Join Logo" class="logoSplashImg onlyDesktop" />
+                <img src="../assets/img/join_logo_white.svg" alt="Join Logo" class="logoSplashImg onlyMobile" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content, firstly hidden-->
+    <div id="pageContent" class="d-None">
+        <header class="headerContent">
+            <div class="logo">
+                <img id="headerLogo" src="../assets/img/join_logo.svg" alt="Join Logo" class="logo" />
+            </div>
+        </header>
+
+        <main class="mainContent">
+            <article class="content">
+                <nav class="top-navigation">
+                    <a routerlink="/hero" aria-label="Back to hero page" class="back-link" href="./welcome.html">
+                        <img src="../assets/img/arrow-left-line.svg" alt="arrow-back">
+                    </a>
+
+                    <div id="request-counter-container" class="request-count-status">
+                        <span id="current-requests-count">0</span> of 10 requests used
+                    </div>
+                </nav>
+
+                <header class="welcome-header">
+                    <h1>Welcome</h1>
+                </header>
+        
+        
+                <!-- ################ no Limit ######################### -->
+                <div id="state-available" class="stakeholder-state">
+                    <section class="info-section">
+                        <div class="text-content">
+                            <h2>Easily create a ticket by sending an email — no extra steps needed.</h2>
+        
+                            <div class="description">
+                                <p>On this platform, you can submit your feature requests via email. Our AI system will
+                                    automatically generate a ticket with a deadline and priority level.</p>
+                                <p>A total of 10 requests can be created per day. After this limit, emails can still be sent,
+                                    but they will be manually reviewed by our team instead of generating AI tickets.</p>
+                            </div>
+                        </div>
+
+                        <figure class="image-container">
+                            <img src="../assets/img/stackholder.svg" alt="Welcome process with AI ticket creation">
+                        </figure>
+                    </section>
+                </div>
+
+        
+                <!-- ################ Limit ######################### -->
+                <div id="state-limit-reached" class="stakeholder-state" style="display: none;">
+                    <section class="info-section">
+                        <div class="text-content">
+                            <div class="limit-warning-banner">
+                                The daily 10-request limit has been reached!
+                            </div>
+        
+                            <div class="description">
+                                <p>Need more? No worries — you can still send emails, but our team will review them manually
+                                    instead of using AI to create tickets.</p>
+                            </div>
+                        </div>
+
+                        <figure class="image-container">
+                            <img src="../assets/img/stackholder-limit.svg" alt="Welcome process manual review">
+                        </figure>
+                    </section>
+                </div>
+
+                <section class="action-section">
+                    <button class="btn btn-primary" aria-label="Create Request">Create request</button>
+                </section>
+        
+            </article>
+        </main>
+        
+        
+        <footer>
+            <div class="loginFooter">
+                <a href="privacy-policy-login.html"> Privacy Policy</a>
+                <a href="legal-notice-login.html">Legal notice</a>
+            </div>
+        </footer>
+    </div>
+    <div id="orientation_warning" class="landscape-view-warning d-none">
+        <p>JOIN works best in portrait mode. Please rotate your device!</p>
+        <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view" />
+    </div>
+</body>
+
+</html>
