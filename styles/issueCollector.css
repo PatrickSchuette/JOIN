@@ -1,48 +1,102 @@
-/* Container für die beiden Auswahlmöglichkeiten */
-.options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-@media (min-width: 768px) {
-    .options-container {
-        flex-direction: row;
-        justify-content: center;
-        align-items: stretch;
-    }
-
-    .options-container>div {
-        flex: 1;
-        max-width: 400px;
-    }
-}
-
+.content,
 .welcome-content {
     background-color: #FFFFFF;
     border-radius: 24px;
-    padding: 48px;
+    padding: 32px 24px;
     max-width: 680px;
     width: 90%;
     margin: 40px auto;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #2D3748;
+    box-sizing: border-box;
+}
+
+.welcome-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome-content p {
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: center;
+    color: #4A5568;
+    margin: 0 0 32px 0;
+    max-width: 500px;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+}
+
+.options-container>div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.option-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #1A202C;
+}
+
+.option-header img {
+    width: 24px;
+    height: 24px;
+}
+
+.options-container a {
+    text-decoration: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.top-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.back-link img {
+    width: 24px;
+    height: 24px;
+}
+
+.request-count-status {
+    color: #3182CE;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .welcome-header h1 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
     color: #1A202C;
     text-align: center;
-    margin-bottom: 24px;
+    margin: 0 0 32px 0;
     position: relative;
     padding-bottom: 12px;
+    width: 100%;
 }
 
 .welcome-header h1::after {
@@ -57,39 +111,6 @@
     border-radius: 2px;
 }
 
-.welcome-content p {
-    font-size: 15px;
-    line-height: 1.5;
-    text-align: center;
-    color: #4A5568;
-    margin-bottom: 40px;
-}
-
-.top-navigation {
-    display: flex;
-    justify-content: space-between;
-    /* Drückt Pfeil nach links, Zähler nach rechts */
-    align-items: center;
-    width: 100%;
-    padding: 16px 0;
-    margin-bottom: 24px;
-}
-
-/* Basis-Farbe für den Zähler (Blau im Normalzustand) */
-.request-count-status {
-    color: #3182CE;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* Diese Klasse wird später per JS an das Container-ID angehängt */
-.request-count-status.limit-reached {
-    color: #E53E3E;
-    /* Wechselt zu Rot, wenn das Limit voll ist */
-    font-weight: 700;
-}
-
-/* Das Warnbanner im Limit-Zustand */
 .limit-warning-banner {
     background-color: #FDE8E8;
     color: #9B2C2C;
@@ -97,6 +118,156 @@
     border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    order: 1;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+.text-content {
+    display: contents;
+}
+
+.text-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 16px 0;
+    color: #1A202C;
+    text-align: center;
+    order: 2;
+}
+
+.image-container {
+    margin: 16px 0;
+    width: 100%;
+    max-width: 280px;
+    display: flex;
+    justify-content: center;
+    order: 3;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.description {
+    width: 100%;
+    text-align: center;
+    order: 4;
+}
+
+.description p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #4A5568;
+    margin: 0 0 16px 0;
+}
+
+.description p:last-child {
+    margin-bottom: 0;
+}
+
+.action-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 32px;
+}
+
+@media (min-width: 768px) {
+    .options-container {
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+        gap: 32px;
+    }
+
+    .options-container>div {
+        max-width: 240px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .content {
+        background-color: transparent;
+        box-shadow: none;
+        max-width: 1200px;
+        width: 100%;
+        padding: 40px 80px;
+        margin: 0 auto;
+        border-radius: 0;
+    }
+
+    .top-navigation {
+        position: relative;
+        margin-bottom: 48px;
+    }
+
+    .content .welcome-header h1 {
+        text-align: left;
+        font-size: 64px;
+        margin-bottom: 48px;
+        padding-bottom: 0;
+    }
+
+    .content .welcome-header h1::after {
+        display: none;
+    }
+
+    .info-section {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 80px;
+    }
+
+    .text-content {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
+        max-width: 600px;
+    }
+
+    .text-content h2 {
+        font-size: 24px;
+        margin-bottom: 24px;
+        text-align: left;
+        order: unset;
+    }
+
+    .image-container {
+        flex: 1;
+        max-width: 450px;
+        margin: 0;
+        order: unset;
+    }
+
+    .description {
+        text-align: left;
+        order: unset;
+    }
+
+    .description p {
+        font-size: 16px;
+    }
+
+    .action-section {
+        justify-content: flex-start;
+        margin-top: 40px;
+        max-width: 600px;
+    }
 }
