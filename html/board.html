@@ -176,6 +176,7 @@
         <div class="header-show-task">
           <div id="taskCategory"></div>
           <h1 class="taskHeader">Add Task</h1>
+          <div id="aiGenerated"></div>
           <div class="close-btn-container">
             <button id="closeDialogBtn" class="close-btn" onclick="closeDialog()">x</button>
           </div>
@@ -183,6 +184,7 @@
 
         <section class="page-container">
           <section class="task-container">
+
             <div class="field-description">
               <label for="task_title" class="notForShow">Title<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="text"
@@ -190,12 +192,22 @@
               <span id="title_indication" class="title-indication" style="display: none;"></span>
               <div class="alert-container"></div>
             </div>
+
             <div class="field-description">
               <label for="task_description" class="notForShow">Description</label>
               <textarea onfocus="handleTextarea(true)" onblur="handleTextarea(false)" name="description"
                 id="task_description" placeholder="Enter a description" style="display: block;"></textarea>
               <span id="description_indication" class="description-indication" style="display: none;"></span>
             </div>
+
+            <div class="creatorContent">
+              <div class="field-description">
+                <label class="color-description" for="creator">Creator:<span class="required">*</span></label>
+                <div id="tagSymbol"> </div>
+                <span id="creator" class="date-indication">CreatorName</span>
+                <div id="creatorContact"> </div>
+              </div>
+          </div>
             <div class="field-description">
               <label class="color-description" for="due_date">Due date:<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
@@ -203,10 +215,11 @@
               <span id="date_indication" class="date-indication" style="display: none;"></span>
               <div class="alert-container"></div>
             </div>
+
           </section>
           <div class="separation-bar"></div>
           <div class="priority-container">
-            <section class="priority">
+            <section class="priority">              
               <div class="field-description">
                 <span class="color-description">Priority</span>
                 <span id="taskPriority" class="task-priority"></span>
@@ -226,6 +239,7 @@
                 </div>
               </div>
             </section>
+
             <section class="assigned">
               <div id="assigned_box" class="field-description assigned-to">
                 <span class="color-description">Assigned to</span>
@@ -241,6 +255,7 @@
                 <div id="contact_icons" class="contacts-icons"></div>
               </div>
             </section>
+
             <section class="category">
               <div class="field-description category">
                 <span>Category<span class="required">*</span></span>
@@ -259,6 +274,7 @@
                 <div class="alert-container"></div>
               </div>
             </section>
+
             <section class="subtask">
               <div class="subtask-field-description">
                 <label class="color-description" for="subtask">Subtasks</label>
@@ -277,8 +293,10 @@
                 </div>
               </div>
             </section>
+
         </section>
         <p class="required-mobile"><span>*</span>This field is required</p>
+
         <section class="bottom-container">
            <p class="required-desktop"><span class="required">*</span>This field is required</p>
           <div id="buttons_dialog" class="buttons">

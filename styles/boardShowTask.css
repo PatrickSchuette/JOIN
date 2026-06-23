@@ -402,6 +402,10 @@ textarea {
     word-break: break-word;
 }
 
+.creatorContent{
+    display: block;
+}
+
 @media(max-width:650px){
     #dialaogBoardTask{
         margin-left: 8px;

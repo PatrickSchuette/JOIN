@@ -91,6 +91,10 @@
     margin-right: 8px;
 }
 
+.creatorContent {
+    display: none;
+}
+
 @media(max-width: 1290px) {
     .add-task-dialog-board .buttons {
         width: 40%;

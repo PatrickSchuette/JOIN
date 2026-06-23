@@ -18,6 +18,7 @@ async function onloadFuncContact() {
 
     renderContacts(contactList, arrOfContacts); 
     renderActiveAvatar();
+    checkUrlForContact();
 }
 
 /**
@@ -174,4 +175,23 @@ function goBackToContactsList(){
     contentContactRef.style = "display:none";
     contentContactslistRef.classList.remove('hidden');
     showActivatedContactInList(joinContacts, activatedContact=0);
+}
+
+/**
+ * Extends the contact page initialization to check for a specific contact email in the URL.
+ * If found, automatically triggers the display function for that contact.
+ */
+function checkUrlForContact() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const contactMail = urlParams.get('contactMail');
+
+  if (contactMail) {
+    // Rufe deine Funktion auf und übergib die E-Mail-Adresse
+    showClickedContact(contactMail);
+    
+    // Optional: Bereinigt die URL-Leiste im Browser, damit beim Neuladen 
+    // der Kontakt nicht permanent wieder geöffnet wird
+    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+  }
 }

@@ -312,6 +312,10 @@ textarea {
     display: none;
 }
 
+.creatorContent {
+    display: none;
+}
+
 @media(max-width: 950px) {
 
     .txt-img span,

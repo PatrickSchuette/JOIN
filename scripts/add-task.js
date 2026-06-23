@@ -29,12 +29,17 @@ window.onload = async () => {
  * @returns {string[]} return.assignedTo - Array of contact identifiers (e.g., email addresses) assigned to the task.
  * @returns {string} return.category - The selected category label for the task.
  * @returns {string[]} return.subtasks - Array of subtasks, each represented as a trimmed string. 
+ * @returns {string} return.creatorName - The name of the person who created the task.
+ * @returns {string} return.createdBy - The email address of the person who created the task.
+ * @returns {string} return.creatorType - The origin type of the creator (always "intern").
  */
 function getTaskInput() {
   const subtaskElements = document.querySelectorAll('#subtask_list .subtask-text');
   const subtasks = Array.from(subtaskElements).map((el, index) => {
     return { task: el.textContent.trim() };
+  const userString = sessionStorage.getItem('loggedInUser');
   });
+  const creator = setCreatorPerson();
   return {
     title: document.getElementById("task_title").value.trim(),
     description: document.getElementById("task_description").value.trim(),
@@ -42,9 +47,37 @@ function getTaskInput() {
     priority: selectedPriority,
     assignedTo: Array.from(selectedContacts),
     category: document.getElementById("selected_category").textContent.trim(),
-    subtasks: subtasks
+    subtasks: subtasks,
+    creatorName: creator.name,
+    createdBy: creator.mail,
+    creatorType: "intern"
   };
 }
+
+/**
+ * Collects and returns the current task input values from the form elements.
+ * Extracts title, description, due date, priority, assigned contacts, category, and subtasks.
+ * 
+ * @function getTaskInput
+ * @returns {TaskData} The complete task object ready for storage or API transmission.
+ */
+function setCreatorPerson() {
+  const userString = sessionStorage.getItem('loggedInUser');
+
+  if (userString) {
+    const user = JSON.parse(userString);
+    return {
+      mail: user.mail, 
+      name: user.name  
+    };
+  }
+
+  return {
+    mail: "guest@test.de",
+    name: "Guest"
+  };
+}
+
 
 /**
  * Contols the date a user can select from the calender
@@ -98,6 +131,7 @@ function resetBasicFields(){
   document.getElementById("contact_icons").innerHTML = "";
   document.getElementById("selected_category").textContent = "Select task category";
   document.getElementById("subtask").value = "";
+  document.getElementById("creator").textContent="";
   selectedContacts.clear();
 }
 

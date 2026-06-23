@@ -17,9 +17,12 @@ const dialogBoardTaskRev = {
     subtask_wrapper: document.getElementById("subtask_wrapper"),
     subtask: document.getElementById("subtask"),
     subtask_actions: document.getElementById("subtask_actions"),
-    subtask_list: document.getElementById("subtask_list")
+    subtask_list: document.getElementById("subtask_list"),
+    creator: document.getElementById("creator"),
+    aiGenerated: document.getElementById("aiGenerated"),
+    tagSymbol: document.getElementById("tagSymbol"),
+    creatorContact: document.getElementById("creatorContact"),
 }
-
 //########################### Rendering #######################
 /**
  * Generates avatar HTML for assigned users.
@@ -102,6 +105,7 @@ function fillDialogFields(task) {
     dialogBoardTaskRev.task_description.value = task.description;
     autoResizeTextarea(dialogBoardTaskRev.task_description);
     dialogBoardTaskRev.due_date.value = task.date;
+    dialogBoardTaskRev.creator.innerHTML = task.creator;
 
     getAllSubtask(task.subtasks);
     changeDOMIfShowTaskIsOpen(actualToDo);
@@ -114,6 +118,9 @@ function fillDialogFields(task) {
     document.getElementById("taskCategory").innerHTML =
         `<div class="taskStatus ${task.category.toLowerCase().replace(/ /g, "-")}">${task.category}</div>`;
     document.getElementById('selected_category').textContent = task.category;
+
+    console.log(task);
+    generateIssueCollector(task.creatorType, task.creatorMail);
 }
 
 /** Configures dialog action buttons */
@@ -250,4 +257,17 @@ function autoResizeTextarea(element) {
  */
 async function timeout(ms){
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function generateIssueCollector(creatorType, email){
+    if (creatorType == "intern") {
+        dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagMember.svg' alt='Intern Member' />"
+        dialogBoardTaskRev.creatorContact.innerHTML = ` <a href="./contacts.html?contactMail=${email}" aria-label="See Profile">
+            <img src="../assets/img/seeProfile.svg" alt="see Profile" /> </a> `;
+        dialogBoardTaskRev.aiGenerated.innerHTML = ""
+    } else {
+        dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagExtern.svg' alt='Extern Member' />"
+        dialogBoardTaskRev.creatorContact.innerHTML =  `<a href="mailto:${email}" aria-label="See Profile"><img src='../assets/img/sendEmail.svg' alt='send Email' /></a>`
+        dialogBoardTaskRev.aiGenerated.innerHTML = "<img src='../assets/img/Note _ KI generiert.svg' alt='AI Generated' />"
+    }
 }
