@@ -1,7 +1,7 @@
 /** Logot the current USer from seassion and fowerd to the login Page */
 function logOut(){
     sessionStorage.clear();
-    window.location.href = './login.html'
+    window.location.href = './welcome.html'
 }
 
 /**

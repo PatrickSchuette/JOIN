@@ -14,22 +14,12 @@
     <script src="../node_modules/dompurify/dist/purify.min.js"></script>
     <script src="../script.js" defer></script>
     <script src="../scripts/firebase.js" defer></script>
-    <script src="../scripts/login.js" defer></script>
+    <script src="../scripts/stakeholder.js" defer></script>
 </head>
 
-<body onload="onloadFunc()">
-    <!-- Splash-Logo -->
-    <div class="maxWidth">
-        <div class="splashWrapper">
-            <div class="logoSplash">
-                <img src="../assets/img/join_logo.svg" alt="Join Logo" class="logoSplashImg onlyDesktop" />
-                <img src="../assets/img/join_logo_white.svg" alt="Join Logo" class="logoSplashImg onlyMobile" />
-            </div>
-        </div>
-    </div>
-
+<body onload="onloadStakeholderFunc()">
     <!-- Main content, firstly hidden-->
-    <div id="pageContent" class="d-None">
+    <div id="pageContent">
         <header class="headerContent">
             <div class="logo">
                 <img id="headerLogo" src="../assets/img/join_logo.svg" alt="Join Logo" class="logo" />
@@ -44,7 +34,7 @@
                     </a>
 
                     <div id="request-counter-container" class="request-count-status">
-                        <span id="current-requests-count">0</span> of 10 requests used
+                        <span id="current-requests-count" style="color: inherit;">0</span> of 10 requests used
                     </div>
                 </nav>
 

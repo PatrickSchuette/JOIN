@@ -88,6 +88,12 @@
     font-weight: 500;
 }
 
+.request-count-status.limit-reached {
+    color: #9B2C2C;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
 .welcome-header h1 {
     font-size: 32px;
     font-weight: 700;

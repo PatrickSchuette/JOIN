@@ -14,11 +14,10 @@
         }
 
 			function checkActiveUser() {
-				// Falls das Projekt im Hauptverzeichnis des Live Servers liegt:
 				if (sessionStorage.getItem('loggedInUser')) {
-					window.location.href = "/html/summary.html";
+					window.location.href = "./html/summary.html";
 				} else {
-					window.location.href = "/html/login.html";
+					window.location.href = "./html/welcome.html";
 				}
 			}
 		

@@ -69,13 +69,17 @@ async function deleteTask() {
 function getMobileDisplayMoveStatusColumn(status) {
     switch (status) {
         case 'boardToDo':
-            return { moveTaskUp: null, moveTaskDown: 'boardProgress' }
+            return { moveTaskUp: null,           moveTaskDown: 'boardProgress' };
         case 'boardProgress':
-            return { moveTaskUp: 'boardToDo', moveTaskDown: 'boardFeedback' }
+            return { moveTaskUp: 'boardToDo',    moveTaskDown: 'boardFeedback' };
         case 'boardFeedback':
-            return { moveTaskUp: 'boardProgress', moveTaskDown: 'boardDone' }
+            return { moveTaskUp: 'boardProgress', moveTaskDown: 'boardDone' };
         case 'boardDone':
-            return { moveTaskUp: 'boardFeedback', moveTaskDown: null }
+            return { moveTaskUp: 'boardFeedback', moveTaskDown: null };
+        case 'boardTriage':
+            return { moveTaskUp: null,           moveTaskDown: 'boardToDo' };
+        default:
+            return { moveTaskUp: null,           moveTaskDown: null };
     }
 }
 
@@ -87,13 +91,17 @@ function getMobileDisplayMoveStatusColumn(status) {
 function getMobileDisplayMoveStatus(status) {
     switch (status) {
         case 'boardToDo':
-            return 'To Do'
+            return 'To Do';
         case 'boardProgress':
-            return 'Progress'
+            return 'Progress';
         case 'boardFeedback':
-            return 'Feedback'
+            return 'Feedback';
         case 'boardDone':
-            return 'Done'
+            return 'Done';
+        case 'boardTriage':
+            return 'Triage';
+        default:
+            return status;
     }
 }
 

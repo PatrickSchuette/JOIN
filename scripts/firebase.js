@@ -103,7 +103,8 @@ let boardPos = {
     boardToDo: {},
     boardProgress: {},
     boardFeedback: {},
-    boardDone: {}
+    boardDone: {},
+    boardTriage: {}
 };
 let actualToDo = null;
 let desiredPos = null;
