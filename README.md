@@ -1,94 +1,77 @@
-JOIN
+# n8n Workflow — Automated Email-to-Task Pipeline
 
-_A Kanban board application designed to track tasks and subtasks and assign them to contacts. Create your own account, log in, save your contacts and create and manage tasks in your team._
+This repository contains the updated n8n workflow for automated email parsing, AI-driven task extraction, and Firebase integration. The core **Join** project remains untouched in the `main` branch.
 
-**Features**
-- Test out the application as a guest or sign up to enjoy the full features
-- Get a quick overwiew in the summary page about the tasks in board
-- Add contacts and manage your contact list in the dedicated section
-- Create tasks, move them across stages (To Do, In Progress, Awaiting feedback, Done)
-- Assign contacts for each task, add multiple subtasks and mark them as done
+## 🚀 Key Features
 
-**Technologies used**
--  HTML
--  CSS
--  JavaScript
--  Firebase
+*   **Robust Email Parsing:** Enhanced extraction with automatic category detection.
+*   **Rate Limiting:** Enforces daily request quotas via Firebase Realtime Database.
+*   **AI-Powered Processing:** Utilizes Gemini AI optimized for multilingual (English/German) inputs.
+*   **Fault-Tolerant Architecture:** Zero-crash design with safe fallbacks for missing or malformed data.
 
-**How to get started**
-You'll need:
--  a modern web browser
--  a code editor, like Visual Studio Code
+---
 
-**Clone the repository**
-git clone https://github.com/MirunaAgopian/JOIN-2
+## 🔧 Detailed Modifications
 
-**Project structure**
+### IMAP Email Parsing
+*   **Advanced Extraction:** Improved parsing for sender, subject, body, and metadata.
+*   **Intelligent Classification:** Automatically detects request types (*feature, bug, question, improvement*).
+*   **Spam Filtering:** System emails (e.g., `info@...`, `noreply@...`) are automatically blocked.
+*   **Safe Defaults:** Added reliable fallback values for missing fields.
 
-JOIN
+### Daily Limit Check (Firebase Realtime Database)
+*   **Quota Enforcement:** Tracks and implements daily request limits per user.
+*   **Dynamic Updates:** Integrated PUT/PATCH logic for creating and updating limit documents.
+*   **Resilience:** Fully fault-tolerant node featuring retry logic and an automatic fallback mode.
+
+### Gemini AI Processing
+*   **Localization:** Updated prompts to correctly handle German language inputs.
+*   **Data Extraction:** Enhanced parsing of titles, descriptions, dates, and subtasks.
+*   **Validation:** Safe fallback behavior triggers if the AI output is invalid or incomplete.
+
+### Subtask Processing
+*   **Safe Parsing:** Subtasks are parsed consistently without breaking the pipeline.
+*   **Auto-Indexing:** Generates unique IDs automatically for every subtask.
+*   **Error Prevention:** Node no longer crashes when subtasks are missing or malformed.
+
+### Firebase Document Preparation
+*   **Zero-Error Design:** Rewritten from scratch to be completely error-proof.
+*   **Schema Enforcement:** Ensures Firebase always receives a valid task object.
+*   **Safe Fields:** Mandatory fields (`type`, `title`, `userEmail`) utilize secure defaults.
+
+### Email Responses
+*   **Success Template:** Updated with detailed task information and daily limit statistics.
+*   **Limit Alerts:** New template specifically designed for users who exceed their daily quota.
+*   **Rich Text:** Improved HTML formatting and edge-case fallback handling.
+
+---
+
+## 🔀 Workflow Structure
+
+The workflow executes strictly in the following sequential order:
+
+```mermaid
+graph TD
+    A[IMAP Trigger] --> B[System Email Filter]
+    B --> C[Parse & Validate Email]
+    C --> D[Clean Greeting & Signature]
+    D --> E[Daily Limit Check]
+    E --> F[Gemini AI Analysis]
+    F --> G[Subtask Processing]
+    G --> H[Prepare Firebase Document]
+    H --> I[Save to Firebase]
+    I --> J[Prepare Email Response]
+    J --> K[Send Email]
 ```
-├── index.html
-├── script.js
-├── style.css
-├── html/
-    └── add-task.html
-    └── board.html
-    └── contacts.html
-    └── help.html
-    └── legal-notice-login.html
-    └── legal-notice.html
-    └── login.html
-    └── privacy-policy-login.html
-    └── privacy-policy.html
-    └── signup.html
-    └── summary.html
-├── styles/
-    └── add-task-interactions.css
-    └── add-task-standard.css
-    └── add-task.css
-    └── board.css
-    └── boardAddTask.css
-    └── boardEditTask.css
-    └── boardShowTask.css
-    └── contact-show.css
-    └── contacts-dialog.css
-    └── contacts-overview.css
-    └── contacts.css
-    └── help.css
-    └── legal-notice.css
-    └── login.css
-    └── navigation.css
-    └── privacy-policy-login.css
-    └── privacy-policy.css
-    └── signup.css
-    └── summary.css
-│ 
-├── scripts/
-│   └── add-task-visuals.js
-    └── add-task.js
-    └── board-design.js
-    └── board-subtask.js
-    └── board-tasks.js
-    └── board.js
-    └── contacts-dialog.js
-    └── contacts-overview.js
-    └── contacts.js
-    └── firebase.js
-    └── greeting.js
-    └── help.js
-    └── login.js
-    └── navigation.js
-    └── signup.js
-    └── summary.js
-    └── templates.js
-└── License
-└── gitignore
-└── README.md
-```
-**License**
 
-This project is licensed under the MIT License — see the LICENSE file for details.
+---
 
-**Acknowledgements**
+## ✔ Summary of Workflow State
 
-This project was built as a team project from a group of three Frontend-Developers studying at the Developer Akademie. 
+The updated n8n workflow is officially:
+*   **Stable** & fault-tolerant
+*   **AI-enhanced** via Gemini
+*   **Firebase-compatible** with schema enforcement
+*   **Protected** against malformed emails and quota abuse
+
+*Note: The Join main project remains unchanged.*

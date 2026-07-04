@@ -35,17 +35,19 @@ function addNewSubtask(text, index) {
  * @param {Integer} index Array Index of Subtask
  */
 async function updateSubTask(index) {
+    let oldStatus = actualToDo.status;
     let taskStatus = null;
-
     if ("checked" in actualToDo.subtasks[index]) {
         taskStatus = !actualToDo.subtasks[index].checked;
     } else {
         taskStatus = true;
     }
-
     await patchData(`tasks/${currentDraggedElement}/subtasks/${index}`, { checked: taskStatus });
     actualToDo.subtasks[index].checked = taskStatus;
+    actualToDo.id = currentDraggedElement;
+    await notifyExternalCreatorOnChange(actualToDo, oldStatus);
 }
+
 
 /**
  * get all number of done Subtasks for the selcted Task

@@ -37,17 +37,19 @@ function addTaskOverlay() {
  */
 
 async function editDialogTask() {
+    let oldStatus = actualToDo.status;
     let task = getTaskInput();
     let subtaskStatus = getSubtaskStatus(actualToDo.subtasks);
-
-    if (!checkIfTaskIsValid(task)) { return; }
+    if (!checkIfTaskIsValid(task)) return;
     if (subtaskStatus != null) {
-        for (let index = 0; index < subtaskStatus.length; index++) {
-            task.subtasks[index].checked = subtaskStatus[index];
+        for (let i = 0; i < subtaskStatus.length; i++) {
+            task.subtasks[i].checked = subtaskStatus[i];
         }
     }
-    dialogBoardTaskRev.dialog.close()
+    dialogBoardTaskRev.dialog.close();
     await patchData('tasks/' + currentDraggedElement, task);
+    task.id = currentDraggedElement;
+    await notifyExternalCreatorOnChange(task, oldStatus);
     onloadFuncBoard();
 }
 
@@ -164,13 +166,16 @@ async function moveTo(targetColumn, ev) {
     ev.preventDefault();
     const idx = todos.findIndex(t => t.id == currentDraggedElement);
     if (idx === -1) return;
+    let oldStatus = todos[idx].status;
     todos[idx].status = targetColumn;
     todos[idx].pos = desiredPos ?? todos.filter(t => t.status === targetColumn).length;
     normalizePositions(targetColumn);
     await putData('tasks/' + todos[idx].id, todos[idx]);
+    await notifyExternalCreatorOnChange(todos[idx], oldStatus);
     desiredPos = null;
     updateHTML();
 }
+
 
 /**
  * Reorders and normalizes the position indices of all tasks within a given column. Updates both the local board state and persists the new positions to the database.

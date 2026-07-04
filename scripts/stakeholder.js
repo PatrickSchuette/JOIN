@@ -44,3 +44,52 @@ function updateStakeholderUI(limitData) {
         counter.classList.remove("limit-reached");
     }
 }
+
+
+/**
+ * Sends a status change payload to the local webhook.
+ * Silently fails if the webhook cannot be reached.
+ * @param {Object} payload - Data describing the task update.
+ * @returns {Promise<void>}
+ */
+async function sendStatusWebhook(payload) {
+    try {
+        //await fetch("https://europe-west1-join-cd262.cloudfunctions.net/statusUpdate", {
+        await fetch("https://join-n8n.app.n8n.cloud/webhook-test/task-status-changed", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        
+    } catch (_) {
+    }
+}
+
+/**
+ * Triggers webhook when an external creator's task changes.
+ * Continues silently if webhook cannot be reached.
+ * @param {Object} task - Updated task object.
+ * @param {string} oldStatus - Previous status of the task.
+ * @returns {Promise<void>}
+ */
+async function notifyExternalCreatorOnChange(task, oldStatus) {
+    try {
+      if (task.creatorType !== "external") return;
+      if (!oldStatus || oldStatus === task.status) return;
+      const loggedIn = sessionStorage.getItem("loggedInUser");
+  
+      const payload = {
+        source: "webhook",
+        taskId: task.id,
+        taskTitle: task.title,
+        creatorEmail: task.createdBy,    
+        creatorName: task.creatorName,     
+        oldStatus: oldStatus,
+        newStatus: task.status,
+        updatedBy: loggedIn ? JSON.parse(loggedIn).mail : "unknown"
+      };
+  
+      await sendStatusWebhook(payload);
+    } catch (_) {}
+  }
+  

@@ -106,11 +106,8 @@ function fillDialogFields(task) {
     autoResizeTextarea(dialogBoardTaskRev.task_description);
     dialogBoardTaskRev.due_date.value = task.date;
     dialogBoardTaskRev.creator.innerHTML = task.creator;
-
     getAllSubtask(task.subtasks);
     changeDOMIfShowTaskIsOpen(actualToDo);
-    
-
     selectedPriority = task.priority;
     document.getElementById("taskPriority").innerHTML =
         `${task.priority} <img src="../assets/img/prio_${task.priority}.svg" alt="Priority of task">`;
@@ -118,8 +115,6 @@ function fillDialogFields(task) {
     document.getElementById("taskCategory").innerHTML =
         `<div class="taskStatus ${task.category.toLowerCase().replace(/ /g, "-")}">${task.category}</div>`;
     document.getElementById('selected_category').textContent = task.category;
-
-    console.log(task);
     generateIssueCollector(task.creatorType, task.creatorMail);
 }
 

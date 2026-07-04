@@ -1,5 +1,6 @@
 let users = [];
 let todos = [];
+let lastKnownStatus = {};
 
 /**
  * This variable includes the url of firebase where the datas of project are stored
@@ -160,6 +161,9 @@ function getTaskArr(ALL_TASKS) {
             creator: value.creatorName,
             creatorMail: value.createdBy,
             creatorType: value.creatorType,
+            createdBy: value.createdBy,        
+            creatorName: value.creatorName,    
+            creatorType: value.creatorType,    
             date: value.date,
             pos: posValue,
             priority: value.priority,
@@ -354,3 +358,6 @@ function addTask() {
     });
   redirectUser();
 }
+
+
+
