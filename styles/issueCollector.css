@@ -4,7 +4,7 @@ b {
 
 .content,
 .welcome-content {
-    max-width: 680px;
+    max-width: 700px;
     width: 90%;
     margin: 10px auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -27,12 +27,12 @@ b {
 }
 
 .welcome-content p {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.5;
     text-align: center;
     color: #4A5568;
     margin: 0 0 32px 0;
-    max-width: 500px;
+    max-width: 100%;
 }
 
 .options-container {
@@ -53,7 +53,7 @@ b {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     margin-bottom: 16px;
     color: #1A202C;
@@ -219,6 +219,14 @@ b {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     }
 
+    .welcome-content p {
+        font-size: 23px;
+    }
+
+    .option-header {
+        font-size: 23px;
+    }
+
     .options-container {
         flex-direction: row;
         justify-content: center;
@@ -227,7 +235,7 @@ b {
     }
 
     .options-container>div {
-        max-width: 240px;
+        max-width: 100%;
     }
 
     .request-count-status {
@@ -306,4 +314,15 @@ b {
         margin-top: 40px;
         max-width: 600px;
     }
+}
+
+.btn-create{
+    background: #29ABE2;
+    color: white;
+}
+
+.btn-member{
+    color: #2A3647;
+    background: transparent;
+    border: 2px solid #2A3647;
 }

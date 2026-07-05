@@ -118,30 +118,6 @@
     },
     {
       "parameters": {
-        "fromEmail": "join.n8n@patrick-schuette.net",
-        "toEmail": "={{ $json.originalFrom }}",
-        "subject": "=⚠️ Tageslimit erreicht",
-        "html": "=<h2>Daily Request Limit Reached</h2>\n<p>Hello {{ $('Check Daily Limit').item.json.userName }},</p>\n<p>We have reached today's limit of <strong>10 feature requests</strong>.</p>\n<p>You can submit new requests again tomorrow.</p>\n<p>Best regards,<br>Your Join Team</p>\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.emailSend",
-      "typeVersion": 2.1,
-      "position": [
-        -96,
-        64
-      ],
-      "id": "1be2aee3-dbe1-44d4-9663-bbbd9fc152a4",
-      "name": "Send Email Limit ereicht",
-      "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
-      "credentials": {
-        "smtp": {
-          "id": "x6z80KoDg0rv6BMR",
-          "name": "SMTP account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "const self = this;\n\nreturn (async () => {\n  const items = $input.all();\n\n  // 🛡️ FEHLERTOLERANZ: Immer ein gültiges Item wählen\n  const parsedData =\n    items.find(item => item.json?.isValid) ||\n    items.find(item => item.json) ||\n    items[0];\n\n  if (!parsedData?.json) {\n    // Node bekommt KEINE gültigen Daten → Fallback\n    return {\n      json: {\n        limitExceeded: false,\n        currentCount: 0,\n        dailyLimit: 10,\n        remainingRequests: 10,\n        _fallbackMode: true,\n        _error: \"No valid parsed email data found (safe fallback)\"\n      }\n    };\n  }\n\n  const input = parsedData.json;\n\n  const webhookData = items.find(item => item.json?.emailUid);\n  const emailUid = webhookData?.json?.emailUid || input.emailUid || \"unknown\";\n\n  console.log(\"📊 ===== CHECK DAILY LIMIT START =====\");\n\n  const baseUrl = \"https://join-cd262-default-rtdb.europe-west1.firebasedatabase.app\";\n\n  const today = new Date().toISOString().split(\"T\")[0];\n  const docId = `global_${today}`;\n  const limitDocPath = `daily_limits/${docId}.json`;\n\n  const maxDaily = 10;\n  const maxRetries = 5;\n\n  console.log(\"📅 Date:\", today);\n  console.log(\"📂 Path:\", limitDocPath);\n\n  // 🔁 RETRY LOOP\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    try {\n      console.log(`\\n🔄 === ATTEMPT ${attempt + 1}/${maxRetries} ===`);\n\n      const getUrl = `${baseUrl}/${limitDocPath}`;\n\n      let getResponse;\n\n      try {\n        getResponse = await self.helpers.httpRequest({\n          method: \"GET\",\n          url: getUrl,\n          headers: { \"Content-Type\": \"application/json\" },\n          json: true,\n          returnFullResponse: true\n        });\n      } catch (getError) {\n        if (getError.statusCode === 404 || getError.message?.includes(\"404\")) {\n          console.log(\"📝 Document does not exist (404)\");\n          getResponse = { statusCode: 404, body: null };\n        } else {\n          throw getError;\n        }\n      }\n\n      let currentCount = 0;\n      let docExists = false;\n\n      console.log(\"📥 GET Status:\", getResponse?.statusCode);\n\n      if (getResponse?.statusCode === 200) {\n        const body = getResponse.body;\n\n        console.log(\"📦 Body:\", body);\n\n        if (body) {\n          currentCount = parseInt(body.count ?? 0, 10);\n          docExists = true;\n        }\n      } else if (getResponse?.statusCode === 404) {\n        currentCount = 0;\n        docExists = false;\n      } else {\n        throw new Error(`Unexpected GET status: ${getResponse?.statusCode}`);\n      }\n\n      const newCount = currentCount + 1;\n      console.log(`➕ Will increment: ${currentCount} → ${newCount}`);\n\n      // 🚫 LIMIT EXCEEDED\n      if (newCount > maxDaily) {\n        console.log(`❌ LIMIT EXCEEDED: ${newCount} > ${maxDaily}`);\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: true,\n            currentCount,\n            dailyLimit: maxDaily,\n            remainingRequests: 0\n          }\n        };\n      }\n\n      const updateBody = {\n        date: today,\n        count: newCount,\n        lastUpdated: new Date().toISOString(),\n        lastRequestTitle: String(input.title || \"untitled\").substring(0, 100),\n        lastRequestFrom: String(input.userEmail || \"unknown\")\n      };\n\n      let writeResponse;\n\n      if (!docExists) {\n        console.log(\"📝 Creating new document with PUT...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PUT\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PUT Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"CREATE\"\n          }\n        };\n      } else {\n        console.log(\"🔄 Updating existing document with PATCH...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PATCH\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PATCH Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"UPDATE\"\n          }\n        };\n      }\n    } catch (error) {\n      console.error(`🔴 Error in attempt ${attempt + 1}:`, error.message);\n\n      if (attempt === maxRetries - 1) {\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: 0,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily,\n            _error: error.message,\n            _fallbackMode: true\n          }\n        };\n      }\n\n      console.log(`⏳ Retrying attempt ${attempt + 2}...`);\n    }\n  }\n\n  return {\n    json: {\n      ...input,\n      emailUid,\n      limitExceeded: false,\n      currentCount: 0,\n      dailyLimit: maxDaily,\n      remainingRequests: maxDaily,\n      _fallbackMode: true,\n      _error: \"Unexpected: Loop ended without return\"\n    }\n  };\n})();\n"
       },
       "id": "0626747b-1be6-4a22-a91b-ca723807b5e4",
@@ -270,6 +246,30 @@
       ],
       "id": "4db4e896-e1db-48fc-9c93-a87f4bb25c20",
       "name": "sender was a system email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "join.n8n@patrick-schuette.net",
+        "toEmail": "={{ $json.originalFrom }}",
+        "subject": "=⚠️ day limit reached",
+        "html": "=<h2>Daily Request Limit Reached</h2>\n<p>Hello {{ $('Check Daily Limit').item.json.userName }},</p>\n<p>We have reached today's limit of <strong>10 feature requests</strong>.</p>\n<p>You can submit new requests again tomorrow.</p>\n<p>Best regards,<br>Your Join Team</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        64
+      ],
+      "id": "1be2aee3-dbe1-44d4-9663-bbbd9fc152a4",
+      "name": "Send Email daily limit",
+      "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
+      "credentials": {
+        "smtp": {
+          "id": "x6z80KoDg0rv6BMR",
+          "name": "SMTP account"
+        }
+      }
     }
   ],
   "connections": {
@@ -310,7 +310,7 @@
       "main": [
         [
           {
-            "node": "Send Email Limit ereicht",
+            "node": "Send Email daily limit",
             "type": "main",
             "index": 0
           }
@@ -398,135 +398,7 @@
       ]
     }
   },
-  "pinData": {
-    "Email Trigger (IMAP)": [
-      {
-        "headers": {
-          "return-path": "Return-Path: <Patrick.Sch@web.de>",
-          "x-spam-checker-version": "X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on\r\n\tdd13038.kasserver.com",
-          "x-original-to": "X-Original-To: join.n8n@patrick-schuette.net",
-          "delivered-to": "Delivered-To: m07feba7@dd13038.kasserver.com",
-          "authentication-results": "Authentication-Results: dd13038.kasserver.com;\r\n\tdkim=pass (2048-bit key; unprotected) header.d=web.de header.i=patrick.sch@web.de header.a=rsa-sha256 header.s=s29768273 header.b=hcp26EW5;\r\n\tdkim-atps=neutral",
-          "x-policyd-weight": "X-policyd-weight: using cached result; rate: -7",
-          "received": "Received: from [93.131.195.214] ([93.131.195.214]) by\r\n trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r (via HTTP); Sun, 5 Jul\r\n 2026 12:36:45 +0000",
-          "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;\r\n\ts=s29768273; t=1783255005; x=1783859805; i=patrick.sch@web.de;\r\n\tbh=BTQyTWFnmOFu8bbLsxTI6nAmMMZ8w3b8KA3HSWkgEzE=;\r\n\th=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:\r\n\t Content-Type:Date:Content-Transfer-Encoding:cc:\r\n\t content-transfer-encoding:content-type:date:from:message-id:\r\n\t mime-version:reply-to:subject:to;\r\n\tb=hcp26EW56EnEcFfqb7Ql4bLlnitA5kcC8aiA8PGhzgNEMrJ+SekH1i/owqBidbQq\r\n\t ROPAMc2OnNONrKvI5wNg1yFl72FCkXZmrpqntT3+f0ZPHieHU4Xk1OY5PXBqFXCSk\r\n\t lVhQEe1GIxJjR/tFkG7whDdqFmN9o4pe+Ei6jEsWCElBdKCxE/0lN7GWPM1DpqtfK\r\n\t 4lbqVGoysq7RYMl4lT2aJCAEsH8KbpeaYV0bfBVoxRNDMFxaxSIz8ctLiAdDCu0f8\r\n\t NIW5zWY54EzM+y/720YMeZVZocYefW6UzWHtCs1CVWCNWvwgYISTpwrzsUj9RdDM0\r\n\t IFMAhi0hd12JOstikw==",
-          "x-ui-sender-class": "X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6",
-          "mime-version": "MIME-Version: 1.0",
-          "message-id": "Message-ID: <trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
-          "from": "From: =?UTF-8?Q?Patrick_Sch=C3=BCtte?= <Patrick.Sch@web.de>",
-          "to": "To: join.n8n@patrick-schuette.net",
-          "subject": "Subject: Test Aufgabe",
-          "content-type": "Content-Type: text/html; charset=UTF-8",
-          "date": "Date: Sun, 5 Jul 2026 12:36:45 +0000",
-          "content-transfer-encoding": "Content-Transfer-Encoding: quoted-printable",
-          "x-ui-client-meta-mail-drop": "X-UI-CLIENT-META-MAIL-DROP: W10=",
-          "x-provags-id": "X-Provags-ID: V03:K1:X0KmigHHgbC3Dg7Rx4tfoXsPeasEBetsYqRb2n4oMQ2SxInhFyPmMLV+2LLTmEkf0GHRO\r\n SkA6L8mEF4GR6owUrOXa3hUccr4LIyZ0cLK0jil/EDEPzpqb8BhGncaRXObdLLYB2Jg0BdBqLnqO\r\n /xeivAGLmAACfmfrwsWOC0F5LZ5BoiCGDLPQddIXR/uWmV7CCOUweO23gfUQi+TIIxlzXjbtQU6o\r\n hSaNXqLcSVc7UY0zQzplNZl1O/qwPBRy4Pf8c1JwLME/TMKHOrop8Lq/4b9FVUCWEl/iwzVMqXxT\r\n R1BiyLuXxJpsfqRojXX4JvNT4Y4CHQVkU7Hiv/nQam6DzI2jBAyjCBTFYIduC0Ps6gP1IL93dt6L\r\n 3nXmEdpQf6m",
-          "ui-outboundreport": "UI-OutboundReport: notjunk:1;M01:P0:4fWtyrmoT0Q=;SWUbzfy3C8vJkQvNr/7NlmVTI7j\r\n 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\r\n gqCjw==",
-          "x-spamd-bar": "X-Spamd-Bar: /",
-          "x-dmarc-test": "X-Dmarc-Test: Allow",
-          "x-kasloop": "X-KasLoop: m07feba7"
-        },
-        "html": "<html><body><div style=\"font-family: 'verdana'; font-size: 12px; color: #000;\"><span style=\"background-color: #ffffff;\">Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask soll tasche gepackt, abwesenheit einrichten und auto tanken sein</span></div></body></html>\n\n",
-        "text": "Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask\nsoll tasche gepackt, abwesenheit einrichten und auto tanken sein",
-        "textAsHtml": "<p>Erstelle eine aufgabe f&uuml;r &uuml;bermorgen um meinen Urlaub vorzubereiten als Subtask<br/>soll tasche gepackt, abwesenheit einrichten und auto tanken sein</p>",
-        "subject": "Test Aufgabe",
-        "date": "2026-07-05T12:36:45.000Z",
-        "to": {
-          "value": [
-            {
-              "address": "join.n8n@patrick-schuette.net",
-              "name": ""
-            }
-          ],
-          "html": "<span class=\"mp_address_group\"><a href=\"mailto:join.n8n@patrick-schuette.net\" class=\"mp_address_email\">join.n8n@patrick-schuette.net</a></span>",
-          "text": "join.n8n@patrick-schuette.net"
-        },
-        "from": {
-          "value": [
-            {
-              "address": "Patrick.Sch@web.de",
-              "name": "Patrick Schütte"
-            }
-          ],
-          "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Patrick Sch&#xFC;tte</span> &lt;<a href=\"mailto:Patrick.Sch@web.de\" class=\"mp_address_email\">Patrick.Sch@web.de</a>&gt;</span>",
-          "text": "\"Patrick Schütte\" <Patrick.Sch@web.de>"
-        },
-        "messageId": "<trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
-        "attributes": {
-          "uid": 45
-        }
-      }
-    ],
-    "Check Daily Limit": [
-      {
-        "headers": {
-          "return-path": "Return-Path: <Patrick.Sch@web.de>",
-          "x-spam-checker-version": "X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on\r\n\tdd13038.kasserver.com",
-          "x-original-to": "X-Original-To: join.n8n@patrick-schuette.net",
-          "delivered-to": "Delivered-To: m07feba7@dd13038.kasserver.com",
-          "authentication-results": "Authentication-Results: dd13038.kasserver.com;\r\n\tdkim=pass (2048-bit key; unprotected) header.d=web.de header.i=patrick.sch@web.de header.a=rsa-sha256 header.s=s29768273 header.b=hcp26EW5;\r\n\tdkim-atps=neutral",
-          "x-policyd-weight": "X-policyd-weight: using cached result; rate: -7",
-          "received": "Received: from [93.131.195.214] ([93.131.195.214]) by\r\n trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r (via HTTP); Sun, 5 Jul\r\n 2026 12:36:45 +0000",
-          "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;\r\n\ts=s29768273; t=1783255005; x=1783859805; i=patrick.sch@web.de;\r\n\tbh=BTQyTWFnmOFu8bbLsxTI6nAmMMZ8w3b8KA3HSWkgEzE=;\r\n\th=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:\r\n\t Content-Type:Date:Content-Transfer-Encoding:cc:\r\n\t content-transfer-encoding:content-type:date:from:message-id:\r\n\t mime-version:reply-to:subject:to;\r\n\tb=hcp26EW56EnEcFfqb7Ql4bLlnitA5kcC8aiA8PGhzgNEMrJ+SekH1i/owqBidbQq\r\n\t ROPAMc2OnNONrKvI5wNg1yFl72FCkXZmrpqntT3+f0ZPHieHU4Xk1OY5PXBqFXCSk\r\n\t lVhQEe1GIxJjR/tFkG7whDdqFmN9o4pe+Ei6jEsWCElBdKCxE/0lN7GWPM1DpqtfK\r\n\t 4lbqVGoysq7RYMl4lT2aJCAEsH8KbpeaYV0bfBVoxRNDMFxaxSIz8ctLiAdDCu0f8\r\n\t NIW5zWY54EzM+y/720YMeZVZocYefW6UzWHtCs1CVWCNWvwgYISTpwrzsUj9RdDM0\r\n\t IFMAhi0hd12JOstikw==",
-          "x-ui-sender-class": "X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6",
-          "mime-version": "MIME-Version: 1.0",
-          "message-id": "Message-ID: <trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
-          "from": "From: =?UTF-8?Q?Patrick_Sch=C3=BCtte?= <Patrick.Sch@web.de>",
-          "to": "To: join.n8n@patrick-schuette.net",
-          "subject": "Subject: Test Aufgabe",
-          "content-type": "Content-Type: text/html; charset=UTF-8",
-          "date": "Date: Sun, 5 Jul 2026 12:36:45 +0000",
-          "content-transfer-encoding": "Content-Transfer-Encoding: quoted-printable",
-          "x-ui-client-meta-mail-drop": "X-UI-CLIENT-META-MAIL-DROP: W10=",
-          "x-provags-id": "X-Provags-ID: V03:K1:X0KmigHHgbC3Dg7Rx4tfoXsPeasEBetsYqRb2n4oMQ2SxInhFyPmMLV+2LLTmEkf0GHRO\r\n SkA6L8mEF4GR6owUrOXa3hUccr4LIyZ0cLK0jil/EDEPzpqb8BhGncaRXObdLLYB2Jg0BdBqLnqO\r\n /xeivAGLmAACfmfrwsWOC0F5LZ5BoiCGDLPQddIXR/uWmV7CCOUweO23gfUQi+TIIxlzXjbtQU6o\r\n hSaNXqLcSVc7UY0zQzplNZl1O/qwPBRy4Pf8c1JwLME/TMKHOrop8Lq/4b9FVUCWEl/iwzVMqXxT\r\n R1BiyLuXxJpsfqRojXX4JvNT4Y4CHQVkU7Hiv/nQam6DzI2jBAyjCBTFYIduC0Ps6gP1IL93dt6L\r\n 3nXmEdpQf6m",
-          "ui-outboundreport": "UI-OutboundReport: notjunk:1;M01:P0:4fWtyrmoT0Q=;SWUbzfy3C8vJkQvNr/7NlmVTI7j\r\n i2dgsbI7ZhvNv+uR1Hp7twL1usje9lwmk8qFlHKRyQF5ueqk3L9VQLG4PNZz6dHgK40Z0fTlv\r\n OkeHknBAv2WpAe013/1Bebs7wKc7hJ/4T/ZRyC4a6fXv5QftYWe0egI1cqUKV9Wmf9mEQ5b8o\r\n aQV6xXpfU98M9nIPAW64YxiNs+aWJE0yBTIVAO9qBrltLHPmmG3d2EVjoLsHEOEkpRjYB11wW\r\n h2GdzhnGQ+Fn1Te3m/dzioZa7QsYlj20nd4bwtwEeyo2iN+wu0AVj5+nNPKKkKvkb2UmWoI4V\r\n Fl+KMGH6aR7nf1TI4YcGJbt4hwZp5loLTYSTWxUya8JHDwpBvr+1RpPYZleVY5YUrgnYnRteH\r\n H0fK0fscNoAI4yYobxBSWQvrpEpPdAfBAGn+Ls7cswH3szWviELXG9hv3Yxg6EjOrptSo+6Nf\r\n l0hREaVu/WA7XqRwGlzlv8tviwvprU2AsIP9M2tE2taQUZ+QEjdPLRQnb7W3OIB1YhJIUhUzR\r\n 4kP2lAtzj0TwO+hmekuldoIb+pG13ZBr9EPyLT6z3Gir9MY+7KHmp17c6aQqibrWtNtf4XnjK\r\n OjtmDDgHYALUi4HXltGzp4btcgAnS4lI126BzKCZzEYsDpsZAjEAuM8Odg/7xImIp12sXSbrX\r\n KVMwLTBlp6lzsU69lO6OvE6jOEDQr3N5ddTnaxpEyeBSn9J9WJmNnYEO88lT6VAx993Fo+tNx\r\n A2AhVDA5OPuaUdL4V0N1bApAUueVU826ZfPW9v8PYGshgeWnDGrQrTZWFIRdxqnCUGYeV6394\r\n 2oAvkZS+oAKl4Ivb0i+x2YSerGufQ0WTjWc8m8AJJLFRShgkKvWx0Sq+DMhlTQjMWo+XU02Fs\r\n FPPRvy4pUtjbYP259AVcG5ZZj2t/vq4Jqb9RK7RsQEaE0biSEp4QeL7iwlJqydqY8JkNmtwpv\r\n yiJjz4vfhyGa6LxxAP8hQq6fY97w/23Xg4KFdJPWq7T/fc6VrHPGR5/OKlCW4o7KzPhZiS7gf\r\n s4dicEmwsgZVQ0ShbhEbv87BR0XjL+4uZXs+qXWf1xhcBi0kkCS/AmmVhMoPwro6XpGnByXTK\r\n yooMoIyCFiF7ymv3NHhSIMHVYFGl+UP9u1wAHJEek3ojxfRgIDa5wQl9IcSPmHhYoF9Atb9NS\r\n Dr9FHO71FJTPRVGTDuhPN7ZtzSki/CizsCwXAWJbzjEptDnxv7C3dXospDujRsz4ZiMhppSp8\r\n RVggo8GcuSDbKbJIn7eKxhJJJEm8cjqVWbEAQULMV4qvFGosSeILh9V0j9bp40YoXhe53UVti\r\n VeZNnhry89kXBu4/loW1wuwOlgTuT1LCPaOURPOWeM2VV+hUCGB5JES4zhVHo/L5jG9V+WLWS\r\n Tvu+HuID1qdUt9Q15UgoBi5bTT8nKqWKoUpqjPsiyumvennO5hKN18WwrJCzl5eu4NcEfwlHr\r\n rpTLGd2AkwNRnINkbhOi9NwfS+/gwlQ64zWsdRvQVBF032FzMwfT/mTLEFc5M1i6Xh/hZIP2a\r\n jt5xH78PNiNZt/DEYQFSYU+2q1v5ApzBKDId0RZ4aAixx9EgnyOUS1oqbiLmC625uNOr0H1ep\r\n 8AhZrEJtRDydycIqpHR+SODWNJAnSvT4Yjymsy/qOJxPiM1kHMXG4sa7LyBT+fh59r3jeWLoy\r\n 6hixZk8ecgk8Vla76y2Nxq3QLQzooYYKOWDQFTzBMfFx7o3nrQEY8fEsO6nIw6ZZut2rDs9D/\r\n VfxDIvALqlBAtQvmgAyEne5XEPo/IG0ApekvXNmT9eoqqcjvM7fkooLoGv1dE+9QEHzvyMhh/\r\n aZeopGucbVamCVt42bfJjgQ33K28b43rQXt3c5J7RoZLfc7QFaapqn0rF8lulg6FHxA/y82m5\r\n oXLrdDUmR1wj9Umej1ZW0s8WZXZUWyg1yMXR2UuGLNALMuB/WjP53iJbPngkTyQqYvR9m+DdB\r\n cYIlC6XAC9YYb9wJpHYsib23CMhzY5sQdN/gf3lpN8q11ztc1GMOG6WfGXR+oR8gzRy78xwD3\r\n BaGqJqSEZLJ7JdQkAKLlINt5VZcXrQ2Gm8fkXvcNWXlO9X7Qg1sBnxYsPBo36ucS+KYLQ98Ya\r\n 7zS3ZgZeUux4xMSRyCsul1+IM12OaCrQJ7QKM41DudJUP7UV2vFuiZZJHy9/59J3XQfD1JX31\r\n kuuPyqUMAy1N2H7K6ZWNyIFixzyt0mQny1BIEmSXHTTa4V4LjgpIyPp6MeCKXJnvkYFIHl4yG\r\n BjN9rDPygnIdSexPIlICwo6hzlJjyLQ5fbCgStpcaQgkKqnKp4bB+XWH1xpRkl26/9IH7WQ+i\r\n 8Yi3jRtqyWuN8OxmTvyZCYYjxYUlBpK62R6HP49fYl4YTkA1jAhia0o1RC+Dtl+BENSvpNXxv\r\n 8nvyq0IsydBWUb1ibtkxZFm1I9GOa+8IEqkU0V51QBu3hrzhYSFUWS5krV4m2mbQfMWMCCvyp\r\n Wjg1/WAcGdMNzq5CmF8YIDPDZ9iCKC4RZow2U7dJxBY5+3i1r0nCXfkjaGjirPrmBc7ASLYqa\r\n Pk209O0ObBHGIwyb9J7TbfAGG3r8IGFhL+FBeC5csXLehRLK4ZizbescUojlZ3TLkGeD7X0TN\r\n /t/hZXilbwoDrW3vYygNijW+fFUpDP46n1QQ/z1nHgu+1qexSwp5fZfg0E8fCkjjjaXMCISBI\r\n qj7vEiSY/3ZxP9J/mESrf4VLCN/Hv2140jI36ZiCvc9JlCMkHvS1out/v5eNeE1R6LvT0dUtw\r\n 4XqBVdspGx6tIwOMV+y0g0a7oxHyL+wmjqkAPDGbp+pPRj7x2DK2mxTNJXmtoi43cB4E0qfak\r\n P2RCPTqDOqGDk30C6CVpbPAg9GYP4BJVTw+3PU9mxhSCT/iidRvWDMkx7otZLM2LNyxemc4s6\r\n NLEsGxn89czrQQokMyAyeJfxoAbH8NC/syb3S7iTYjxoyM4PztIrQlsJWmVKrkTO9teWzFhu6\r\n eus5NIcJR9VHf3EFbZVGPeHW28pOSMhvlEQRAHbJTR7/kGr/P6v5b2ct7UIwpXZeAxUUHuvyB\r\n dLPbUT/lz+DMt+rCM+UFIqQeZfzl/YWb1fDRTkKxKycSOqBhKZzhsSI1Mraz9YwAbdeoFqsgo\r\n /jkaFcxZ+lcDZvVWik6YO5+b9dJhQU27DbfCBP8UYaab8hIyWsW8/esYmtd8rQMZN1BQhZeG2\r\n 5UrDWkavRBgU/GfaEFdHyvnSbnkoHXFyJZLGodBIKjQZNi1/ZiQd/My+6Z5XD9nlwsC1mxmXN\r\n uDSJP43gtYpBCodGyAWnhYb/6TVY9eQe0bTKPYQjn259IK/GRGhTyVindbPS4ap0ddAuzi3hU\r\n 6oXW5WaPhz+i8C45aODg+9EVjhA8CrcdnDyHalflTkx7knnAOio9RlZA9yBHMlt0eyvJiKiSh\r\n b4xx5qo0KbfexWUNBEJJ025/kKJGuZ1yhEllNu7TPYg4yoYnBcysViTob/YHriHExtA6GMBpC\r\n ty+L4zXgMP7+aWAvCZn4VOi3Pca8Hu0JsmTIcPf+RMEZeZDh3CrfS1z3rZNJ93uhs7G9xxkEY\r\n fWhUA8K/arpnpyUJZhfMPMha1rf3AV/fxqGqxwrUbM5MHg5CxHKjkSHIXvMI6dWYYBEJ3uzXZ\r\n GlrCDXpzHkH4UFoU2wrWGnU8aEg7+SLIrqN7dMmRYpwb4GPZDkav1Kauk2QMz6snZG/xfFjNb\r\n It2iutw+eRkc+ua7DkULhVv0CcWDeAM+0U9eQDV+TtzEODBTZLRfMi8y9jx9PcX0PLeR0oeBU\r\n 9KPLctfwG6Va4s9NxvRoyFik1Dp92BAhHbhEUa0k1izjPCQJdFtkZSZ4NU0zKmRUYs7ckhTZG\r\n kfqwYGVEWLuwu0hKBMjrYaXKYn4CbqCBVJPRvwVGYviL11kcewy2z4jGL4QAvrl7K5h1yfrle\r\n /mI4aEq+K14WsL600unllsNKo/g/YYoyJnNHH6V/ALHboHsUhvOulLL7gKiuf485ILPhvZRJM\r\n mu7d+23POxIstUyh3hcVBuLYJJtQScdt5wnfgJa5TL8kALKiLUcc6ERb+W0nMhg1emu+77atK\r\n p1SDUZ5IWlevi2+bDG8L8HAA9MVCPegVy59+clqhvZXdLJKPGWvvYm5lmzFSV8pzfS0R3544J\r\n Vi68s+QAjRdf0C99KnmeXq7vCFrpiVexulNszBIWJAz9BtHblzR91JHqsfb/mHQsIde+wr60d\r\n KwGmL6VshAteRfpOenocOOiXpeiKqaEU9IRyaskIrpJciEYDfRbqvD9EnS75zj6wL/0etqAw0\r\n lF84huDRRRIHqRmHFlpoN4s/YwxE19SyODIlGofvl7oEwAtTWPsnfP/7Z6KRFKjkZKyBojwQJ\r\n rNqJKM7Hh6c9T7URLOQI2OMGZmLPbcC3O/YtkU9GOpZeCabxhO095Er+y2saF94THsEXu2SwB\r\n O1RVZLK84Xg3hO1EsLdNghpIbO4pzv8AUUDBmTo1b/NafvC2DoW831o0kpnXxCGALIYBJORj2\r\n EtSnYPgr7Sq//zOY15SFTNGbiCtcq+CD8tXHj4J8e0bysIKa1UEiZKpVatELZRgKXpOiMhdzf\r\n lki1+w6gFaQx4pt4QRlUq0ojypal4ocUiC0wKRomG752rjpXFJp4bNh4RQ/0LiNdGFwhISgJL\r\n Ovq3GaShYmJhFmvKFwl4+ZGj5JoDQBPHr8Axd50un9Zxpb6W1JzH/cgGeN9l+XcdYGH1LDKmP\r\n gVY/Js75r2ccKpGgsF8gnL9dE4TX/tXQpKfRrkYdOHbIz194AexwEd9zLR+Axz+Z35ElbZPo0\r\n JL0KgeLL/HcKCTwQHl9R21ckODQFHcaHoZmJWiVma8vvtPJU009y+0iHULRZPOd2Qky3dCsEp\r\n z1HDU/NNVZCq3UVQz+oHuYMnKrCht0wVAditvq2vOXVR1ajBdrvOk9Df+ZzgMjA/aVI7gNXp+\r\n DiLqZu2uEXPlljG+v6v1PVlxhn3OMq+vBjpzK2bbpIwyCn3Ak3dpB9+zYSB328TbV7ye4S9Vl\r\n Th3rDuBwjPqN7SqIrtEkav48mUuuWMcZb9VE77cAit9v5/K/gezvFVWNpv6itrJRcudT6J1x9\r\n gqCjw==",
-          "x-spamd-bar": "X-Spamd-Bar: /",
-          "x-dmarc-test": "X-Dmarc-Test: Allow",
-          "x-kasloop": "X-KasLoop: m07feba7"
-        },
-        "html": "<html><body><div style=\"font-family: 'verdana'; font-size: 12px; color: #000;\"><span style=\"background-color: #ffffff;\">Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask soll tasche gepackt, abwesenheit einrichten und auto tanken sein</span></div></body></html>\n\n",
-        "text": "Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask\nsoll tasche gepackt, abwesenheit einrichten und auto tanken sein",
-        "textAsHtml": "<p>Erstelle eine aufgabe f&uuml;r &uuml;bermorgen um meinen Urlaub vorzubereiten als Subtask<br/>soll tasche gepackt, abwesenheit einrichten und auto tanken sein</p>",
-        "subject": "Test Aufgabe",
-        "date": "2026-07-05T12:36:45.000Z",
-        "to": {
-          "value": [
-            {
-              "address": "join.n8n@patrick-schuette.net",
-              "name": ""
-            }
-          ],
-          "html": "<span class=\"mp_address_group\"><a href=\"mailto:join.n8n@patrick-schuette.net\" class=\"mp_address_email\">join.n8n@patrick-schuette.net</a></span>",
-          "text": "join.n8n@patrick-schuette.net"
-        },
-        "from": {
-          "value": [
-            {
-              "address": "Patrick.Sch@web.de",
-              "name": "Patrick Schütte"
-            }
-          ],
-          "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Patrick Sch&#xFC;tte</span> &lt;<a href=\"mailto:Patrick.Sch@web.de\" class=\"mp_address_email\">Patrick.Sch@web.de</a>&gt;</span>",
-          "text": "\"Patrick Schütte\" <Patrick.Sch@web.de>"
-        },
-        "messageId": "<trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
-        "attributes": {
-          "uid": 45
-        },
-        "emailUid": "unknown",
-        "limitExceeded": false,
-        "currentCount": 2,
-        "dailyLimit": 10,
-        "remainingRequests": 8,
-        "_operation": "UPDATE"
-      }
-    ],
-    "AI Agent": [
-      {
-        "output": "{\"category\":\"User Story\",\"createdBy\":\"Patrick.Sch@web.de\",\"creator\":\"Patrick Schütte\",\"creatorMail\":\"Patrick.Sch@web.de\",\"creatorName\":\"Patrick Schütte\",\"creatorType\":\"external\",\"date\":\"2025-05-16\",\"description\":\"Vorbereitung des anstehenden Urlaubs inklusive organisatorischer Aufgaben und Reisevorbereitungen.\",\"pos\":0,\"priority\":\"medium\",\"status\":\"boardTriage\",\"assignedTo\":[\"join.n8n@patrick-schuette.net\"],\"subtasks\":[{\"checked\":false,\"task\":\"Tasche gepackt\"},{\"checked\":false,\"task\":\"Abwesenheit einrichten\"},{\"checked\":false,\"task\":\"Auto tanken\"}],\"title\":\"Urlaub vorbereiten\"}"
-      }
-    ]
-  },
+  "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "225f756c76d8c85f3ebc848f047b554e8df1b8365479bf96173202eb9ec503d0"
