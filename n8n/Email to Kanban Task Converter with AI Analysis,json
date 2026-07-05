@@ -8,29 +8,29 @@
       "type": "n8n-nodes-base.emailReadImap",
       "typeVersion": 2.1,
       "position": [
-        -1056,
+        -256,
         208
       ],
-      "id": "9ab0bae5-f2a7-4232-81c6-e0a5ab95f326",
+      "id": "d1579169-78b2-4b87-88d5-11fa1e82b176",
       "name": "Email Trigger (IMAP)",
       "credentials": {
         "imap": {
-          "id": "UDvomEibgdoCscfl",
-          "name": "join.n8n@patrick-schuette.net"
+          "id": "BCJu57nxkIcqV6eS",
+          "name": "IMAP account"
         }
       }
     },
     {
       "parameters": {
-        "jsCode": "const response = $input.first().json;\n\n// Absenderdaten sicher extrahieren\nlet senderEmail = response.createdBy || \"\";\nlet senderName = $('Prepare Firebase Document').first().json.creatorName || \"\";\n\n// Fallback: Name aus Email ableiten\nif (!senderName && senderEmail) {\n  senderName = senderEmail.split(\"@\")[0];\n}\n\n// Titel & Details\nconst title = $('Prepare Firebase Document').first().json.title || \"(no title provided)\";\nconst category = response.category || \"General\";\nconst priority = response.priority || \"Medium\";\n\n// Limit-Werte\nconst remaining = response.remainingRequests ?? 0;\nconst limit = response.dailyLimit ?? 10;\n\n// HTML E-Mail ohne Emojis\nconst htmlEmail = `\n<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;\">\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;\">Request Received</h1>\n  </div>\n\n  <div style=\"padding: 30px;\">\n    <p style=\"font-size: 16px; color: #333333; margin-bottom: 20px;\">Hello <strong>${senderName}</strong>,</p>\n    <p style=\"font-size: 15px; color: #555555; line-height: 1.6; margin-bottom: 25px;\">\n      Thank you for your request. Your task has been successfully created and will be available in your board.\n    </p>\n\n    <div style=\"background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 25px;\">\n      <h3 style=\"color: #333333; margin-top: 0; margin-bottom: 15px; font-size: 18px;\">Ticket Details</h3>\n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Title:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${title}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Category:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${category}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Priority:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${priority}</td>\n        </tr>\n      </table>\n    </div>\n\n    <div style=\"background: #f5f5f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 25px; text-align: center;\">\n      <p style=\"margin: 0; color: #666666; font-size: 14px;\">\n        Today you have <strong>${remaining} of ${limit} requests</strong> remaining\n      </p>\n    </div>\n\n    <p style=\"font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 10px;\">\n      If you have any questions, feel free to contact us anytime.\n    </p>\n  </div>\n\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 30px; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"color: #ffffff; margin: 0; font-size: 16px; font-weight: 500;\">Your Join Team</p>\n    <p style=\"color: rgba(255, 255, 255, 0.8); margin: 8px 0 0 0; font-size: 12px;\">\n      This email was automatically generated. Please do not reply directly.\n    </p>\n  </div>\n</div>\n`;\n\nreturn {\n  json: {\n    subject: `Your Feature Request Has Been Received - ${title}`,\n    html: htmlEmail\n  }\n};\n"
+        "jsCode": "const response = $input.first().json;\n\n// Absenderdaten sicher extrahieren\nlet senderEmail = response.createdBy || \"\";\nlet senderName = $('Prepare Firebase Document').first().json.creatorName || \"\";\n\n// Fallback: Name aus Email ableiten\nif (!senderName && senderEmail) {\n  senderName = senderEmail.split(\"@\")[0];\n}\n\n// Titel & Details\nconst title = $('Prepare Firebase Document').first().json.title || \"(no title provided)\";\nconst category = response.category || \"General\";\nconst priority = response.priority || \"Medium\";\n\n// Limit-Werte\nconst limit = 10;\nconst remaining = limit - $('Is Limit Reached?').first().json.currentCount;\n\n// HTML E-Mail\nconst htmlEmail = `\n<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;\">\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;\">Request Received</h1>\n  </div>\n\n  <div style=\"padding: 30px;\">\n    <p style=\"font-size: 16px; color: #333333; margin-bottom: 20px;\">Hello <strong>${senderName}</strong>,</p>\n    <p style=\"font-size: 15px; color: #555555; line-height: 1.6; margin-bottom: 25px;\">\n      Thank you for your request. Your task has been successfully created and will be available in your board.\n    </p>\n\n    <div style=\"background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 25px;\">\n      <h3 style=\"color: #333333; margin-top: 0; margin-bottom: 15px; font-size: 18px;\">Ticket Details</h3>\n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Title:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${title}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Category:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${category}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Priority:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${priority}</td>\n        </tr>\n      </table>\n    </div>\n\n    <div style=\"background: #f5f5f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 25px; text-align: center;\">\n      <p style=\"margin: 0; color: #666666; font-size: 14px;\">\n        Today you have <strong>${remaining} of ${limit} requests</strong> remaining\n      </p>\n    </div>\n\n    <p style=\"font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 10px;\">\n      If you have any questions, feel free to contact us anytime.\n    </p>\n  </div>\n\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 30px; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"color: #ffffff; margin: 0; font-size: 16px; font-weight: 500;\">Your Join Team</p>\n    <p style=\"color: rgba(255, 255, 255, 0.8); margin: 8px 0 0 0; font-size: 12px;\">\n      This email was automatically generated. Please do not reply directly.\n    </p>\n  </div>\n</div>\n`;\n\nreturn {\n  json: {\n    subject: `Your Feature Request Has Been Received - ${title}`,\n    html: htmlEmail\n  }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        608,
+        1408,
         320
       ],
-      "id": "44071890-c613-43ca-a3af-02714edb5601",
+      "id": "0841e85f-15fe-439d-95ab-982c5e9b7916",
       "name": "Prepare for email"
     },
     {
@@ -54,10 +54,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        400,
+        1200,
         320
       ],
-      "id": "2a9f93c7-23a0-492b-8609-5f071b7bcbb9",
+      "id": "d7c11a0c-5142-4d63-b837-a3e2f2cba3ee",
       "name": "HTTP Firebase"
     },
     {
@@ -83,12 +83,12 @@
         },
         "options": {}
       },
-      "id": "bc0c7610-c3a1-4106-b7b7-7dab4450ed4f",
+      "id": "66ed832b-ddb6-45c1-9a08-c37e7bb65df1",
       "name": "Is Limit Reached?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -368,
+        432,
         192
       ]
     },
@@ -103,15 +103,39 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        784,
+        1584,
         320
       ],
-      "id": "b909d70e-2f37-4fbc-8c3f-dbc2916ede54",
+      "id": "1f56ad67-68d9-4c76-99b7-b45f0583096d",
       "name": "Send an Email",
       "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
       "credentials": {
         "smtp": {
-          "id": "x6z80KoDg0rv6BMR",
+          "id": "jdIU3xzWgTjgT9Lj",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "join.n8n@patrick-schuette.net",
+        "toEmail": "={{ $json.originalFrom }}",
+        "subject": "=⚠️ Tageslimit erreicht",
+        "html": "=<h2>Daily Request Limit Reached</h2>\n<p>Hello {{ $('Check Daily Limit').item.json.userName }},</p>\n<p>We have reached today's limit of <strong>10 feature requests</strong>.</p>\n<p>You can submit new requests again tomorrow.</p>\n<p>Best regards,<br>Your Join Team</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        704,
+        64
+      ],
+      "id": "acdde367-33a8-475a-809a-dec69b763e64",
+      "name": "Send Email Limit ereicht",
+      "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
+      "credentials": {
+        "smtp": {
+          "id": "jdIU3xzWgTjgT9Lj",
           "name": "SMTP account"
         }
       }
@@ -120,12 +144,12 @@
       "parameters": {
         "jsCode": "const self = this;\n\nreturn (async () => {\n  const items = $input.all();\n\n  // 🛡️ FEHLERTOLERANZ: Immer ein gültiges Item wählen\n  const parsedData =\n    items.find(item => item.json?.isValid) ||\n    items.find(item => item.json) ||\n    items[0];\n\n  if (!parsedData?.json) {\n    // Node bekommt KEINE gültigen Daten → Fallback\n    return {\n      json: {\n        limitExceeded: false,\n        currentCount: 0,\n        dailyLimit: 10,\n        remainingRequests: 10,\n        _fallbackMode: true,\n        _error: \"No valid parsed email data found (safe fallback)\"\n      }\n    };\n  }\n\n  const input = parsedData.json;\n\n  const webhookData = items.find(item => item.json?.emailUid);\n  const emailUid = webhookData?.json?.emailUid || input.emailUid || \"unknown\";\n\n  console.log(\"📊 ===== CHECK DAILY LIMIT START =====\");\n\n  const baseUrl = \"https://join-cd262-default-rtdb.europe-west1.firebasedatabase.app\";\n\n  const today = new Date().toISOString().split(\"T\")[0];\n  const docId = `global_${today}`;\n  const limitDocPath = `daily_limits/${docId}.json`;\n\n  const maxDaily = 10;\n  const maxRetries = 5;\n\n  console.log(\"📅 Date:\", today);\n  console.log(\"📂 Path:\", limitDocPath);\n\n  // 🔁 RETRY LOOP\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    try {\n      console.log(`\\n🔄 === ATTEMPT ${attempt + 1}/${maxRetries} ===`);\n\n      const getUrl = `${baseUrl}/${limitDocPath}`;\n\n      let getResponse;\n\n      try {\n        getResponse = await self.helpers.httpRequest({\n          method: \"GET\",\n          url: getUrl,\n          headers: { \"Content-Type\": \"application/json\" },\n          json: true,\n          returnFullResponse: true\n        });\n      } catch (getError) {\n        if (getError.statusCode === 404 || getError.message?.includes(\"404\")) {\n          console.log(\"📝 Document does not exist (404)\");\n          getResponse = { statusCode: 404, body: null };\n        } else {\n          throw getError;\n        }\n      }\n\n      let currentCount = 0;\n      let docExists = false;\n\n      console.log(\"📥 GET Status:\", getResponse?.statusCode);\n\n      if (getResponse?.statusCode === 200) {\n        const body = getResponse.body;\n\n        console.log(\"📦 Body:\", body);\n\n        if (body) {\n          currentCount = parseInt(body.count ?? 0, 10);\n          docExists = true;\n        }\n      } else if (getResponse?.statusCode === 404) {\n        currentCount = 0;\n        docExists = false;\n      } else {\n        throw new Error(`Unexpected GET status: ${getResponse?.statusCode}`);\n      }\n\n      const newCount = currentCount + 1;\n      console.log(`➕ Will increment: ${currentCount} → ${newCount}`);\n\n      // 🚫 LIMIT EXCEEDED\n      if (newCount > maxDaily) {\n        console.log(`❌ LIMIT EXCEEDED: ${newCount} > ${maxDaily}`);\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: true,\n            currentCount,\n            dailyLimit: maxDaily,\n            remainingRequests: 0\n          }\n        };\n      }\n\n      const updateBody = {\n        date: today,\n        count: newCount,\n        lastUpdated: new Date().toISOString(),\n        lastRequestTitle: String(input.title || \"untitled\").substring(0, 100),\n        lastRequestFrom: String(input.userEmail || \"unknown\")\n      };\n\n      let writeResponse;\n\n      if (!docExists) {\n        console.log(\"📝 Creating new document with PUT...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PUT\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PUT Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"CREATE\"\n          }\n        };\n      } else {\n        console.log(\"🔄 Updating existing document with PATCH...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PATCH\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PATCH Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"UPDATE\"\n          }\n        };\n      }\n    } catch (error) {\n      console.error(`🔴 Error in attempt ${attempt + 1}:`, error.message);\n\n      if (attempt === maxRetries - 1) {\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: 0,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily,\n            _error: error.message,\n            _fallbackMode: true\n          }\n        };\n      }\n\n      console.log(`⏳ Retrying attempt ${attempt + 2}...`);\n    }\n  }\n\n  return {\n    json: {\n      ...input,\n      emailUid,\n      limitExceeded: false,\n      currentCount: 0,\n      dailyLimit: maxDaily,\n      remainingRequests: maxDaily,\n      _fallbackMode: true,\n      _error: \"Unexpected: Loop ended without return\"\n    }\n  };\n})();\n"
       },
-      "id": "0626747b-1be6-4a22-a91b-ca723807b5e4",
+      "id": "20d4553a-7ae1-410a-8555-febd90a013c5",
       "name": "Check Daily Limit",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -608,
+        192,
         192
       ]
     },
@@ -165,10 +189,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -848,
+        -48,
         208
       ],
-      "id": "1a8103a9-caf8-467b-a53c-e7b4b6a09103",
+      "id": "a540c7da-f27c-488f-9e5f-e648e6b0ac3e",
       "name": "Check if no system Email Adress"
     },
     {
@@ -182,10 +206,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -128,
+        672,
         320
       ],
-      "id": "a073d697-9073-42e9-9dcd-3b709cc29d56",
+      "id": "baa9d337-50b9-4e35-abd4-ab73bb24f929",
       "name": "AI Agent"
     },
     {
@@ -195,14 +219,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        -144,
+        656,
         544
       ],
-      "id": "43571d35-05f3-4e63-a3e5-100984246bb7",
+      "id": "f775fc65-bbc7-45aa-b082-342c76e7504d",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "6KwYcVVac9rSAVbt",
+          "id": "SZqD1nNwDJioliIr",
           "name": "Google Gemini(PaLM) Api account"
         }
       }
@@ -215,10 +239,10 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.3,
       "position": [
-        32,
+        832,
         576
       ],
-      "id": "ccf3093e-c332-4e98-bf34-4cbac8541aaa",
+      "id": "f22f79ce-723c-4b50-a08a-e733124f8a11",
       "name": "Code Tool"
     },
     {
@@ -228,10 +252,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        208,
+        1008,
         320
       ],
-      "id": "dbeea2c2-219c-48d0-b027-c5a6a2e3a012",
+      "id": "6dab22b0-761c-4891-b862-48cfda364722",
       "name": "Prepare Firebase Document"
     },
     {
@@ -241,35 +265,11 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -608,
+        192,
         368
       ],
-      "id": "4db4e896-e1db-48fc-9c93-a87f4bb25c20",
+      "id": "e88d9f0b-4951-4c1b-a09b-0662da3dbe3c",
       "name": "sender was a system email"
-    },
-    {
-      "parameters": {
-        "fromEmail": "join.n8n@patrick-schuette.net",
-        "toEmail": "={{ $json.originalFrom }}",
-        "subject": "=⚠️ day limit reached",
-        "html": "=<h2>Daily Request Limit Reached</h2>\n<p>Hello {{ $('Check Daily Limit').item.json.userName }},</p>\n<p>We have reached today's limit of <strong>10 feature requests</strong>.</p>\n<p>You can submit new requests again tomorrow.</p>\n<p>Best regards,<br>Your Join Team</p>\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.emailSend",
-      "typeVersion": 2.1,
-      "position": [
-        -96,
-        64
-      ],
-      "id": "1be2aee3-dbe1-44d4-9663-bbbd9fc152a4",
-      "name": "Send Email daily limit",
-      "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
-      "credentials": {
-        "smtp": {
-          "id": "x6z80KoDg0rv6BMR",
-          "name": "SMTP account"
-        }
-      }
     }
   ],
   "connections": {
@@ -310,7 +310,7 @@
       "main": [
         [
           {
-            "node": "Send Email daily limit",
+            "node": "Send Email Limit ereicht",
             "type": "main",
             "index": 0
           }
@@ -401,6 +401,6 @@
   "pinData": {},
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "225f756c76d8c85f3ebc848f047b554e8df1b8365479bf96173202eb9ec503d0"
+    "instanceId": "c207e85e8dea1db3c29b761cefde4fe45833a219634d9386213d09d7590ce49c"
   }
 }

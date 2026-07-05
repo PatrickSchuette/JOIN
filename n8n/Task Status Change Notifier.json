@@ -1,113 +1,110 @@
 {
-    "nodes": [
-      {
-        "parameters": {
-          "httpMethod": "POST",
-          "path": "task-status-changed",
-          "responseMode": "responseNode",
-          "options": {
-            "allowedOrigins": "=http://127.0.0.1:5500"
-          }
-        },
-        "id": "5e7642e7-a032-4b54-bdb4-72a4dcd7e7d6",
-        "name": "Status Change Webhook",
-        "type": "n8n-nodes-base.webhook",
-        "typeVersion": 2.1,
-        "position": [
-          640,
-          784
-        ],
-        "webhookId": "task-status-webhook-001"
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "task-status-changed",
+        "options": {}
       },
-      {
-        "parameters": {
-          "jsCode": "const raw = $input.first().json;\nconst data = raw.body;\n\nconsole.log('📬 Received:', JSON.stringify(data, null, 2));\n\n// Quelle prüfen\nif (!data.source || data.source !== 'webhook') {\n  console.log('⏭️ Skipping - wrong source');\n  return [];\n}\n\n// Email prüfen\nif (!data.creatorEmail) {\n  console.log('⚠️ No email');\n  return [];\n}\n\n// Statusänderung prüfen\nconst isStatusChange = !!(data.oldStatus && data.newStatus);\nconsole.log('🔍 Status change:', isStatusChange);\n\nif (!isStatusChange) {\n  return [];\n}\n\n// Board-Status-Namen\nconst statusNames = {\n  'boardTriage': 'Triage',\n  'boardToDo': 'To Do',\n  'boardProgress': 'In Bearbeitung',\n  'boardFeedback': 'Feedback',\n  'boardDone': 'Erledigt'\n};\n\nconst statusEmojis = {\n  'boardTriage': '🔍',\n  'boardToDo': '📋',\n  'boardProgress': '⚙️',\n  'boardFeedback': '⏳',\n  'boardDone': '✅'\n};\n\nreturn {\n  json: {\n    taskId: data.taskId,\n    taskTitle: data.taskTitle || 'Aufgabe',\n    oldStatus: statusNames[data.oldStatus] || data.oldStatus,\n    newStatus: statusNames[data.newStatus] || data.newStatus,\n    statusEmoji: statusEmojis[data.newStatus] || '🔔',\n    creatorEmail: data.creatorEmail,\n    creatorName: data.creatorName || 'User',\n    updatedBy: data.updatedBy || 'Team',\n    formattedDate: new Date().toLocaleString('de-DE')\n  }\n};\n"
-        },
-        "id": "ab6d0895-616c-4a7a-89b7-52d41c643ebb",
-        "name": "Process Status Change",
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          848,
-          784
-        ]
+      "id": "5e7642e7-a032-4b54-bdb4-72a4dcd7e7d6",
+      "name": "Status Change Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        784
+      ],
+      "webhookId": "task-status-webhook-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json;\nconst data = raw.body;\n\nconsole.log('📬 Received:', JSON.stringify(data, null, 2));\n\n// Quelle prüfen\nif (!data.source || data.source !== 'webhook') {\n  console.log('⏭️ Skipping - wrong source');\n  return [];\n}\n\n// Email prüfen\nif (!data.creatorEmail) {\n  console.log('⚠️ No email');\n  return [];\n}\n\n// Statusänderung prüfen\nconst isStatusChange = !!(data.oldStatus && data.newStatus);\nconsole.log('🔍 Status change:', isStatusChange);\n\nif (!isStatusChange) {\n  return [];\n}\n\n// Board-Status-Namen\nconst statusNames = {\n  'boardTriage': 'Triage',\n  'boardToDo': 'To Do',\n  'boardProgress': 'In Bearbeitung',\n  'boardFeedback': 'Feedback',\n  'boardDone': 'Erledigt'\n};\n\nconst statusEmojis = {\n  'boardTriage': '🔍',\n  'boardToDo': '📋',\n  'boardProgress': '⚙️',\n  'boardFeedback': '⏳',\n  'boardDone': '✅'\n};\n\nreturn {\n  json: {\n    taskId: data.taskId,\n    taskTitle: data.taskTitle || 'Aufgabe',\n    oldStatus: statusNames[data.oldStatus] || data.oldStatus,\n    newStatus: statusNames[data.newStatus] || data.newStatus,\n    statusEmoji: statusEmojis[data.newStatus] || '🔔',\n    creatorEmail: data.creatorEmail,\n    creatorName: data.creatorName || 'User',\n    updatedBy: data.updatedBy || 'Team',\n    formattedDate: new Date().toLocaleString('de-DE')\n  }\n};\n"
       },
-      {
-        "parameters": {
-          "fromEmail": "noreply@patrick-schuette.net",
-          "toEmail": "={{ $json.creatorEmail }}",
-          "subject": "Your task has been updated",
-          "html": "={{ $json.htmlBody }}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.emailSend",
-        "typeVersion": 2.1,
-        "position": [
-          1264,
-          784
-        ],
-        "id": "107ab615-b95e-46fa-a719-02814ed9b16d",
-        "name": "Send an Email",
-        "webhookId": "2aeee255-49dd-468d-b3f4-9f6b8cf386ac",
-        "credentials": {
-          "smtp": {
-            "id": "jdIU3xzWgTjgT9Lj",
-            "name": "SMTP account"
-          }
+      "id": "ab6d0895-616c-4a7a-89b7-52d41c643ebb",
+      "name": "Process Status Change",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@patrick-schuette.net",
+        "toEmail": "={{ $json.creatorEmail }}",
+        "subject": "Your task has been updated",
+        "html": "={{ $json.htmlBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        784
+      ],
+      "id": "107ab615-b95e-46fa-a719-02814ed9b16d",
+      "name": "Send an Email",
+      "webhookId": "2aeee255-49dd-468d-b3f4-9f6b8cf386ac",
+      "credentials": {
+        "smtp": {
+          "id": "jdIU3xzWgTjgT9Lj",
+          "name": "SMTP account"
         }
-      },
-      {
-        "parameters": {
-          "jsCode": "const data = $input.first().json;\n\nconst html = `\n<div style=\"font-family: Arial, sans-serif; padding: 20px; max-width: 600px;\">\n  <h2 style=\"color: #333; margin-bottom: 10px;\">\n    ${data.statusEmoji} Task Status Update\n  </h2>\n\n  <p style=\"font-size: 15px; color: #555;\">\n    Hello <strong>${data.creatorName}</strong>,\n  </p>\n\n  <p style=\"font-size: 15px; color: #555; line-height: 1.5;\">\n    your task <strong>\"${data.taskTitle}\"</strong> has been updated.\n  </p>\n\n  <table style=\"width: 100%; margin-top: 20px; border-collapse: collapse;\">\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Previous Status:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.oldStatus}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">New Status:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.newStatus}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Updated By:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.updatedBy}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Timestamp:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.formattedDate}</td>\n    </tr>\n  </table>\n\n  <p style=\"margin-top: 25px; font-size: 14px; color: #777;\">\n    Best regards,<br>\n    Your Join Team\n  </p>\n</div>\n`;\n\nreturn {\n  json: {\n    ...data,\n    htmlBody: html\n  }\n};\n"
-        },
-        "type": "n8n-nodes-base.code",
-        "typeVersion": 2,
-        "position": [
-          1056,
-          784
-        ],
-        "id": "b9619977-1ffb-4474-a89a-243635d2afa2",
-        "name": "prepare Email"
-      }
-    ],
-    "connections": {
-      "Status Change Webhook": {
-        "main": [
-          [
-            {
-              "node": "Process Status Change",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Process Status Change": {
-        "main": [
-          [
-            {
-              "node": "prepare Email",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "prepare Email": {
-        "main": [
-          [
-            {
-              "node": "Send an Email",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
       }
     },
-    "pinData": {},
-    "meta": {
-      "templateCredsSetupCompleted": true,
-      "instanceId": "c207e85e8dea1db3c29b761cefde4fe45833a219634d9386213d09d7590ce49c"
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\nconst html = `\n<div style=\"font-family: Arial, sans-serif; padding: 20px; max-width: 600px;\">\n  <h2 style=\"color: #333; margin-bottom: 10px;\">\n    ${data.statusEmoji} Task Status Update\n  </h2>\n\n  <p style=\"font-size: 15px; color: #555;\">\n    Hello <strong>${data.creatorName}</strong>,\n  </p>\n\n  <p style=\"font-size: 15px; color: #555; line-height: 1.5;\">\n    your task <strong>\"${data.taskTitle}\"</strong> has been updated.\n  </p>\n\n  <table style=\"width: 100%; margin-top: 20px; border-collapse: collapse;\">\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Previous Status:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.oldStatus}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">New Status:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.newStatus}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Updated By:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.updatedBy}</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; font-weight: bold; color: #666;\">Timestamp:</td>\n      <td style=\"padding: 8px; color: #333;\">${data.formattedDate}</td>\n    </tr>\n  </table>\n\n  <p style=\"margin-top: 25px; font-size: 14px; color: #777;\">\n    Best regards,<br>\n    Your Join Team\n  </p>\n</div>\n`;\n\nreturn {\n  json: {\n    ...data,\n    htmlBody: html\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1056,
+        784
+      ],
+      "id": "b9619977-1ffb-4474-a89a-243635d2afa2",
+      "name": "prepare Email"
     }
+  ],
+  "connections": {
+    "Status Change Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process Status Change",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Status Change": {
+      "main": [
+        [
+          {
+            "node": "prepare Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prepare Email": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c207e85e8dea1db3c29b761cefde4fe45833a219634d9386213d09d7590ce49c"
   }
+}
