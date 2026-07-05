@@ -33,15 +33,19 @@ async function loadDailyLimit() {
  */
 function updateStakeholderUI(limitData) {
     const count = limitData.count ?? 0;
+    const available = document.getElementById("state-available");
+    const limit = document.getElementById("state-limit-reached");
     const counter = document.getElementById("request-counter-container");
     const countSpan = document.getElementById("current-requests-count");
-
     countSpan.textContent = count;
-
     if (count >= 10) {
         counter.classList.add("limit-reached");
+        available.style.display = "none";
+        limit.style.display = "block";
     } else {
         counter.classList.remove("limit-reached");
+        available.style.display = "block";
+        limit.style.display = "none";
     }
 }
 

@@ -2,29 +2,36 @@
   "nodes": [
     {
       "parameters": {
-        "jsCode": "const response = $input.first().json;\n\n// Limit-Daten holen\nconst limitData = $('Is Limit Reached?').first().json;\n\n// 🔥 NAME SICHER EXTRAHIEREN\n// IMAP liefert ein Objekt unter 'from' mit einer Value-Liste\nconst imapFrom = $('Email Trigger (IMAP)').first().json.from;\nconst senderName =\n  imapFrom?.value?.[0]?.name ||\n  imapFrom?.name ||\n  imapFrom?.text ||\n  imapFrom?.address ||\n  response.creatorName ||\n  response.userName ||\n  \"User\";\n\n// 🔥 TITEL & DETAILS SICHER EXTRAHIEREN\nconst firebase = $('Prepare Firebase Document').first().json;\nconst title = firebase.title ?? \"(no title provided)\";\nconst category = firebase.category ?? \"General\";\nconst priority = firebase.priority ?? \"Medium\";\n\n// 🔥 LIMIT-WERTE\nconst remaining = limitData.remainingRequests ?? 0;\nconst limit = limitData.dailyLimit ?? 10;\n\n// 🔥 HTML EMAIL\nconst htmlEmail = `\n<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;\">\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;\">✅ Request Received!</h1>\n  </div>\n\n  <div style=\"padding: 30px;\">\n    <p style=\"font-size: 16px; color: #333333; margin-bottom: 20px;\">Hello <strong>${senderName}</strong>,</p>\n    <p style=\"font-size: 15px; color: #555555; line-height: 1.6; margin-bottom: 25px;\">\n      Thank you for your request! Your task has been successfully created and will be available in your board.\n    </p>\n\n    <div style=\"background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 25px;\">\n      <h3 style=\"color: #333333; margin-top: 0; margin-bottom: 15px; font-size: 18px;\">📋 Ticket Details</h3>\n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Title:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${title}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Category:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${category}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Priority:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${priority}</td>\n        </tr>\n      </table>\n    </div>\n\n    <div style=\"background: #f5f5f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 25px; text-align: center;\">\n      <p style=\"margin: 0; color: #666666; font-size: 14px;\">\n        Today you have <strong>${remaining} of ${limit} requests</strong> remaining\n      </p>\n    </div>\n\n    <p style=\"font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 10px;\">\n      If you have any questions, feel free to contact us anytime.\n    </p>\n  </div>\n\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 30px; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"color: #ffffff; margin: 0; font-size: 16px; font-weight: 500;\">Your Join Team</p>\n    <p style=\"color: rgba(255, 255, 255, 0.8); margin: 8px 0 0 0; font-size: 12px;\">\n      This email was automatically generated. Please do not reply directly.\n    </p>\n  </div>\n</div>\n`;\n\n// Übergabe im exakten Format, das Ihr \"Send an Email\"-Node erwartet\nreturn {\n  json: {\n    subject: `✅ Your Feature Request Has Been Received - ${title}`,\n    html: htmlEmail\n  }\n};\n"
+        "format": "resolved",
+        "options": {}
       },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
       "position": [
-        1200,
-        144
+        -1056,
+        208
       ],
-      "id": "14f200af-3446-47fb-8867-8269efb44e06",
-      "name": "Prepare for email"
+      "id": "9ab0bae5-f2a7-4232-81c6-e0a5ab95f326",
+      "name": "Email Trigger (IMAP)",
+      "credentials": {
+        "imap": {
+          "id": "UDvomEibgdoCscfl",
+          "name": "join.n8n@patrick-schuette.net"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "const aiResponse = $input.first().json;\nconst validatedData = $('Is Limit Reached?').first().json;\nconst filteredData = $('Ansprache entfernen in mail').first().json;\n\nlet subtasks = [];\nlet taskDescription = '';\nlet generatedTitle = '';\nlet generatedDate = null; // Variable für das KI-Datum bereitstellen\n\ntry {\n  let content = aiResponse.content?.parts?.[0]?.text || '';\n\n  content = content\n    .replace(/```json/gi, '')\n    .replace(/```/g, '')\n    .trim();\n\n  let parsed;\n\n  try {\n    parsed = JSON.parse(content);\n  } catch {\n    const match = content.match(/(\\{[\\s\\S]*\\})/);\n    parsed = match ? JSON.parse(match[1]) : null;\n  }\n\n  if (!parsed || typeof parsed !== 'object') {\n    throw new Error('Parsed result is not an object');\n  }\n\n  generatedTitle = parsed.title?.trim().substring(0, 80) || validatedData.title;\n\n  taskDescription = parsed.description?.trim() || filteredData.description;\n\n  generatedDate = parsed.date || null;\n\n  // Subtasks\n  const rawSubtasks = parsed.subtasks || [];\n\n  if (Array.isArray(rawSubtasks)) {\n    subtasks = rawSubtasks\n      .map((st, idx) => {\n        let title = typeof st === 'string'\n          ? st\n          : st?.task || st?.title || st?.name || st?.description || '';\n\n        title = title.trim();\n        if (!title) return null;\n\n        return {\n          id: `subtask_${Date.now()}_${idx}_${Math.random().toString(36).substr(2, 5)}`,\n          title: title.substring(0, 255),\n          completed: st?.checked || false\n        };\n      })\n      .filter(Boolean);\n  }\n\n} catch (error) {\n  taskDescription = filteredData.description;\n  generatedTitle = validatedData.title;\n  subtasks = [];\n}\n\nreturn {\n  json: {\n    ...validatedData,\n    title: generatedTitle,\n    description: taskDescription,\n    date: generatedDate || validatedData.date,\n    subtasks,\n    _aiGenerated: {\n      title: !!generatedTitle,\n      subtasks: subtasks.length > 0,\n      hadErrors: subtasks.length === 0\n    }\n  }\n};\n"
+        "jsCode": "const response = $input.first().json;\n\n// Absenderdaten sicher extrahieren\nlet senderEmail = response.createdBy || \"\";\nlet senderName = $('Prepare Firebase Document').first().json.creatorName || \"\";\n\n// Fallback: Name aus Email ableiten\nif (!senderName && senderEmail) {\n  senderName = senderEmail.split(\"@\")[0];\n}\n\n// Titel & Details\nconst title = $('Prepare Firebase Document').first().json.title || \"(no title provided)\";\nconst category = response.category || \"General\";\nconst priority = response.priority || \"Medium\";\n\n// Limit-Werte\nconst remaining = response.remainingRequests ?? 0;\nconst limit = response.dailyLimit ?? 10;\n\n// HTML E-Mail ohne Emojis\nconst htmlEmail = `\n<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;\">\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; border-radius: 8px 8px 0 0;\">\n    <h1 style=\"color: #ffffff; margin: 0; font-size: 28px; font-weight: 600;\">Request Received</h1>\n  </div>\n\n  <div style=\"padding: 30px;\">\n    <p style=\"font-size: 16px; color: #333333; margin-bottom: 20px;\">Hello <strong>${senderName}</strong>,</p>\n    <p style=\"font-size: 15px; color: #555555; line-height: 1.6; margin-bottom: 25px;\">\n      Thank you for your request. Your task has been successfully created and will be available in your board.\n    </p>\n\n    <div style=\"background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 25px;\">\n      <h3 style=\"color: #333333; margin-top: 0; margin-bottom: 15px; font-size: 18px;\">Ticket Details</h3>\n      <table style=\"width: 100%; border-collapse: collapse;\">\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Title:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${title}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Category:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${category}</td>\n        </tr>\n        <tr>\n          <td style=\"padding: 8px 0; color: #666666; font-weight: 600; width: 30%;\">Priority:</td>\n          <td style=\"padding: 8px 0; color: #333333;\">${priority}</td>\n        </tr>\n      </table>\n    </div>\n\n    <div style=\"background: #f5f5f5; padding: 15px 20px; border-radius: 4px; margin-bottom: 25px; text-align: center;\">\n      <p style=\"margin: 0; color: #666666; font-size: 14px;\">\n        Today you have <strong>${remaining} of ${limit} requests</strong> remaining\n      </p>\n    </div>\n\n    <p style=\"font-size: 14px; color: #666666; line-height: 1.6; margin-bottom: 10px;\">\n      If you have any questions, feel free to contact us anytime.\n    </p>\n  </div>\n\n  <div style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 25px 30px; text-align: center; border-radius: 0 0 8px 8px;\">\n    <p style=\"color: #ffffff; margin: 0; font-size: 16px; font-weight: 500;\">Your Join Team</p>\n    <p style=\"color: rgba(255, 255, 255, 0.8); margin: 8px 0 0 0; font-size: 12px;\">\n      This email was automatically generated. Please do not reply directly.\n    </p>\n  </div>\n</div>\n`;\n\nreturn {\n  json: {\n    subject: `Your Feature Request Has Been Received - ${title}`,\n    html: htmlEmail\n  }\n};\n"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        688,
-        144
+        608,
+        320
       ],
-      "id": "1f4a9890-e307-42d6-a538-c20f0ddc7b0b",
-      "name": "Subtask node"
+      "id": "44071890-c613-43ca-a3af-02714edb5601",
+      "name": "Prepare for email"
     },
     {
       "parameters": {
@@ -47,91 +54,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1024,
-        144
+        400,
+        320
       ],
-      "id": "f8681707-70ad-4af6-ac73-e4b9f7a9bfcb",
+      "id": "2a9f93c7-23a0-492b-8609-5f071b7bcbb9",
       "name": "HTTP Firebase"
-    },
-    {
-      "parameters": {
-        "resource": "document",
-        "modelId": {
-          "__rl": true,
-          "value": "models/gemini-2.5-flash",
-          "mode": "list",
-          "cachedResultName": "models/gemini-2.5-flash"
-        },
-        "text": "=You are a professional project management assistant. Your only output format is raw, minified JSON.\n\n### CRITICAL RULE — DO NOT VIOLATE:\nReturn ONLY the raw JSON object. \nDo NOT wrap the output in markdown code blocks like ```json ... ```.\nDo NOT include any introduction, explanation, commentary, or trailing text.\nThe very first character of your response must be '{' and the very last character must be '}'.\n\n### Objective\nAnalyze the provided email description. Extract the core task, rewrite the description into a professional English summary, break it down into the requested sub-scenarios, and format it exactly according to the expected JSON structure.\n\n### Rules\n1. TITLE: Combine the main request and the explicit name. Target format: \"Test task generated by AI\". Max 80 characters.\n2. DESCRIPTION: Translate and rewrite the request into a precise, professional English summary (1-2 sentences). Target: \"Create a test task that is explicitly named 'generated by AI'. This task should include two distinct sub-scenarios.\"\n3. SUBTASKS: \n   - Extract the implicit or explicit subtasks as scenarios.\n   - Format each subtask as an object with two fields: \"checked\" (always false) and \"task\" (the scenario name in English, e.g., \"Scenario: Works\", \"Scenario: Fails\").\n4. ASSIGNED TO: Extract any email addresses found in the text or CC fields. If none are found, return an empty array [].\n5. DATE calculation:\n   - Target date based on the email context is: 2026-06-30\n   - Use this exact date format: YYYY-MM-DD.\n6. FIXED METADATA: \n   - \"creatorType\" must always be \"extern\".\n   - \"priority\" must always be \"medium\" (unless an urgent keyword is found).\n   - \"status\" must always be \"boardTriage\".\n\n### Expected JSON Structure\n{\n  \"assignedTo\": [],\n  \"creatorType\": \"extern\",\n  \"date\": \"YYYY-MM-DD\",\n  \"description\": \"String\",\n  \"priority\": \"String\",\n  \"status\": \"String\",\n  \"subtasks\": [\n    {\n      \"checked\": false,\n      \"task\": \"String\"\n    }\n  ],\n  \"title\": \"String\"\n}\n\n### Input Data to Analyze\n=== START OF DESCRIPTION ===\n{{ $json.description }}\n=== END OF DESCRIPTION ===\n",
-        "options": {
-          "maxOutputTokens": "={{ 2000 }}"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.googleGemini",
-      "typeVersion": 1,
-      "position": [
-        512,
-        144
-      ],
-      "id": "611b5e03-17b5-46e5-bb44-d193b4248ce3",
-      "name": "Analyze document",
-      "alwaysOutputData": true,
-      "executeOnce": true,
-      "retryOnFail": true,
-      "waitBetweenTries": 2000,
-      "credentials": {
-        "googlePalmApi": {
-          "id": "SZqD1nNwDJioliIr",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      },
-      "notes": "You are a task extraction bot. Extract 2-3 subtasks from the text below.\n\nCRITICAL RULES:\n1. Return ONLY valid JSON\n2. NO explanations\n3. NO markdown\n4. NO other text\n\nRequired format:\n{\"subtasks\": [{\"title\": \"First task\"}, {\"title\": \"Second task\"}]}\n\nText to analyze:"
-    },
-    {
-      "parameters": {
-        "jsCode": "const input = $input.first().json;\n\nconsole.log('📧 Processing Email Input');\nconsole.log(JSON.stringify(input, null, 2));\n\n/**\n * IMAP EMAIL ONLY — Webhook-Code entfernt\n */\n\nlet from = input.from?.address || input.from?.text || input.from || '';\nlet subject = input.subject || '';\nlet body =\n  input.text ||\n  input.textPlain ||\n  (typeof input.body === 'string' ? input.body : '') ||\n  input.textAsHtml ||\n  input.html ||\n  '';\n\nconst bodyStr = typeof body === 'string' ? body : String(body || '');\nconst cleanBody = bodyStr.replace(/<[^>]*>/g, '');\n\nconst emailMatch = from.match(/([^\\\\s@]+@[^\\\\s@]+\\\\.[^\\\\s@]+)/);\nconst userEmail = emailMatch ? emailMatch[1] : from;\n\nconst nameMatch = from.match(/^([^<]+)</);\nconst userName = nameMatch ? nameMatch[1].trim().replace(/\\\"/g, '') : userEmail.split('@')[0];\n\nlet type = 'feature';\n\n/**\n * TYPE detection \n */\nconst loweredSubject = subject.toLowerCase();\n\nif (loweredSubject.startsWith(\"[feature]\")) type = \"feature\";\nelse if (loweredSubject.startsWith(\"[bug]\")) type = \"bug\";\nelse if (loweredSubject.startsWith(\"[question]\")) type = \"question\";\nelse if (loweredSubject.startsWith(\"[improvement]\")) type = \"improvement\";\nelse {\n  // Fallback: Body durchsuchen\n  const loweredBody = cleanBody.toLowerCase();\n  if (loweredBody.includes(\"type: feature\")) type = \"feature\";\n  else if (loweredBody.includes(\"type: bug\")) type = \"bug\";\n  else if (loweredBody.includes(\"type: question\")) type = \"question\";\n  else if (loweredBody.includes(\"type: improvement\")) type = \"improvement\";\n}\n\n/**\n * BUG detection\n */\nconst bugWords = [\n  \"bug\",\"error\",\"crash\",\"fail\",\"broken\",\"not work\",\"doesn't work\",\n  \"vulnerability\",\"security\",\"xss\",\"sql injection\",\"exploit\",\"defect\",\"issue\"\n];\n\nconst loweredSubjectBody = (subject + \" \" + cleanBody).toLowerCase();\n\nif (type === \"feature\") {\n  for (const word of bugWords) {\n    if (loweredSubjectBody.includes(word)) {\n      type = \"bug\";\n      break;\n    }\n  }\n}\n\n/**\n * TITLE extraction — ohne Regex\n */\nlet title = subject;\n\n// Entferne [Feature] etc.\nif (title.startsWith(\"[\")) {\n  const closing = title.indexOf(\"]\");\n  if (closing !== -1) {\n    title = title.substring(closing + 1).trim();\n  }\n}\n\nif (!title || title.length < 5) {\n  const lines = cleanBody.split(\"\\n\");\n  const titleLine = lines.find(l => l.toLowerCase().startsWith(\"title:\"));\n  if (titleLine) {\n    title = titleLine.split(\":\")[1].trim();\n  } else {\n    title = \"Untitled Request\";\n  }\n}\n\n/**\n * DESCRIPTION extraction — Regex bleibt, aber ist stabil\n */\nlet description;\nconst originalRequestMatch = cleanBody.match(/##\\s*📝\\s*Original-Anfrage:\\s*\\n\\s*(.+?)(?:\\n\\s*---|\\n\\s*\\*\\*Täglich|$)/is);\n\nif (originalRequestMatch) {\n  description = originalRequestMatch[1].trim();\n} else {\n  description = cleanBody\n    .replace(/\\*\\*Dieses Ticket wurde KI-generiert[\\s\\S]*?---/g, '')\n    .replace(/\\*\\*Täglich[\\s\\S]*$/g, '')\n    .replace(/💡\\s*\\*Dieser Stakeholder[\\s\\S]*$/g, '')\n    .replace(/Type:.*?\\n/gi, '')\n    .replace(/Title:.*?\\n/gi, '')\n    .replace(/Priority:.*?\\n/gi, '')\n    .replace(/---[\\s\\S]*$/g, '')\n    .trim();\n}\n\n/**\n * PRIORITY detection\n */\nconst urgentWords = [\"urgent\",\"dringend\",\"sofort\",\"kritisch\",\"critical\",\"security\",\"high\",\"asap\",\"immediately\"];\nconst lowWords = [\"low\",\"niedrig\",\"später\",\"nice to have\",\"optional\",\"someday\"];\n\nlet priority = \"medium\";\n\nfor (const w of urgentWords) {\n  if (loweredSubjectBody.includes(w)) {\n    priority = \"high\";\n    break;\n  }\n}\n\nif (priority === \"medium\") {\n  for (const w of lowWords) {\n    if (loweredSubjectBody.includes(w)) {\n      priority = \"low\";\n      break;\n    }\n  }\n}\n\nconst timestamp = input.date || new Date().toISOString();\n\nreturn {\n  json: {\n    isValid: true,\n    reason: \"\",\n    emailUid: input.uid || input.messageId || \"empty\",\n    type,\n    title: title.substring(0, 80),\n    description,\n    userEmail,\n    userName,\n    priority,\n    status: \"triage\",\n    timestamp,\n    originalFrom: from,\n    originalSubject: subject,\n    source: \"email\"\n  }\n};\n"
-      },
-      "id": "34389241-1ff6-4750-b39d-69559445dfb6",
-      "name": "Parse & Validate Email",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        112,
-        144
-      ]
-    },
-    {
-      "parameters": {
-        "format": "resolved",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.emailReadImap",
-      "typeVersion": 2.1,
-      "position": [
-        -912,
-        48
-      ],
-      "id": "d6115d3b-400a-451a-bd62-d8fb02aa8cd3",
-      "name": "Email Trigger (IMAP)",
-      "credentials": {
-        "imap": {
-          "id": "BCJu57nxkIcqV6eS",
-          "name": "IMAP account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const req = $input.first()?.json || {};\n\n// 🛡️ FEHLERTOLERANZ: Wenn gar nichts kommt → Fallback-Dokument\nif (!req || typeof req !== \"object\") {\n  console.warn(\"⚠️ No input received. Using safe fallback.\");\n  return {\n    json: {\n      id: `task_${Date.now()}`,\n      title: \"(missing title)\",\n      description: \"(missing description)\",\n      category: \"User Story\",\n      priority: \"medium\",\n      status: \"boardTriage\",\n      createdBy: \"unknown\",\n      creatorName: \"unknown\",\n      creatorType: \"external\",\n      date: new Date().toISOString().split(\"T\")[0],\n      assignedTo: [],\n      subtasks: [],\n      pos: 0,\n      _fallbackMode: true\n    }\n  };\n}\n\nconsole.log(\"📥 RECEIVED FROM SUBTASK NODE:\");\nconsole.log(\"   Title:\", req?.title);\n\n// 🛡️ Pflichtfelder prüfen — aber NICHT crashen\nif (!req.type) {\n  console.warn(\"⚠️ Missing field: type → using fallback 'feature'\");\n  req.type = \"feature\";\n}\n\nif (!req.title) {\n  console.warn(\"⚠️ Missing field: title → using fallback\");\n  req.title = \"(no title)\";\n}\n\nif (!req.userEmail) {\n  console.warn(\"⚠️ Missing field: userEmail → using fallback\");\n  req.userEmail = \"unknown@unknown\";\n}\n\n// ✔ description optional machen\nif (!req.description || req.description.trim().length === 0) {\n  console.warn(\"⚠️ No description provided. Using fallback.\");\n  req.description = \"(no description provided)\";\n}\n\n// Kategorie bestimmen\nconst categoryMap = {\n  feature: \"User Story\",\n  bug: \"Technical Task\",\n  question: \"User Story\",\n  improvement: \"User Story\"\n};\n\nconst reqType = String(req.type || \"feature\").toLowerCase();\nconst category = categoryMap[reqType] || \"User Story\";\n\n// Priority bestimmen\nconst reqPriority = String(req.priority || \"medium\").toLowerCase();\nconst priority = [\"high\", \"medium\", \"low\"].includes(reqPriority)\n  ? reqPriority\n  : \"medium\";\n\n// Datum bestimmen\nconst finalDate = req.date || new Date().toISOString().split(\"T\")[0];\n\n// Subtasks stabilisieren\nconst subtasks = Array.isArray(req.subtasks) ? req.subtasks : [];\n\nconst firestoreSubtasks = subtasks.map(st => ({\n  id: String(st.id || `sub_${Date.now()}`),\n  task: String(st.title || st.task || \"(no subtask title)\"),\n  completed: Boolean(st.completed)\n}));\n\nconsole.log(\"✅ Firebase document prepared:\", req.title.substring(0, 80));\nconsole.log(\"🔍 Status set to:\", req.status || \"boardTriage\");\nconsole.log(\"📋 Subtasks to save:\", firestoreSubtasks.length);\n\nconst firestoreBody = {\n  id: req.id || req.emailUid || `task_${Date.now()}`,\n  title: req.title,\n  description: req.description,\n  category,\n  priority,\n  status: \"boardTriage\",\n  createdBy: $input.first().json.from.value[0].address,\n  creatorName: $input.first().json.from.value[0].name || req.userEmail.split(\"@\")[0],\n  creatorType: \"external\",\n  date: finalDate,\n  assignedTo: req.assignedTo || [],\n  subtasks: firestoreSubtasks,\n  pos: 0\n};\n\nreturn {\n  json: firestoreBody\n};\n"
-      },
-      "id": "22306481-ce66-475c-91c4-65fed022bd2e",
-      "name": "Prepare Firebase Document",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        848,
-        144
-      ]
     },
     {
       "parameters": {
@@ -156,27 +83,14 @@
         },
         "options": {}
       },
-      "id": "0355827c-738d-4d6f-b2b2-8f1e784e3161",
+      "id": "bc0c7610-c3a1-4106-b7b7-7dab4450ed4f",
       "name": "Is Limit Reached?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -160,
-        32
+        -368,
+        192
       ]
-    },
-    {
-      "parameters": {
-        "jsCode": "const input = $input.first().json;\n\nlet cleanedDescription = input.description || '';\n\ncleanedDescription = cleanedDescription\n  .replace(/^(Hi|Hello|Hey|Hallo|Guten Tag|Moin|Servus)[,!\\s]*/gi, '')\n  .replace(/\\n*(VG|Grüße|Gruß|LG|MfG|Best|Regards|Cheers|Thanks|Danke)[,!\\s]*$/gi, '')\n  .replace(/\\n{3,}/g, '\\n\\n')\n  .trim();\n\n\nif (cleanedDescription.length < 10) {\n  cleanedDescription = input.description;\n}\n\nreturn {\n  json: {\n    type: input.type,\n    title: input.title,\n    description: cleanedDescription,\n    originalDescription: input.description\n  }\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        320,
-        144
-      ],
-      "id": "c85118ee-53dc-441a-a3a1-0cfb4acf46ad",
-      "name": "Ansprache entfernen in mail"
     },
     {
       "parameters": {
@@ -189,15 +103,15 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        1376,
-        144
+        784,
+        320
       ],
-      "id": "141f5b77-8d5a-4c07-b088-e1557365b68d",
+      "id": "b909d70e-2f37-4fbc-8c3f-dbc2916ede54",
       "name": "Send an Email",
       "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
       "credentials": {
         "smtp": {
-          "id": "jdIU3xzWgTjgT9Lj",
+          "id": "x6z80KoDg0rv6BMR",
           "name": "SMTP account"
         }
       }
@@ -213,15 +127,15 @@
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
       "position": [
-        112,
-        -96
+        -96,
+        64
       ],
-      "id": "ad27625f-613e-4596-8442-14d9d18e23bb",
+      "id": "1be2aee3-dbe1-44d4-9663-bbbd9fc152a4",
       "name": "Send Email Limit ereicht",
       "webhookId": "2a7d0853-7185-4907-bfb8-24f38724b375",
       "credentials": {
         "smtp": {
-          "id": "jdIU3xzWgTjgT9Lj",
+          "id": "x6z80KoDg0rv6BMR",
           "name": "SMTP account"
         }
       }
@@ -230,27 +144,14 @@
       "parameters": {
         "jsCode": "const self = this;\n\nreturn (async () => {\n  const items = $input.all();\n\n  // 🛡️ FEHLERTOLERANZ: Immer ein gültiges Item wählen\n  const parsedData =\n    items.find(item => item.json?.isValid) ||\n    items.find(item => item.json) ||\n    items[0];\n\n  if (!parsedData?.json) {\n    // Node bekommt KEINE gültigen Daten → Fallback\n    return {\n      json: {\n        limitExceeded: false,\n        currentCount: 0,\n        dailyLimit: 10,\n        remainingRequests: 10,\n        _fallbackMode: true,\n        _error: \"No valid parsed email data found (safe fallback)\"\n      }\n    };\n  }\n\n  const input = parsedData.json;\n\n  const webhookData = items.find(item => item.json?.emailUid);\n  const emailUid = webhookData?.json?.emailUid || input.emailUid || \"unknown\";\n\n  console.log(\"📊 ===== CHECK DAILY LIMIT START =====\");\n\n  const baseUrl = \"https://join-cd262-default-rtdb.europe-west1.firebasedatabase.app\";\n\n  const today = new Date().toISOString().split(\"T\")[0];\n  const docId = `global_${today}`;\n  const limitDocPath = `daily_limits/${docId}.json`;\n\n  const maxDaily = 10;\n  const maxRetries = 5;\n\n  console.log(\"📅 Date:\", today);\n  console.log(\"📂 Path:\", limitDocPath);\n\n  // 🔁 RETRY LOOP\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    try {\n      console.log(`\\n🔄 === ATTEMPT ${attempt + 1}/${maxRetries} ===`);\n\n      const getUrl = `${baseUrl}/${limitDocPath}`;\n\n      let getResponse;\n\n      try {\n        getResponse = await self.helpers.httpRequest({\n          method: \"GET\",\n          url: getUrl,\n          headers: { \"Content-Type\": \"application/json\" },\n          json: true,\n          returnFullResponse: true\n        });\n      } catch (getError) {\n        if (getError.statusCode === 404 || getError.message?.includes(\"404\")) {\n          console.log(\"📝 Document does not exist (404)\");\n          getResponse = { statusCode: 404, body: null };\n        } else {\n          throw getError;\n        }\n      }\n\n      let currentCount = 0;\n      let docExists = false;\n\n      console.log(\"📥 GET Status:\", getResponse?.statusCode);\n\n      if (getResponse?.statusCode === 200) {\n        const body = getResponse.body;\n\n        console.log(\"📦 Body:\", body);\n\n        if (body) {\n          currentCount = parseInt(body.count ?? 0, 10);\n          docExists = true;\n        }\n      } else if (getResponse?.statusCode === 404) {\n        currentCount = 0;\n        docExists = false;\n      } else {\n        throw new Error(`Unexpected GET status: ${getResponse?.statusCode}`);\n      }\n\n      const newCount = currentCount + 1;\n      console.log(`➕ Will increment: ${currentCount} → ${newCount}`);\n\n      // 🚫 LIMIT EXCEEDED\n      if (newCount > maxDaily) {\n        console.log(`❌ LIMIT EXCEEDED: ${newCount} > ${maxDaily}`);\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: true,\n            currentCount,\n            dailyLimit: maxDaily,\n            remainingRequests: 0\n          }\n        };\n      }\n\n      const updateBody = {\n        date: today,\n        count: newCount,\n        lastUpdated: new Date().toISOString(),\n        lastRequestTitle: String(input.title || \"untitled\").substring(0, 100),\n        lastRequestFrom: String(input.userEmail || \"unknown\")\n      };\n\n      let writeResponse;\n\n      if (!docExists) {\n        console.log(\"📝 Creating new document with PUT...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PUT\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PUT Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"CREATE\"\n          }\n        };\n      } else {\n        console.log(\"🔄 Updating existing document with PATCH...\");\n\n        writeResponse = await self.helpers.httpRequest({\n          method: \"PATCH\",\n          url: `${baseUrl}/daily_limits/${docId}.json`,\n          headers: { \"Content-Type\": \"application/json\" },\n          body: updateBody,\n          json: true,\n          returnFullResponse: true\n        });\n\n        console.log(\"📤 PATCH Status:\", writeResponse?.statusCode);\n\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: newCount,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily - newCount,\n            _operation: \"UPDATE\"\n          }\n        };\n      }\n    } catch (error) {\n      console.error(`🔴 Error in attempt ${attempt + 1}:`, error.message);\n\n      if (attempt === maxRetries - 1) {\n        return {\n          json: {\n            ...input,\n            emailUid,\n            limitExceeded: false,\n            currentCount: 0,\n            dailyLimit: maxDaily,\n            remainingRequests: maxDaily,\n            _error: error.message,\n            _fallbackMode: true\n          }\n        };\n      }\n\n      console.log(`⏳ Retrying attempt ${attempt + 2}...`);\n    }\n  }\n\n  return {\n    json: {\n      ...input,\n      emailUid,\n      limitExceeded: false,\n      currentCount: 0,\n      dailyLimit: maxDaily,\n      remainingRequests: maxDaily,\n      _fallbackMode: true,\n      _error: \"Unexpected: Loop ended without return\"\n    }\n  };\n})();\n"
       },
-      "id": "5b3a9ffb-3028-4962-bb35-7475ced026f4",
+      "id": "0626747b-1be6-4a22-a91b-ca723807b5e4",
       "name": "Check Daily Limit",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -400,
-        32
+        -608,
+        192
       ]
-    },
-    {
-      "parameters": {
-        "jsCode": "console.log($input.first().json.headers.from + \" is a system email address. Workflow will be stopped.\");\nreturn {\n  json: {\n    stopped: true,\n    reason: \"System email detected\",\n    from: $input.first().json.headers.from\n  }\n};\n"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -416,
-        288
-      ],
-      "id": "8155539a-b4d9-4ae1-a76e-6c06c8ddea8d",
-      "name": "Code in JavaScript"
     },
     {
       "parameters": {
@@ -288,30 +189,106 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -640,
-        48
+        -848,
+        208
       ],
-      "id": "99b4cbc4-856e-47f1-a558-d1850cefcbfd",
+      "id": "1a8103a9-caf8-467b-a53c-e7b4b6a09103",
       "name": "Check if no system Email Adress"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=={{ \nJSON.stringify({\n  text: $('Email Trigger (IMAP)').item.json.text,\n  senderEmail: $('Email Trigger (IMAP)').item.json.from.value[0].address,\n  senderName: $('Email Trigger (IMAP)').item.json.from.value[0].name || \"\",\n  ccHeader: $('Email Trigger (IMAP)').item.json.headers.cc || \"\",\n  toHeader: $('Email Trigger (IMAP)').item.json.headers.to || \"\"\n})\n}}\n",
+        "options": {
+          "systemMessage": "You are a professional project management assistant. Your only output format is raw, minified JSON.\n\nReturn ONLY the raw JSON object.\nNo markdown.\nNo comments.\nNo explanations.\nThe first character must be '{' and the last must be '}'.\n\nUse the same language as the input text. Do not translate.\n\nToday's date is {{ $now }}.\n\nThe sender email is: {{ $('Email Trigger (IMAP)').item.json.from.value[0].address }}\nThe sender name is: {{ $('Email Trigger (IMAP)').item.json.from.value[0].name }}\nThe CC header is: {{ $('Email Trigger (IMAP)').item.json.headers.cc }}\nThe TO header is: {{ $('Email Trigger (IMAP)').item.json.headers.to }}\n\nIf sender name is empty, derive it from the sender email by removing the domain.\nExample: \"patrick.sch@web.de\" → \"patrick.sch\".\n\nAnalyze the provided text in its original language and extract:\n\n- title (same language as input, max 80 chars)\n- description (same language as input, 1–2 sentences)\n- subtasks (same language as input)\n\n- date = due date extracted from natural language expressions in the input text.\n  Interpret German time expressions such as:\n  - \"morgen\" → today + 1 day\n  - \"übermorgen\" → today + 2 days\n  - \"in X Tagen\" → today + X days\n  - \"nächste Woche\" → today + 7 days\n  - explicit dates like \"am 30. Juni\" → convert to YYYY-MM-DD\n  - weekdays like \"am Freitag\" → next upcoming weekday\n  If no due date can be extracted, set date = today + 7 days.\n\n- priority = \"medium\"\n- status = \"boardTriage\"\n- creatorType = \"external\"\n- category = \"User Story\"\n\n- createdBy = sender email\n- creatorMail = sender email\n- creatorName = sender name (or derived fallback)\n- creator = sender name (or derived fallback)\n\n- pos = 0\n\n- assignedTo = array of email addresses found in:\n  - the input text\n  - CC header\n  - TO header\n  Remove duplicates. Multiple addresses allowed.\n\nExpected JSON:\n{\n  \"category\": \"String\",\n  \"createdBy\": \"String\",\n  \"creator\": \"String\",\n  \"creatorMail\": \"String\",\n  \"creatorName\": \"String\",\n  \"creatorType\": \"String\",\n  \"date\": \"YYYY-MM-DD\",\n  \"description\": \"String\",\n  \"pos\": 0,\n  \"priority\": \"medium\",\n  \"status\": \"boardTriage\",\n  \"assignedTo\": [\"email1@example.com\"],\n  \"subtasks\": [\n    { \"checked\": false, \"task\": \"String\" }\n  ],\n  \"title\": \"String\"\n}\n\n=== INPUT ===\n{{ $('Email Trigger (IMAP)').item.json.text }}\n=== END ===\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -128,
+        320
+      ],
+      "id": "a073d697-9073-42e9-9dcd-3b709cc29d56",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -144,
+        544
+      ],
+      "id": "43571d35-05f3-4e63-a3e5-100984246bb7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6KwYcVVac9rSAVbt",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "JSON structure definition for the AI Agent.",
+        "jsCode": "{\n  \"assignedTo\": [],\n  \"creatorType\": \"extern\",\n  \"date\": \"YYYY-MM-DD\",\n  \"description\": \"String\",\n  \"priority\": \"medium\",\n  \"status\": \"boardTriage\",\n  \"subtasks\": [\n    { \"checked\": false, \"task\": \"String\" }\n  ],\n  \"title\": \"String\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        576
+      ],
+      "id": "ccf3093e-c332-4e98-bf34-4cbac8541aaa",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.output;\nconst parsed = JSON.parse(raw);\nreturn { json: parsed };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        320
+      ],
+      "id": "dbeea2c2-219c-48d0-b027-c5a6a2e3a012",
+      "name": "Prepare Firebase Document"
+    },
+    {
+      "parameters": {
+        "jsCode": "console.log($input.first().json.headers.from + \" is a system email address. Workflow will be stopped.\");\nreturn {\n  json: {\n    stopped: true,\n    reason: \"System email detected\",\n    from: $input.first().json.headers.from\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -608,
+        368
+      ],
+      "id": "4db4e896-e1db-48fc-9c93-a87f4bb25c20",
+      "name": "sender was a system email"
     }
   ],
   "connections": {
-    "Prepare for email": {
+    "Email Trigger (IMAP)": {
       "main": [
         [
           {
-            "node": "Send an Email",
+            "node": "Check if no system Email Adress",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Subtask node": {
+    "Prepare for email": {
       "main": [
         [
           {
-            "node": "Prepare Firebase Document",
+            "node": "Send an Email",
             "type": "main",
             "index": 0
           }
@@ -329,50 +306,6 @@
         ]
       ]
     },
-    "Analyze document": {
-      "main": [
-        [
-          {
-            "node": "Subtask node",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Parse & Validate Email": {
-      "main": [
-        [
-          {
-            "node": "Ansprache entfernen in mail",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Email Trigger (IMAP)": {
-      "main": [
-        [
-          {
-            "node": "Check if no system Email Adress",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Prepare Firebase Document": {
-      "main": [
-        [
-          {
-            "node": "HTTP Firebase",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Is Limit Reached?": {
       "main": [
         [
@@ -384,18 +317,7 @@
         ],
         [
           {
-            "node": "Parse & Validate Email",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Ansprache entfernen in mail": {
-      "main": [
-        [
-          {
-            "node": "Analyze document",
+            "node": "AI Agent",
             "type": "main",
             "index": 0
           }
@@ -424,7 +346,51 @@
         ],
         [
           {
-            "node": "Code in JavaScript",
+            "node": "sender was a system email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Prepare Firebase Document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Firebase Document": {
+      "main": [
+        [
+          {
+            "node": "HTTP Firebase",
             "type": "main",
             "index": 0
           }
@@ -432,9 +398,137 @@
       ]
     }
   },
-  "pinData": {},
+  "pinData": {
+    "Email Trigger (IMAP)": [
+      {
+        "headers": {
+          "return-path": "Return-Path: <Patrick.Sch@web.de>",
+          "x-spam-checker-version": "X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on\r\n\tdd13038.kasserver.com",
+          "x-original-to": "X-Original-To: join.n8n@patrick-schuette.net",
+          "delivered-to": "Delivered-To: m07feba7@dd13038.kasserver.com",
+          "authentication-results": "Authentication-Results: dd13038.kasserver.com;\r\n\tdkim=pass (2048-bit key; unprotected) header.d=web.de header.i=patrick.sch@web.de header.a=rsa-sha256 header.s=s29768273 header.b=hcp26EW5;\r\n\tdkim-atps=neutral",
+          "x-policyd-weight": "X-policyd-weight: using cached result; rate: -7",
+          "received": "Received: from [93.131.195.214] ([93.131.195.214]) by\r\n trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r (via HTTP); Sun, 5 Jul\r\n 2026 12:36:45 +0000",
+          "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;\r\n\ts=s29768273; t=1783255005; x=1783859805; i=patrick.sch@web.de;\r\n\tbh=BTQyTWFnmOFu8bbLsxTI6nAmMMZ8w3b8KA3HSWkgEzE=;\r\n\th=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:\r\n\t Content-Type:Date:Content-Transfer-Encoding:cc:\r\n\t content-transfer-encoding:content-type:date:from:message-id:\r\n\t mime-version:reply-to:subject:to;\r\n\tb=hcp26EW56EnEcFfqb7Ql4bLlnitA5kcC8aiA8PGhzgNEMrJ+SekH1i/owqBidbQq\r\n\t ROPAMc2OnNONrKvI5wNg1yFl72FCkXZmrpqntT3+f0ZPHieHU4Xk1OY5PXBqFXCSk\r\n\t lVhQEe1GIxJjR/tFkG7whDdqFmN9o4pe+Ei6jEsWCElBdKCxE/0lN7GWPM1DpqtfK\r\n\t 4lbqVGoysq7RYMl4lT2aJCAEsH8KbpeaYV0bfBVoxRNDMFxaxSIz8ctLiAdDCu0f8\r\n\t NIW5zWY54EzM+y/720YMeZVZocYefW6UzWHtCs1CVWCNWvwgYISTpwrzsUj9RdDM0\r\n\t IFMAhi0hd12JOstikw==",
+          "x-ui-sender-class": "X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6",
+          "mime-version": "MIME-Version: 1.0",
+          "message-id": "Message-ID: <trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
+          "from": "From: =?UTF-8?Q?Patrick_Sch=C3=BCtte?= <Patrick.Sch@web.de>",
+          "to": "To: join.n8n@patrick-schuette.net",
+          "subject": "Subject: Test Aufgabe",
+          "content-type": "Content-Type: text/html; charset=UTF-8",
+          "date": "Date: Sun, 5 Jul 2026 12:36:45 +0000",
+          "content-transfer-encoding": "Content-Transfer-Encoding: quoted-printable",
+          "x-ui-client-meta-mail-drop": "X-UI-CLIENT-META-MAIL-DROP: W10=",
+          "x-provags-id": "X-Provags-ID: V03:K1:X0KmigHHgbC3Dg7Rx4tfoXsPeasEBetsYqRb2n4oMQ2SxInhFyPmMLV+2LLTmEkf0GHRO\r\n SkA6L8mEF4GR6owUrOXa3hUccr4LIyZ0cLK0jil/EDEPzpqb8BhGncaRXObdLLYB2Jg0BdBqLnqO\r\n /xeivAGLmAACfmfrwsWOC0F5LZ5BoiCGDLPQddIXR/uWmV7CCOUweO23gfUQi+TIIxlzXjbtQU6o\r\n hSaNXqLcSVc7UY0zQzplNZl1O/qwPBRy4Pf8c1JwLME/TMKHOrop8Lq/4b9FVUCWEl/iwzVMqXxT\r\n R1BiyLuXxJpsfqRojXX4JvNT4Y4CHQVkU7Hiv/nQam6DzI2jBAyjCBTFYIduC0Ps6gP1IL93dt6L\r\n 3nXmEdpQf6m",
+          "ui-outboundreport": "UI-OutboundReport: notjunk:1;M01:P0:4fWtyrmoT0Q=;SWUbzfy3C8vJkQvNr/7NlmVTI7j\r\n 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\r\n gqCjw==",
+          "x-spamd-bar": "X-Spamd-Bar: /",
+          "x-dmarc-test": "X-Dmarc-Test: Allow",
+          "x-kasloop": "X-KasLoop: m07feba7"
+        },
+        "html": "<html><body><div style=\"font-family: 'verdana'; font-size: 12px; color: #000;\"><span style=\"background-color: #ffffff;\">Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask soll tasche gepackt, abwesenheit einrichten und auto tanken sein</span></div></body></html>\n\n",
+        "text": "Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask\nsoll tasche gepackt, abwesenheit einrichten und auto tanken sein",
+        "textAsHtml": "<p>Erstelle eine aufgabe f&uuml;r &uuml;bermorgen um meinen Urlaub vorzubereiten als Subtask<br/>soll tasche gepackt, abwesenheit einrichten und auto tanken sein</p>",
+        "subject": "Test Aufgabe",
+        "date": "2026-07-05T12:36:45.000Z",
+        "to": {
+          "value": [
+            {
+              "address": "join.n8n@patrick-schuette.net",
+              "name": ""
+            }
+          ],
+          "html": "<span class=\"mp_address_group\"><a href=\"mailto:join.n8n@patrick-schuette.net\" class=\"mp_address_email\">join.n8n@patrick-schuette.net</a></span>",
+          "text": "join.n8n@patrick-schuette.net"
+        },
+        "from": {
+          "value": [
+            {
+              "address": "Patrick.Sch@web.de",
+              "name": "Patrick Schütte"
+            }
+          ],
+          "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Patrick Sch&#xFC;tte</span> &lt;<a href=\"mailto:Patrick.Sch@web.de\" class=\"mp_address_email\">Patrick.Sch@web.de</a>&gt;</span>",
+          "text": "\"Patrick Schütte\" <Patrick.Sch@web.de>"
+        },
+        "messageId": "<trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
+        "attributes": {
+          "uid": 45
+        }
+      }
+    ],
+    "Check Daily Limit": [
+      {
+        "headers": {
+          "return-path": "Return-Path: <Patrick.Sch@web.de>",
+          "x-spam-checker-version": "X-Spam-Checker-Version: SpamAssassin 4.0.0 (2022-12-13) on\r\n\tdd13038.kasserver.com",
+          "x-original-to": "X-Original-To: join.n8n@patrick-schuette.net",
+          "delivered-to": "Delivered-To: m07feba7@dd13038.kasserver.com",
+          "authentication-results": "Authentication-Results: dd13038.kasserver.com;\r\n\tdkim=pass (2048-bit key; unprotected) header.d=web.de header.i=patrick.sch@web.de header.a=rsa-sha256 header.s=s29768273 header.b=hcp26EW5;\r\n\tdkim-atps=neutral",
+          "x-policyd-weight": "X-policyd-weight: using cached result; rate: -7",
+          "received": "Received: from [93.131.195.214] ([93.131.195.214]) by\r\n trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r (via HTTP); Sun, 5 Jul\r\n 2026 12:36:45 +0000",
+          "dkim-signature": "DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;\r\n\ts=s29768273; t=1783255005; x=1783859805; i=patrick.sch@web.de;\r\n\tbh=BTQyTWFnmOFu8bbLsxTI6nAmMMZ8w3b8KA3HSWkgEzE=;\r\n\th=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Subject:\r\n\t Content-Type:Date:Content-Transfer-Encoding:cc:\r\n\t content-transfer-encoding:content-type:date:from:message-id:\r\n\t mime-version:reply-to:subject:to;\r\n\tb=hcp26EW56EnEcFfqb7Ql4bLlnitA5kcC8aiA8PGhzgNEMrJ+SekH1i/owqBidbQq\r\n\t ROPAMc2OnNONrKvI5wNg1yFl72FCkXZmrpqntT3+f0ZPHieHU4Xk1OY5PXBqFXCSk\r\n\t lVhQEe1GIxJjR/tFkG7whDdqFmN9o4pe+Ei6jEsWCElBdKCxE/0lN7GWPM1DpqtfK\r\n\t 4lbqVGoysq7RYMl4lT2aJCAEsH8KbpeaYV0bfBVoxRNDMFxaxSIz8ctLiAdDCu0f8\r\n\t NIW5zWY54EzM+y/720YMeZVZocYefW6UzWHtCs1CVWCNWvwgYISTpwrzsUj9RdDM0\r\n\t IFMAhi0hd12JOstikw==",
+          "x-ui-sender-class": "X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6",
+          "mime-version": "MIME-Version: 1.0",
+          "message-id": "Message-ID: <trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
+          "from": "From: =?UTF-8?Q?Patrick_Sch=C3=BCtte?= <Patrick.Sch@web.de>",
+          "to": "To: join.n8n@patrick-schuette.net",
+          "subject": "Subject: Test Aufgabe",
+          "content-type": "Content-Type: text/html; charset=UTF-8",
+          "date": "Date: Sun, 5 Jul 2026 12:36:45 +0000",
+          "content-transfer-encoding": "Content-Transfer-Encoding: quoted-printable",
+          "x-ui-client-meta-mail-drop": "X-UI-CLIENT-META-MAIL-DROP: W10=",
+          "x-provags-id": "X-Provags-ID: V03:K1:X0KmigHHgbC3Dg7Rx4tfoXsPeasEBetsYqRb2n4oMQ2SxInhFyPmMLV+2LLTmEkf0GHRO\r\n SkA6L8mEF4GR6owUrOXa3hUccr4LIyZ0cLK0jil/EDEPzpqb8BhGncaRXObdLLYB2Jg0BdBqLnqO\r\n /xeivAGLmAACfmfrwsWOC0F5LZ5BoiCGDLPQddIXR/uWmV7CCOUweO23gfUQi+TIIxlzXjbtQU6o\r\n hSaNXqLcSVc7UY0zQzplNZl1O/qwPBRy4Pf8c1JwLME/TMKHOrop8Lq/4b9FVUCWEl/iwzVMqXxT\r\n R1BiyLuXxJpsfqRojXX4JvNT4Y4CHQVkU7Hiv/nQam6DzI2jBAyjCBTFYIduC0Ps6gP1IL93dt6L\r\n 3nXmEdpQf6m",
+          "ui-outboundreport": "UI-OutboundReport: notjunk:1;M01:P0:4fWtyrmoT0Q=;SWUbzfy3C8vJkQvNr/7NlmVTI7j\r\n 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\r\n gqCjw==",
+          "x-spamd-bar": "X-Spamd-Bar: /",
+          "x-dmarc-test": "X-Dmarc-Test: Allow",
+          "x-kasloop": "X-KasLoop: m07feba7"
+        },
+        "html": "<html><body><div style=\"font-family: 'verdana'; font-size: 12px; color: #000;\"><span style=\"background-color: #ffffff;\">Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask soll tasche gepackt, abwesenheit einrichten und auto tanken sein</span></div></body></html>\n\n",
+        "text": "Erstelle eine aufgabe für übermorgen um meinen Urlaub vorzubereiten als Subtask\nsoll tasche gepackt, abwesenheit einrichten und auto tanken sein",
+        "textAsHtml": "<p>Erstelle eine aufgabe f&uuml;r &uuml;bermorgen um meinen Urlaub vorzubereiten als Subtask<br/>soll tasche gepackt, abwesenheit einrichten und auto tanken sein</p>",
+        "subject": "Test Aufgabe",
+        "date": "2026-07-05T12:36:45.000Z",
+        "to": {
+          "value": [
+            {
+              "address": "join.n8n@patrick-schuette.net",
+              "name": ""
+            }
+          ],
+          "html": "<span class=\"mp_address_group\"><a href=\"mailto:join.n8n@patrick-schuette.net\" class=\"mp_address_email\">join.n8n@patrick-schuette.net</a></span>",
+          "text": "join.n8n@patrick-schuette.net"
+        },
+        "from": {
+          "value": [
+            {
+              "address": "Patrick.Sch@web.de",
+              "name": "Patrick Schütte"
+            }
+          ],
+          "html": "<span class=\"mp_address_group\"><span class=\"mp_address_name\">Patrick Sch&#xFC;tte</span> &lt;<a href=\"mailto:Patrick.Sch@web.de\" class=\"mp_address_email\">Patrick.Sch@web.de</a>&gt;</span>",
+          "text": "\"Patrick Schütte\" <Patrick.Sch@web.de>"
+        },
+        "messageId": "<trinity-eb345bba-0afa-4511-966d-93beb73d7477-1783255005270@trinity-msg-rest-webde-webde-live-85d6ff85c9-j7g9r>",
+        "attributes": {
+          "uid": 45
+        },
+        "emailUid": "unknown",
+        "limitExceeded": false,
+        "currentCount": 2,
+        "dailyLimit": 10,
+        "remainingRequests": 8,
+        "_operation": "UPDATE"
+      }
+    ],
+    "AI Agent": [
+      {
+        "output": "{\"category\":\"User Story\",\"createdBy\":\"Patrick.Sch@web.de\",\"creator\":\"Patrick Schütte\",\"creatorMail\":\"Patrick.Sch@web.de\",\"creatorName\":\"Patrick Schütte\",\"creatorType\":\"external\",\"date\":\"2025-05-16\",\"description\":\"Vorbereitung des anstehenden Urlaubs inklusive organisatorischer Aufgaben und Reisevorbereitungen.\",\"pos\":0,\"priority\":\"medium\",\"status\":\"boardTriage\",\"assignedTo\":[\"join.n8n@patrick-schuette.net\"],\"subtasks\":[{\"checked\":false,\"task\":\"Tasche gepackt\"},{\"checked\":false,\"task\":\"Abwesenheit einrichten\"},{\"checked\":false,\"task\":\"Auto tanken\"}],\"title\":\"Urlaub vorbereiten\"}"
+      }
+    ]
+  },
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "c207e85e8dea1db3c29b761cefde4fe45833a219634d9386213d09d7590ce49c"
+    "instanceId": "225f756c76d8c85f3ebc848f047b554e8df1b8365479bf96173202eb9ec503d0"
   }
 }

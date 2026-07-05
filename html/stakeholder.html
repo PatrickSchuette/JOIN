@@ -34,7 +34,7 @@
                     </a>
 
                     <div id="request-counter-container" class="request-count-status">
-                        <span id="current-requests-count" style="color: inherit;">0</span> of 10 requests used
+                        <b><span id="current-requests-count" style="color: inherit;"></span></b> of <b>10</b> requests used
                     </div>
                 </nav>
 
@@ -61,6 +61,14 @@
                             <img src="../assets/img/stackholder.svg" alt="Welcome process with AI ticket creation">
                         </figure>
                     </section>
+
+                    <section class="action-section">
+                        <button class="btn btn-email"
+                            onclick="window.location.href='mailto:&quot;Join Issue Collector&quot; <join.n8n@patrick-schuette.net>?subject=Join%20Issue%20Collector&body=Hallo%20Team,'">
+                            Create request
+                        </button>
+                    </section>
+                    
                 </div>
 
         
@@ -82,11 +90,15 @@
                             <img src="../assets/img/stackholder-limit.svg" alt="Welcome process manual review">
                         </figure>
                     </section>
-                </div>
+                
 
-                <section class="action-section">
-                    <button class="btn btn-primary" aria-label="Create Request">Create request</button>
-                </section>
+                    <section class="action-section">
+                        <button class="btn btn-email"
+                            onclick="window.location.href='mailto:&quot;Join Issue Collector&quot; <join.n8n@patrick-schuette.net>?subject=Join%20Issue%20Collector&body=Hallo%20Team,'">
+                            send an email
+                        </button>                    
+                    </section>
+                </div>
         
             </article>
         </main>
