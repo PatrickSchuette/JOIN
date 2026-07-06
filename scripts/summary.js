@@ -31,6 +31,7 @@ function countTask(){
     let countInProgress = 0;
     let countAwaitingFeedback = 0;
     let countUrgentTasks = 0;
+    let countExternalTasks = 0;
     for(let index = 0; index < todos.length; index++){
         if(todos[index].status == 'boardToDo'){
             countToDo++;
@@ -44,8 +45,11 @@ function countTask(){
         if(todos[index].priority == 'urgent' && todos[index].status !== 'boardDone'){
             countUrgentTasks++;
         }
+        if(todos[index].creatorType === 'external'){
+            countExternalTasks++;
+        }
     }
-    return returnNumberOfTasks(countToDo, countDone, countInProgress, countAwaitingFeedback, countUrgentTasks);
+    return returnNumberOfTasks(countToDo, countDone, countInProgress, countAwaitingFeedback, countUrgentTasks, countExternalTasks);
 }
 
 /**
@@ -57,14 +61,15 @@ function countTask(){
  * @param {number} urgent - number of tasks with the priority 'urgent'
  * @returns {Object} - Object containing the number of tasks for each category and their total
  */
-function returnNumberOfTasks(toDo, done, inProgress, awaitingFeedback, urgent){
+function returnNumberOfTasks(toDo, done, inProgress, awaitingFeedback, urgent, external){
     return {
         toDo: toDo,
         done: done,
         inProgress: inProgress,
         awaitingFeedback: awaitingFeedback,
         urgent: urgent,
-        total: toDo + done + inProgress + awaitingFeedback
+        total: toDo + done + inProgress + awaitingFeedback,
+        external: external
     };
 }
 
@@ -81,12 +86,14 @@ function insertNumbers(){
     let urgentTasks = document.getElementById('urgent_tasks_number');
     let total = document.getElementById('total');
     let numbers = countTask();
+    let aiTaskCount = document.getElementById('aiTaskCount');
     toDo.innerHTML = `${numbers.toDo}`;
     done.innerHTML = `${numbers.done}`;
     inProgress.innerHTML = `${numbers.inProgress}`;
     awaitingFeedback.innerHTML = `${numbers.awaitingFeedback}`;
-    urgentTasks.innerHTML = `${numbers.urgent}`
-    total.innerHTML = `${numbers.total}`
+    urgentTasks.innerHTML = `${numbers.urgent}`;
+    total.innerHTML = `${numbers.total}`;
+    aiTaskCount.innerHTML = `${numbers.external}`;
 }
 
 /**

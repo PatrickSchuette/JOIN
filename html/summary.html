@@ -1,183 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join - Summary</title>
-    <link rel="icon" href="../assets/img/join_logo.svg" />
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style.css" />
-    <link rel="stylesheet" href="../styles/summary.css" />
-    <link rel="stylesheet" href="../styles/navigation.css" />
-    <!-- JS files-->
-    <script src="../node_modules/dompurify/dist/purify.min.js"></script>
-    <script src="../scripts/firebase.js"></script>
-    <script src="../scripts/navigation.js" defer></script>
-    <script src="../scripts/summary.js" defer></script>
-    <script src="../script.js" defer></script>
-    <script src="../scripts/greeting.js" defer></script>
-  </head>
-  <body onload="onloadFunctionSummary()">
-    <header>
-      <nav>
-        <img
-          class="mobile-navbar-logo"
-          src="../assets/img/join_logo.svg"
-          alt="The logo of the application"
-        />
-        <p>Kanban Projekt Management Tool</p>
-        <div class="user-help-container">
-          <a href="help.html" aria-label="Opens Help section"
-            ><img
-              class="help-btn"
-              src="../assets/img/help_btn.svg"
-              alt="a help button displaying a question mark"
-          /></a>
-          <button
-            id="activeAvatar"
-            class="nav-user-btn"
-            onclick="toggleSubmenu()"
-          >
-            G
-          </button>
-        </div>
-        <!-- Submenu, desktop version -->
-        <div id="submenu" class="desktop-submenu d-none">
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-        <!-- Submenu, mobile version -->
-        <div id="mobile_submenu" class="mobile-submenu">
-          <a href="help.html" aria-label="Opens Help section">Help</a>
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-      </nav>
-    </header>
-    <aside>
-      <img
-        class="sidebar-logo"
-        src="../assets/img/join_logo_white.svg"
-        alt="The logo of the app JOIN"
-      />
-      <div class="sidebar-components">
-        <a
-          id="summary_tab_pc"
-          href="summary.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('summary')"
-        >
-          <img
-            src="../assets/img/summary.svg"
-            alt="icon leading to the summary page"
-          />
-          <p>Summary</p>
-        </a>
-        <a
-          id="add_task_tab_pc"
-          href="add-task.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('task')"
-        >
-          <img
-            src="../assets/img/add_task.svg"
-            alt="icon leading to the add task page"
-          />
-          <p>Add Task</p>
-        </a>
-        <a
-          id="board_tab_pc"
-          href="board.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('board')"
-        >
-          <img
-            src="../assets/img/board.svg"
-            alt="icon leading to the board page"
-          />
-          <p>Board</p>
-        </a>
-        <a
-          id="contacts_tab_pc"
-          href="contacts.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('contacts')"
-        >
-          <img
-            src="../assets/img/contacts.svg"
-            alt="icon leading to the contacts page"
-          />
-          <p>Contacts</p>
-        </a>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join - Summary</title>
+  <link rel="icon" href="../assets/img/join_logo.svg" />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../styles/summary.css" />
+  <link rel="stylesheet" href="../styles/navigation.css" />
+  <!-- JS files-->
+  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="../scripts/firebase.js"></script>
+  <script src="../scripts/navigation.js" defer></script>
+  <script src="../scripts/summary.js" defer></script>
+  <script src="../script.js" defer></script>
+  <script src="../scripts/greeting.js" defer></script>
+</head>
+
+<body onload="onloadFunctionSummary()">
+  <header>
+    <nav>
+      <img class="mobile-navbar-logo" src="../assets/img/join_logo.svg" alt="The logo of the application" />
+      <p>Kanban Projekt Management Tool</p>
+      <div class="user-help-container">
+        <a href="help.html" aria-label="Opens Help section"><img class="help-btn" src="../assets/img/help_btn.svg"
+            alt="a help button displaying a question mark" /></a>
+        <button id="activeAvatar" class="nav-user-btn" onclick="toggleSubmenu()">
+          G
+        </button>
       </div>
-      <div class="legal-notice-container">
-        <a class="legal-notice-elements" href="privacy-policy.html"
-          >Privacy Policy</a
-        >
-        <a class="legal-notice-elements" href="legal-notice.html"
-          >Legal Notice</a
-        >
+
+      <!-- Submenu, desktop version -->
+      <div id="submenu" class="desktop-submenu d-none">
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
       </div>
-    </aside>
-    <main>
-      <section id="mobile_overlay" class="mobile-overlay active">
-        <p id="mobile_greeting"></p>
+
+      <!-- Submenu, mobile version -->
+      <div id="mobile_submenu" class="mobile-submenu">
+        <a href="help.html" aria-label="Opens Help section">Help</a>
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
+      </div>
+    </nav>
+  </header>
+
+  <aside>
+    <img class="sidebar-logo" src="../assets/img/join_logo_white.svg" alt="The logo of the app JOIN" />
+    <div class="sidebar-components">
+      <a id="summary_tab_pc" href="summary.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('summary')">
+        <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
+        <p>Summary</p>
+      </a>
+      <a id="add_task_tab_pc" href="add-task.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('task')">
+        <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
+        <p>Add Task</p>
+      </a>
+      <a id="board_tab_pc" href="board.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('board')">
+        <img src="../assets/img/board.svg" alt="icon leading to the board page" />
+        <p>Board</p>
+      </a>
+      <a id="contacts_tab_pc" href="contacts.html" class="sidebar-menu-elements"
+        onclick="setDesktopTabFocus('contacts')">
+        <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
+        <p>Contacts</p>
+      </a>
+    </div>
+    <div class="legal-notice-container">
+      <a class="legal-notice-elements" href="privacy-policy.html">Privacy Policy</a>
+      <a class="legal-notice-elements" href="legal-notice.html">Legal Notice</a>
+    </div>
+  </aside>
+
+  <main>
+    <section id="mobile_overlay" class="mobile-overlay active">
+      <p id="mobile_greeting"></p>
+    </section>
+
+    <section class="main-content">
+      <section class="page-title">
+        <h1>Join 360</h1>
+        <div class="divider-line"></div>
+        <span>Key Metrics at a glance</span>
       </section>
-      <section class="main-content">
-        <section class="page-title">
-          <h1>Join 360</h1>
-          <div class="divider-line"></div>
-          <span>Key Metrics at a glance</span>
-        </section>
-        <section class="page-info">
-          <div class="stats">
-            <div class="to-do">
-              <div onclick="redirectToBoard()" class="to-do-container">
-                <div class="icon-wrapper">
-                  <div class="edit-icon"></div>
-                </div>
-                <div class="to-do-container-numbers">
-                  <h2 id="to_do"></h2>
-                  <h3>To-do</h3>
-                </div>
+
+      <section class="page-info">
+        <div class="stats">
+          <div class="to-do">
+            <div onclick="redirectToBoard()" class="to-do-container">
+              <div class="icon-wrapper">
+                <div class="edit-icon"></div>
               </div>
-              <div class="done">
-                <div onclick="redirectToBoard()" class="done-container">
-                  <div class="icon-wrapper">
-                    <div class="done-icon"></div>
-                  </div>
-                  <div class="done-container-numbers">
-                    <h2 id="done"></h2>
-                    <h3>Done</h3>
-                  </div>
+              <div class="to-do-container-numbers">
+                <h2 id="to_do"></h2>
+                <h3>To-do</h3>
+              </div>
+            </div>
+            <div class="done">
+              <div onclick="redirectToBoard()" class="done-container">
+                <div class="icon-wrapper">
+                  <div class="done-icon"></div>
+                </div>
+                <div class="done-container-numbers">
+                  <h2 id="done"></h2>
+                  <h3>Done</h3>
                 </div>
               </div>
             </div>
-            <div onclick="redirectToBoard()">
+          </div>
+
+          <div onclick="redirectToBoard()" class="tasks">
+          
               <div class="done-container middle">
                 <div id="prio_icon_background" class="middle-icon-wrapper">
                   <div id="prio_icon" class="middle-icon"></div>
@@ -192,94 +129,73 @@
                   <span id="deadline_message">Upcoming deadline</span>
                 </div>
               </div>
+
+              <div class="to-do-container">
+                <div class="to-do-container-numbers">
+                  <h2 id="aiTaskCount">4</h2>
+                  <h4>Email <br /> request</h4>
+                </div>
+              </div>
+
+          </div>
+
+          <div class="tasks">
+            <div onclick="redirectToBoard()" class="to-do-container">
+              <div class="to-do-container-numbers">
+                <h2 id="total"></h2>
+                <h4>Tasks in <br />Board</h4>
+              </div>
             </div>
-            <div class="tasks">
-              <div onclick="redirectToBoard()" class="to-do-container">
-                <div class="to-do-container-numbers">
-                  <h2 id="total"></h2>
-                  <h4>Tasks in <br />Board</h4>
-                </div>
+
+            <div onclick="redirectToBoard()" class="to-do-container">
+              <div class="to-do-container-numbers">
+                <h2 id="in_progress"></h2>
+                <h4>Tasks in <br />Progress</h4>
               </div>
-              <div onclick="redirectToBoard()" class="to-do-container">
-                <div class="to-do-container-numbers">
-                  <h2 id="in_progress"></h2>
-                  <h4>Tasks in <br />Progress</h4>
-                </div>
-              </div>
-              <div onclick="redirectToBoard()" class="to-do-container">
-                <div class="to-do-container-numbers">
-                  <h2 id="awaiting_feedback"></h2>
-                  <h4>Awaiting<br />Feedback</h4>
-                </div>
+            </div>
+
+            <div onclick="redirectToBoard()" class="to-do-container">
+              <div class="to-do-container-numbers">
+                <h2 id="awaiting_feedback"></h2>
+                <h4>Awaiting<br />Feedback</h4>
               </div>
             </div>
           </div>
-          <div id="pc_greeting" class="greeting">
-            <p>
-              <span id="greeting_word"></span><span id="punctuation"></span>
-            </p>
-            <span id="username"></span>
-          </div>
-        </section>
+        </div>
+        <div id="pc_greeting" class="greeting">
+          <p>
+            <span id="greeting_word"></span><span id="punctuation"></span>
+          </p>
+          <span id="username"></span>
+        </div>
       </section>
-    </main>
-    <footer>
-      <a
-        id="summary_tab_mobile"
-        href="summary.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('summary')"
-      >
-        <img
-          src="../assets/img/summary.svg"
-          alt="icon leading to the summary page"
-        />
-        <p>Summary</p>
-      </a>
-      <a
-        id="add_task_tab_mobile"
-        href="add-task.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('task')"
-      >
-        <img
-          src="../assets/img/add_task.svg"
-          alt="icon leading to the add task page"
-        />
-        <p>Add Task</p>
-      </a>
-      <a
-        id="board_tab_mobile"
-        href="board.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('board')"
-      >
-        <img
-          src="../assets/img/board.svg"
-          alt="icon leading to the board page"
-        />
-        <p>Board</p>
-      </a>
-      <a
-        id="contacts_tab_mobile"
-        href="contacts.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('contacts')"
-      >
-        <img
-          src="../assets/img/contacts.svg"
-          alt="icon leading to the contacts page"
-        />
-        <p>Contacts</p>
-      </a>
-    </footer>
-    <div id="orientation_warning" class="landscape-view-warning d-none">
-      <p>JOIN works best in portrait mode. Please rotate your device!</p>
-      <img
-        class="device-icon"
-        src="../assets/img/device_landscape.svg"
-        alt="A tablet positioned in landscape view"
-      />
-    </div>
-  </body>
+
+    </section>
+  </main>
+
+  <footer>
+    <a id="summary_tab_mobile" href="summary.html" class="footer-menu-elements" onclick="setMobileTabFocus('summary')">
+      <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
+      <p>Summary</p>
+    </a>
+    <a id="add_task_tab_mobile" href="add-task.html" class="footer-menu-elements" onclick="setMobileTabFocus('task')">
+      <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
+      <p>Add Task</p>
+    </a>
+    <a id="board_tab_mobile" href="board.html" class="footer-menu-elements" onclick="setMobileTabFocus('board')">
+      <img src="../assets/img/board.svg" alt="icon leading to the board page" />
+      <p>Board</p>
+    </a>
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
+      onclick="setMobileTabFocus('contacts')">
+      <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
+      <p>Contacts</p>
+    </a>
+  </footer>
+  <div id="orientation_warning" class="landscape-view-warning d-none">
+    <p>JOIN works best in portrait mode. Please rotate your device!</p>
+    <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view" />
+  </div>
+</body>
+
 </html>
