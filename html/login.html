@@ -39,17 +39,21 @@
         </button>
       </div>
     </header>
+
     <main class="mainContent">
+
       <div class="loginContent">
         <div class="title-divider">
           <h1 class="loginTitle">Log in</h1>
           <hr class="headline-underline" />
         </div>
-        <form onsubmit="userLogin()" id="loginForm">
+        <form onsubmit="userLogin();  return false;" id="loginForm">
+
           <div class="mail-wrapper">
             <input id="txtEMail" type="email" placeholder="Email" required class="inputLogin" />
             <span class="formMailIcon"></span>
           </div>
+
           <div class="password-wrapper">
             <input id="txtPassword" type="password" placeholder="Password" required class="inputLogin formPassIcon" />
             <span id="togglePassword" class="toggle-icon"></span>
@@ -57,8 +61,9 @@
           <!-- </div> -->
 
           <div id="loginStatus">&nbsp;</div>
+
           <div class="btnLoginContent">
-            <button type="button" id="btnLogin" onclick="userLogin()" class="btn btnPrimary">
+            <button type="submit" id="btnLogin"  class="btn btnPrimary">
               Login
             </button>
             <button type="button" id="btnGuestLogin" onclick="userGuestLogin()" class="btn btnSecondary">
@@ -67,13 +72,16 @@
           </div>
         </form>
       </div>
+
       <div class="signUp onlyMobile">
         <span class="lblSignUp">Not a Join user?</span>
         <button type="button" class="btn btnPrimary" onclick="window.location.href='./signup.html'">
           Sign up
         </button>
       </div>
+
     </main>
+
     <footer>
       <div class="loginFooter">
         <a href="privacy-policy-login.html"> Privacy Policy</a>

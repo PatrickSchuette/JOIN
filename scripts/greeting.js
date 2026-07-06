@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (window.innerWidth <= 850) {
         greet(storedUserName === "Guest" ? null : storedUserName);
-        sessionStorage.removeItem("loggedInUser");
+        //sessionStorage.removeItem("loggedInUser");
     } else {
         greet(storedUserName === "Guest" ? null : storedUserName);
         overlay.classList.remove('active');
