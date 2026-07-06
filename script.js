@@ -93,7 +93,7 @@ window.addEventListener('resize', checkOrientation);
     "/html/privacy-policy-login.html",
     "/html/legal-notice-login.html",
     "/html/welcome.html",
-    "html/stakeholder.html"
+    "/html/stakeholder.html"
  ];
 
  if (

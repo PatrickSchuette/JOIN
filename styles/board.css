@@ -504,14 +504,14 @@ dialog::backdrop {
     }
 }
 
-@media (max-width: 1620px) {
+@media (max-width: 1700px) {
     .column {
         gap: 8px;
         margin-right: 16px;
     }
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1500px) {
     .mainContent {
         height: auto;
         align-items: stretch;
@@ -561,9 +561,6 @@ dialog::backdrop {
         height: 48px;
     }
 
-}
-
-@media(max-width: 1020px) {
     .boardHeader {
         display: flex;
         flex-direction: column;
@@ -628,5 +625,70 @@ dialog::backdrop {
 
     .onlyDesktop {
         display: none;
+    }
+}
+
+@media (max-width: 1500px) {
+    .board-content-main {
+        flex-direction: column;
+        align-items: stretch;
+        height: auto;
+    }
+
+    .column {
+        width: 100%;
+        margin-right: 0 !important;
+        margin-bottom: 32px;
+        height: auto;
+    }
+
+    .drag-area {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        min-height: unset;
+        height: auto;
+        overflow-y: hidden;
+        padding-bottom: 8px;
+    }
+
+    .drag-area .todo {
+        flex-shrink: 0;
+        width: 260px;
+        margin: 0;
+    }
+}
+
+@media (max-width: 1500px) and (hover: hover) {
+    .drag-area {
+        overflow-x: auto;
+        scrollbar-width: auto;
+        -ms-overflow-style: auto;
+    }
+
+    .drag-area::-webkit-scrollbar {
+        display: block !important;
+        height: 8px;
+    }
+
+    .drag-area::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .drag-area::-webkit-scrollbar-thumb {
+        background: #a8a8a8;
+        border-radius: 4px;
+    }
+
+    .drag-area::-webkit-scrollbar-thumb:hover {
+        background: #2A3647;
+    }
+}
+
+@media (max-width: 1500px) and (hover: none) {
+    .drag-area {
+        overflow-x: scroll;
+        -webkit-overflow-scrolling: touch;
     }
 }

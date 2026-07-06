@@ -1,4 +1,4 @@
-body:has(dialog[open]){
+body:has(dialog[open]) {
     overflow: hidden;
 }
 
@@ -50,7 +50,7 @@ select {
     cursor: default;
 }
 
-ul{
+ul {
     display: inline-block;
     padding-left: 0px;
     margin: 0 5px;
@@ -67,7 +67,7 @@ ul{
     font-weight: 400;
 }
 
-.subtask-list:hover{
+.subtask-list:hover {
     background-color: #F5F5F5;
 }
 
@@ -116,7 +116,7 @@ label {
     white-space: nowrap;
 }
 
-.color-description{
+.color-description {
     color: #42526E;
 }
 
@@ -164,7 +164,7 @@ button {
     vertical-align: middle;
 }
 
-.header-show-task{
+.header-show-task {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -172,7 +172,7 @@ button {
     padding-bottom: 16px;
 }
 
-.close-btn-container{
+.close-btn-container {
     padding-top: 1px;
     padding-left: 8px;
     padding-right: 8px;
@@ -180,7 +180,7 @@ button {
     border-radius: 50px;
 }
 
-.close-btn-container:hover{
+.close-btn-container:hover {
     background-color: #EEEEEE;
     cursor: pointer;
 }
@@ -257,7 +257,7 @@ button {
     border-radius: 30px;
 }
 
-#dialaogBoardTask::-webkit-scrollbar{
+#dialaogBoardTask::-webkit-scrollbar {
     display: none;
 }
 
@@ -289,52 +289,52 @@ textarea {
     display: none;
 }
 
-.assignedUser{
+.assignedUser {
     display: flex;
     align-items: center;
     gap: 8px;
     padding-bottom: 12px;
 }
 
-.userName{
+.userName {
     display: block;
 }
 
-#task_title{
+#task_title {
     font-size: 50px;
     font-weight: bold;
 }
 
-.title-indication{
+.title-indication {
     font-size: 60px;
     font-weight: bold;
     word-break: break-word;
 }
 
-.task-priority{
+.task-priority {
     padding-left: 92px;
     display: flex;
     gap: 8px;
 }
 
-#assigned_box{
+#assigned_box {
     display: flex;
     flex-direction: column;
     align-items: start;
 }
 
-.required-mobile{
+.required-mobile {
     display: none;
 }
 
-.contacts-icons{
+.contacts-icons {
     padding-left: 16px;
     max-height: 150px;
     width: 100%;
     overflow-y: auto;
 }
 
-.checkbox-container{
+.checkbox-container {
     height: 24px;
     width: 24px;
     background-image: url('../assets/img/check_button_unchecked.svg');
@@ -343,12 +343,12 @@ textarea {
     background-size: 24px 24px;
 }
 
-.checkbox-container:hover{
+.checkbox-container:hover {
     cursor: pointer;
     background-image: url('../assets/img/check_button_hover_disable.svg');
 }
 
-.checkbox-checked{
+.checkbox-checked {
     min-height: 24px;
     min-width: 24px;
     cursor: pointer;
@@ -358,80 +358,98 @@ textarea {
     background-size: 24px 24px;
 }
 
-.checkbox-checked:hover{
+.checkbox-checked:hover {
     cursor: pointer;
     background-image: url('../assets/img/check_button_hover_checked.svg');
 }
 
-.subtask-actions{
+.subtask-actions {
     display: none;
 }
 
-.bottom-container{
+.bottom-container {
     width: 100%;
     display: flex;
     justify-content: end;
     margin-top: 32px;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-.task-ctrl-box{
+.task-ctrl-box {
     display: flex;
     gap: 8px;
 }
 
-.border-line{
+.border-line {
     border: unset;
     border-left: 1px solid #D1D1D1;
 }
 
-.btn-task-ctrl{
+.btn-task-ctrl {
     cursor: pointer;
 }
 
-.subtask-text{
+.subtask-text {
     cursor: pointer;
     word-break: break-word;
 }
 
-.description-indication{
+.description-indication {
     color: black;
     word-break: break-word;
 }
 
-.creatorContent{
+.creatorContent {
     display: block;
 }
 
-@media(max-width:650px){
-    #dialaogBoardTask{
-        margin-left: 8px;
-        margin-right: 8px;
+.mobileCreator {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+}
+
+.gap-8 {
+    gap: 8px;
+    margin-right: 8px;
+}
+
+@media(max-width:650px) {
+    #dialaogBoardTask {
+        margin-left: 0;
+        margin-right: 0;
         width: auto;
-        padding: 24px;
-        left: 16px;
-        right: 16px;
+        padding: 12px;
+        left: 0;
+        right: 0;
     }
 
-    .title-indication{
+    .title-indication {
         font-size: 36px;
     }
 
-    textarea{
+    textarea {
         font-size: 16px;
         height: auto;
     }
 }
 
-@media(max-width:450px){
-    .field-description label{
+@media(max-width:450px) {
+    .field-description label {
         flex: 0 0 100px;
     }
 
-    .task-priority{
+    .task-priority {
         padding-left: 42px;
     }
+
+    .mobileCreator {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
 }
+

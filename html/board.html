@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../styles/boardAddTask.css" id="cssAddTaskBoard" disabled>
   <link rel="stylesheet" href="../styles/boardEditTask.css" id="cssEditTask" disabled>
   <link rel="stylesheet" href="../styles/boardShowTask.css" id="cssShowTask" disabled>
-  
+
   <!-- JS files -->
   <script src="../node_modules/dompurify/dist/purify.min.js"></script>
   <script src="../scripts/navigation.js" defer></script>
@@ -35,6 +35,7 @@
   <script src="../scripts/templates.js" defer></script>
   <script src="../scripts/stakeholder.js" defer></script>
 </head>
+
 <body>
 
   <header>
@@ -95,9 +96,9 @@
     <div class="mainContent">
       <div class="boardHeader">
         <div class="title-btn">
-        <h1>Board</h1>
+          <h1>Board</h1>
           <div onclick="showDialogAddTask('boardToDo')" class="btn-add-task-mobile">
-                <span class="btn-plus">+</span>
+            <span class="btn-plus">+</span>
           </div>
         </div>
         <div class="searchBoard">
@@ -171,7 +172,7 @@
       </div>
     </div>
 
-     <dialog class="add-task-dialog-board" id="dialaogBoardTask">
+    <dialog class="add-task-dialog-board" id="dialaogBoardTask">
 
       <section class="main-DialogContent">
         <div class="header-show-task">
@@ -189,7 +190,7 @@
             <div class="field-description">
               <label for="task_title" class="notForShow">Title<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="text"
-                id="task_title" required placeholder="Enter a title" maxlength="100" style="display: block;"/>
+                id="task_title" required placeholder="Enter a title" maxlength="100" style="display: block;" />
               <span id="title_indication" class="title-indication" style="display: none;"></span>
               <div class="alert-container"></div>
             </div>
@@ -204,15 +205,20 @@
             <div class="creatorContent">
               <div class="field-description">
                 <label class="color-description" for="creator">Creator:<span class="required">*</span></label>
-                <div id="tagSymbol"> </div>
-                <span id="creator" class="date-indication">CreatorName</span>
-                <div id="creatorContact"> </div>
+                <div class="mobileCreator">
+                  <div id="tagSymbol" class="gap-8"> </div>
+                  <div style="display: flex; flex-direction: row; align-items: start;">
+                    <span id="creator" class="date-indication" class="gap-8">CreatorName</span>
+                    <div id="creatorContact"> </div>
+                  </div>
+                </div>
+
               </div>
-          </div>
+            </div>
             <div class="field-description">
               <label class="color-description" for="due_date">Due date:<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
-                id="due_date" required  style="display: block;"/>
+                id="due_date" required style="display: block;" />
               <span id="date_indication" class="date-indication" style="display: none;"></span>
               <div class="alert-container"></div>
             </div>
@@ -220,7 +226,7 @@
           </section>
           <div class="separation-bar"></div>
           <div class="priority-container">
-            <section class="priority">              
+            <section class="priority">
               <div class="field-description">
                 <span class="color-description">Priority</span>
                 <span id="taskPriority" class="task-priority"></span>
@@ -244,14 +250,14 @@
             <section class="assigned">
               <div id="assigned_box" class="field-description assigned-to">
                 <span class="color-description">Assigned to</span>
-                <div onclick="toggleContactList()"  class="dropdown" id="assigned_to">
+                <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
                   <span>Select contacts to assign</span>
                   <button>
                     <span id="dropdown_arrow" class="dropdown-arrow"></span>
                   </button>
-                    <div id="contact_list" class="contacts-list">
-                      <ul id="contact_ul"></ul>
-                    </div>
+                  <div id="contact_list" class="contacts-list">
+                    <ul id="contact_ul"></ul>
+                  </div>
                 </div>
                 <div id="contact_icons" class="contacts-icons"></div>
               </div>
@@ -281,7 +287,7 @@
                 <label class="color-description" for="subtask">Subtasks</label>
                 <div id="subtask_wrapper" class="subtask-wrapper">
                   <input id="subtask" class="subtask-input" type="text" placeholder="Add new subtask"
-                    onfocus="activateSubtask()" onblur="deactivateSubtask(event)" style="display: block;"/>
+                    onfocus="activateSubtask()" onblur="deactivateSubtask(event)" style="display: block;" />
                   <div id="subtask_actions" class="subtask-actions">
                     <button onclick="clearSubtaskInput()" class="subtask-close-btn" title="Cancel"
                       type="button"></button>
@@ -299,7 +305,7 @@
         <p class="required-mobile"><span>*</span>This field is required</p>
 
         <section class="bottom-container">
-           <p class="required-desktop"><span class="required">*</span>This field is required</p>
+          <p class="required-desktop"><span class="required">*</span>This field is required</p>
           <div id="buttons_dialog" class="buttons">
             <button id="btnDialogLeft" onclick="leftBtnAction()">
               <span id="btnDialogLeftContent">Template</span>
@@ -311,11 +317,13 @@
             </button>
           </div>
           <div id="task_ctrl_box" class="task-ctrl-box hidden">
-            <img id="btn_delete_task" class="btn-task-ctrl" src="../assets/img/delete_contact.svg" alt="delete button with trash icon"
-              onmouseover="changeTaskImgHover('btn_delete_task')" onmouseout="changeTaskImgOut('btn_delete_task')">
+            <img id="btn_delete_task" class="btn-task-ctrl" src="../assets/img/delete_contact.svg"
+              alt="delete button with trash icon" onmouseover="changeTaskImgHover('btn_delete_task')"
+              onmouseout="changeTaskImgOut('btn_delete_task')">
             <div class="border-line"></div>
-            <img id="btn_edit_task" class="btn-task-ctrl" src="../assets/img/edit_contact.svg" alt="edit button with pen icon"
-              onmouseover="changeTaskImgHover('btn_edit_task')" onmouseout="changeTaskImgOut('btn_edit_task')">
+            <img id="btn_edit_task" class="btn-task-ctrl" src="../assets/img/edit_contact.svg"
+              alt="edit button with pen icon" onmouseover="changeTaskImgHover('btn_edit_task')"
+              onmouseout="changeTaskImgOut('btn_edit_task')">
           </div>
         </section>
         </div>
@@ -348,4 +356,5 @@
     <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view">
   </div>
 </body>
+
 </html>
