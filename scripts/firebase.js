@@ -163,6 +163,9 @@ function getTaskArr(ALL_TASKS) {
             assignedTo: value.assignedTo,
             status: statusValue
         });
+        if (!boardPos[statusValue]) {
+            boardPos[statusValue] = {};
+        }
         boardPos[statusValue][key] = posValue;
     }
     return arr;
