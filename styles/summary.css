@@ -482,3 +482,34 @@ h4 {
         gap: 8px !important;
     }
 }
+
+@media (max-width: 1230px) {
+    main {
+        overflow-y: scroll !important;
+    }
+}
+
+
+html,
+body {
+    overflow-y: scroll !important;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    display: block !important;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

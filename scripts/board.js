@@ -22,6 +22,7 @@ const dialogBoardTaskRev = {
     aiGenerated: document.getElementById("aiGenerated"),
     tagSymbol: document.getElementById("tagSymbol"),
     creatorContact: document.getElementById("creatorContact"),
+    title_indication: document.getElementById("title_indication"),
 }
 //########################### Rendering #######################
 /**
@@ -76,6 +77,7 @@ async function showDialogTask(id) {
     fillDialogFields(actualToDo);
     renderDialogActions();
     getAssignedUser();
+    initTitleAutosize();
 }
 
 /** Prepares dialog appearance and resets inputs */
@@ -265,4 +267,22 @@ function generateIssueCollector(creatorType, email){
         dialogBoardTaskRev.creatorContact.innerHTML =  `<a href="mailto:${email}" aria-label="See Profile"><img src='../assets/img/sendEmail.svg' alt='send Email' /></a>`
         dialogBoardTaskRev.aiGenerated.innerHTML = "<img src='../assets/img/Note _ KI generiert.svg' alt='AI Generated' />"
     }
+}
+
+/**
+ * Adjusts the title font size dynamically based on text length for desktop screens.
+ */
+function initTitleAutosize() {
+  const titleElement = dialogBoardTaskRev.title_indication;
+  if (!titleElement || window.innerWidth < 900) return;
+
+  const length = titleElement.textContent.length;
+
+  if (length > 20) {
+    titleElement.style.fontSize = '36px';
+  } else if (length > 10) {
+    titleElement.style.fontSize = '48px';
+  } else {
+    titleElement.style.fontSize = '57px';
+  }
 }

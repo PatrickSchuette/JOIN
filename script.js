@@ -87,7 +87,7 @@ function showOrientationWarning(isLandscape){
 window.matchMedia("(orientation: portrait)").addEventListener('change', checkOrientation);
 window.addEventListener('resize', checkOrientation);
 
- let whitelist = [
+let whitelist = [
     "/html/login.html",
     "/html/signup.html",
     "/html/privacy-policy-login.html",
@@ -95,10 +95,14 @@ window.addEventListener('resize', checkOrientation);
     "/html/welcome.html",
     "/html/stakeholder.html"
  ];
-
- if (
-   !sessionStorage.getItem('loggedInUser') &&
-   !whitelist.includes(window.location.pathname)
- ) {
-   window.location.href = '/html/welcome.html';
+ 
+ let currentPath = window.location.pathname;
+ let isWhitelisted = whitelist.some(path => currentPath.endsWith(path));
+ 
+ if (!sessionStorage.getItem('loggedInUser') && !isWhitelisted) {
+   let htmlIndex = currentPath.indexOf('/html/');
+   
+   let dynamicBase = currentPath.substring(0, htmlIndex);
+   
+   window.location.href = dynamicBase + '/html/welcome.html';
  }

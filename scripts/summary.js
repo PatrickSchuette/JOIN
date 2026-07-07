@@ -114,12 +114,15 @@ function stripTime(date) {
  */
 function getUpcomingDeadline(){
     let today = stripTime(new Date());
-    let nextTask = null;
+    let nextTask = null;   
     for(let index = 0; index < todos.length; index++){
         let task = todos[index];
+        if (!task.date) continue; 
+        
         let taskDate = stripTime(new Date(task.date));
-        if(task.status !== 'boardDone' && task.priority == 'urgent'){
-            if(nextTask === null || taskDate < new Date(nextTask.date)){
+        
+        if(task.status !== 'boardDone' && taskDate >= today){
+            if(nextTask === null || taskDate < stripTime(new Date(nextTask.date))){
                 nextTask = task;
             }
         }
@@ -138,6 +141,8 @@ function getUpcomingDeadline(){
  */
 function changeDateFormat(){
     let deadline = getUpcomingDeadline();
+    if (!deadline) return null;
+
     return new Intl.DateTimeFormat('en-US', {
         month: 'long',
         day: '2-digit',
@@ -153,7 +158,13 @@ function changeDateFormat(){
 function insertUpcomingDeadline(){
     let container = document.getElementById('datum');
     let deadline = changeDateFormat();
-    container.textContent = deadline; 
+    
+    if (deadline) {
+        container.textContent = deadline; 
+        container.classList.remove('d-none');
+    } else {
+        container.classList.add('d-none'); 
+    }
 }
 
 /**
