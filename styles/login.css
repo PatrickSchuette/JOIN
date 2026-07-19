@@ -408,6 +408,23 @@ footer {
   }
 }
 
+footer {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-height: 700px) {
+  footer {
+    position: static;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 40px;
+  }
+}
+
 @media(max-width: 1024px) and (max-height: 600px) {
   .loginTitle{
     font-size: 32px;
