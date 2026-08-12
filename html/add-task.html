@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../styles/add-task-standard.css" />
     <link rel="stylesheet" href="../styles/add-task-interactions.css" />
     <!-- JS files -->
+    <script src="../scripts/config.js" defer></script>
     <script src="../node_modules/dompurify/dist/purify.min.js"></script>
     <script src="../scripts/navigation.js" defer></script>
     <script src="../script.js" defer></script>
@@ -220,7 +221,7 @@
                 id="assigned_to"
               >
                 <span>Select contacts to assign</span>
-                <button>
+                <button  aria-label="Dropdown open">
                   <span id="dropdown_arrow" class="dropdown-arrow"></span>
                 </button>
                 <div id="contact_list" class="contacts-list">
@@ -237,7 +238,7 @@
                 class="dropdown"
               >
                 <span id="selected_category">Select task category</span>
-                <button>
+                <button aria-label="Dropdown open">
                   <span
                     id="category_dropdown_arrow"
                     class="dropdown-arrow"

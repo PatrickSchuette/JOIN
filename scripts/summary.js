@@ -11,6 +11,7 @@ async function onloadFunctionSummary(){
     insertNumbers();
     insertUpcomingDeadline();
     insertDeadlineMessage();
+    statusSummaryN8N();
 }
 
 /**
@@ -203,5 +204,17 @@ function redirectToBoard(){
     window.location.href = "./board.html"
 }
 
+/**
+ * manage the visibility of email task container in summary view based on the ACTIVATE_N8N configuration.
+ * If ACTIVATE_N8N is false, the email task container will be hidden.
+ * This function is called during the initial rendering of the summary page.
+ */
+function statusSummaryN8N(){
+    const n8n_container = document.getElementById('aiTaskContainer');
+    const prio_container = document.getElementById('prio_container');
 
+    if(!ACTIVATE_N8N){
+        n8n_container.style.display = 'none';
+    }
+}
 

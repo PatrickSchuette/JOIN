@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../styles/summary.css" />
   <link rel="stylesheet" href="../styles/navigation.css" />
   <!-- JS files-->
+  <script src="../scripts/config.js" defer></script>
   <script src="../node_modules/dompurify/dist/purify.min.js"></script>
   <script src="../scripts/firebase.js"></script>
   <script src="../scripts/navigation.js" defer></script>
@@ -115,7 +116,7 @@
 
           <div onclick="redirectToBoard()" class="tasks">
           
-              <div class="done-container middle">
+              <div id = "prio_container" class="done-container middle">
                 <div id="prio_icon_background" class="middle-icon-wrapper">
                   <div id="prio_icon" class="middle-icon"></div>
                 </div>
@@ -130,7 +131,7 @@
                 </div>
               </div>
 
-              <div class="to-do-container">
+              <div id="aiTaskContainer" class="to-do-container">
                 <div class="to-do-container-numbers">
                   <h2 id="aiTaskCount">4</h2>
                   <h4>Email <br /> request</h4>

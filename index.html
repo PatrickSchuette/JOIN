@@ -2,32 +2,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join</title>
-    <link rel="icon" href="./assets/img/join_logo.svg">
-    <link rel="stylesheet" href="./style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Join</title>
+	<link rel="icon" href="./assets/img/join_logo.svg">
+	<link rel="stylesheet" href="./style.css">
+	<script src="./scripts/config.js" defer></script>
 
-    <script>
-        function onloadFunc() {
-            checkActiveUser();
-        }
+	<script>
+		function onloadFunc() {
+			checkActiveUser();
+		}
 
-			function checkActiveUser() {
-				if (sessionStorage.getItem('loggedInUser')) {
-					window.location.href = "./html/summary.html";
-				} else {
-					window.location.href = "./html/welcome.html";
-				}
+		function checkActiveUser() {
+			let startPage;
+			if (ACTIVATE_N8N) {
+				startPage = './html/welcome.html'
+			} else {
+				startPage = './html/login.html'
 			}
-		
+
+
+			if (sessionStorage.getItem('loggedInUser')) {
+				window.location.href = "./html/summary.html";
+			} else {
+				window.location.href = startPage;
+			}
+		}
+
 
 		function getBasePath() {
 			const path = window.location.pathname;
 			const parts = path.split('/').filter(Boolean);
 			return '/' + parts[0];
 		}
-    </script>
+	</script>
 
 </head>
 

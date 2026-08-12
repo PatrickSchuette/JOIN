@@ -199,6 +199,20 @@ function updateHTML() {
   renderTodos("boardProgress");
   renderTodos("boardFeedback");
   renderTodos("boardDone");
+  boardStatusN8N();
+}
+
+/**
+ * manage the visibility of Triage column in board view based on the ACTIVATE_N8N configuration.
+ * If ACTIVATE_N8N is false, the Triage column will be hidden.
+ * This function is called during the initial rendering of the board.
+ */
+function boardStatusN8N(){
+  const triage = document.getElementById('triage');
+
+  if(!ACTIVATE_N8N){
+    triage.style.display = 'none';
+  }
 }
 
 /**

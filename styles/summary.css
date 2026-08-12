@@ -514,3 +514,13 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+@media (min-width: 600px) {
+    #prio_container {
+        flex: 2;
+    }
+
+    #aiTaskContainer {
+        flex: 1;
+    }
+}

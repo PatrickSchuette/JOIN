@@ -1,7 +1,12 @@
 /** Logot the current USer from seassion and fowerd to the login Page */
 function logOut(){
     sessionStorage.clear();
-    window.location.href = './welcome.html'
+    
+    if(ACTIVATE_N8N){
+        window.location.href = './welcome.html'
+    } else {
+        window.location.href = './login.html'
+    }
 }
 
 /**

@@ -2,18 +2,11 @@ let users = [];
 let todos = [];
 let lastKnownStatus = {};
 
-/**
- * This variable includes the url of firebase where the datas of project are stored
- * 
- */
-// const BASE_URL = 'https://remotestorage-162fc-default-rtdb.europe-west1.firebasedatabase.app/';
-const BASE_URL = 'https://join-cd262-default-rtdb.europe-west1.firebasedatabase.app/';
-
 /** loads all useres that are stored in the database
  * @param {string} path ky of the first Level of database
  * @returns json of the reqest  */
 async function loadData(path = ''){
-    let response = await fetch(BASE_URL + path + '.json');
+    let response = await fetch(BASE_FIREBASE_URL + path + '.json');
     let responseAtJson = await response.json();
     return responseAtJson;
 }
@@ -25,7 +18,7 @@ async function loadData(path = ''){
  * @param {Object} data - includes the new data of contact 
  */
 async function postData(path='', data={}){
-    let response = await fetch(BASE_URL + path + '.json', {
+    let response = await fetch(BASE_FIREBASE_URL + path + '.json', {
         method : "POST",
         header : {
             "Content-type" : "application/json"
@@ -41,7 +34,7 @@ async function postData(path='', data={}){
  * @returns - a json object with filled data of request
  */
 async function deleteData(path=''){
-    let response = await fetch(BASE_URL + path + '.json', {
+    let response = await fetch(BASE_FIREBASE_URL + path + '.json', {
         method : "DELETE"
     });
     return resonseToJson = await response.json();
@@ -54,7 +47,7 @@ async function deleteData(path=''){
  * @param {Object} data - includes the data object filled with new data 
  */
 async function putData(path='', data = {}){
-    await fetch(BASE_URL + path + '.json', {
+    await fetch(BASE_FIREBASE_URL + path + '.json', {
         method : "PUT",
         header : {
             "Content-type" : "application/json"
@@ -70,7 +63,7 @@ async function putData(path='', data = {}){
  * @returns - a json object filled with data of request
  */
 async function getAllUsers(path = ''){
-    let response = await fetch(BASE_URL + path + '.json');
+    let response = await fetch(BASE_FIREBASE_URL + path + '.json');
     let responseAtJson = await response.json();
     return responseAtJson;
 }
@@ -86,7 +79,7 @@ async function getAllUsers(path = ''){
  */
 async function patchData(path = '', data = {}) {
   try {
-    await fetch(BASE_URL + path + '.json', {
+    await fetch(BASE_FIREBASE_URL + path + '.json', {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
@@ -291,7 +284,7 @@ async function uploadTaskToFirebase(path = "", task = {}) {
         return null;
       }
 
-  let response = await fetch(BASE_URL + path + ".json", {
+  let response = await fetch(BASE_FIREBASE_URL + path + ".json", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
