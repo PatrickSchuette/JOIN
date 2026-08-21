@@ -7,6 +7,7 @@
 async function onloadFunctionSummary(){
     const ALL_TASKS = await loadData('tasks');
     todos = getTaskArr(ALL_TASKS); 
+    updatePriroityOutdated();
     renderActiveAvatar();
     insertNumbers();
     insertUpcomingDeadline();
@@ -218,3 +219,23 @@ function statusSummaryN8N(){
     }
 }
 
+/**
+ * Updates priority of tasks that are not done.
+ * Sets priority to high if due date is within 2 (DUE_DAYS_HIHG_PRIORITY) days.
+ * @returns {void}
+ */
+async function updatePriroityOutdated() {
+    let today = stripTime(new Date());
+    for (let i = 0; i < todos.length; i++) {
+        let t = todos[i];
+        if (t.status === 'boardDone') continue;
+        if (t.priority === 'urgent') continue;
+        if (!t.date) continue;
+        let d = stripTime(new Date(t.date));
+        let diff = (d - today) / (1000 * 60 * 60 * 24);
+        if (diff <= DUE_DAYS_HIHG_PRIORITY) {
+            t.priority = 'urgent';
+            await patchData('tasks/' + t.id, { priority: 'urgent' });
+        }
+    }
+}
