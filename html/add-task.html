@@ -1,368 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join - Add Task</title>
-    <link rel="icon" href="../assets/img/join_logo.svg" />
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style.css" />
-    <link rel="stylesheet" href="../styles/summary.css" />
-    <link rel="stylesheet" href="../styles/navigation.css" />
-    <link rel="stylesheet" href="../styles/add-task.css" />
-    <link rel="stylesheet" href="../styles/add-task-standard.css" />
-    <link rel="stylesheet" href="../styles/add-task-interactions.css" />
-    <!-- JS files -->
-    <script src="../scripts/config.js" defer></script>
-    <script src="../node_modules/dompurify/dist/purify.min.js"></script>
-    <script src="../scripts/navigation.js" defer></script>
-    <script src="../script.js" defer></script>
-    <script src="../scripts/add-task.js" defer></script>
-    <script src="../scripts/add-task-visuals.js" defer></script>
-    <script src="../scripts/templates.js" defer></script>
-    <script src="../scripts/contacts-overview.js" defer></script>
-    <script src="../scripts/firebase.js" defer></script>
-    <script src="../scripts/contacts.js" defer></script>
-  </head>
-  <body>
-    <header>
-      <nav>
-        <img
-          class="mobile-navbar-logo"
-          src="../assets/img/join_logo.svg"
-          alt="The logo of the application"
-        />
-        <p>Kanban Projekt Management Tool</p>
-        <div class="user-help-container">
-          <a href="help.html" aria-label="Opens Help section"
-            ><img
-              class="help-btn"
-              src="../assets/img/help_btn.svg"
-              alt="a help button displaying a question mark"
-          /></a>
-          <button
-            id="activeAvatar"
-            class="nav-user-btn"
-            onclick="toggleSubmenu()"
-          >
-            G
-          </button>
-        </div>
-        <!-- Submenu, desktop version -->
-        <div id="submenu" class="desktop-submenu d-none">
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-        <!-- Submenu, mobile version -->
-        <div id="mobile_submenu" class="mobile-submenu">
-          <a href="help.html" aria-label="Opens Help section">Help</a>
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-      </nav>
-    </header>
-    <aside>
-      <img
-        class="sidebar-logo"
-        src="../assets/img/join_logo_white.svg"
-        alt="The logo of the app JOIN"
-      />
-      <div class="sidebar-components">
-        <a
-          id="summary_tab_pc"
-          href="summary.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('summary')"
-        >
-          <img
-            src="../assets/img/summary.svg"
-            alt="icon leading to the summary page"
-          />
-          <p>Summary</p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join - Add Task</title>
+  <link rel="icon" href="../assets/img/join_logo.svg" />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../styles/summary.css" />
+  <link rel="stylesheet" href="../styles/navigation.css" />
+  <link rel="stylesheet" href="../styles/add-task.css" />
+  <link rel="stylesheet" href="../styles/add-task-standard.css" />
+  <link rel="stylesheet" href="../styles/add-task-interactions.css" />
+  <!-- JS files -->
+  <script src="../scripts/config.js" defer></script>
+  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="../scripts/navigation.js" defer></script>
+  <script src="../script.js" defer></script>
+  <script src="../scripts/add-task.js" defer></script>
+  <script src="../scripts/add-task-visuals.js" defer></script>
+  <script src="../scripts/templates.js" defer></script>
+  <script src="../scripts/contacts-overview.js" defer></script>
+  <script src="../scripts/firebase.js" defer></script>
+  <script src="../scripts/contacts.js" defer></script>
+  <script src="../scripts/imagePicker.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <nav>
+      <img class="mobile-navbar-logo" src="../assets/img/join_logo.svg" alt="The logo of the application" />
+      <p>Kanban Projekt Management Tool</p>
+      <div class="user-help-container">
+        <a href="help.html" aria-label="Opens Help section">
+          <img class="help-btn" src="../assets/img/help_btn.svg" alt="a help button displaying a question mark" />
         </a>
-        <a
-          id="add_task_tab_pc"
-          href="add-task.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('task')"
-        >
-          <img
-            src="../assets/img/add_task.svg"
-            alt="icon leading to the add task page"
-          />
-          <p>Add Task</p>
-        </a>
-        <a
-          id="board_tab_pc"
-          href="board.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('board')"
-        >
-          <img
-            src="../assets/img/board.svg"
-            alt="icon leading to the board page"
-          />
-          <p>Board</p>
-        </a>
-        <a
-          id="contacts_tab_pc"
-          href="contacts.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('contacts')"
-        >
-          <img
-            src="../assets/img/contacts.svg"
-            alt="icon leading to the contacts page"
-          />
-          <p>Contacts</p>
-        </a>
+        <button id="activeAvatar" class="nav-user-btn" onclick="toggleSubmenu()">
+          G
+        </button>
       </div>
-      <div class="legal-notice-container">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="legal-notice.html">Legal Notice</a>
+
+      <!-- Submenu, desktop version -->
+      <div id="submenu" class="desktop-submenu d-none">
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
       </div>
-    </aside>
-    <div id="overlay_container" class="overlay-container"></div>
-    <main>
-      <section class="main-content">
-        <h1>Add Task</h1>
-        <section class="page-container">
-          <section class="task-container">
-            <div class="field-description">
-              <label for="task_title">
-                Title
-                <span class="required">*</span>
-              </label>
-              <input
-                onfocus="handleFocus(event)"
-                oninput="handleInput(event)"
-                onblur="handleBlur(event)"
-                type="text"
-                id="task_title"
-                required
-                placeholder="Enter a title"
-                maxlength="100"
-              />
-              <div class="alert-container"></div>
-            </div>
-            <div class="field-description">
-              <label for="task_description">Description</label>
-              <textarea
-                onfocus="handleTextarea(true)"
-                onblur="handleTextarea(false)"
-                name="description"
-                id="task_description"
-                placeholder="Enter a description"
-              ></textarea>
-            </div>
-            <div class="field-description">
-              <label for="due_date"
-                >Due date<span class="required">*</span></label
-              >
-              <input
-                onfocus="handleFocus(event)"
-                oninput="handleInput(event)"
-                onblur="handleBlur(event)"
-                type="date"
-                id="due_date"
-                required
-              />
-              <div class="alert-container"></div>
-            </div>
-          </section>
-          <div class="separation-bar"></div>
-          <section class="priority-container">
-            <div class="field-description">
-              <span>Priority</span>
-              <div class="priority-stages">
-                <div onclick="setPrioColor(this)" class="txt-img urgent">
-                  <span>Urgent</span>
-                  <div class="urgent-img prio-img"></div>
-                </div>
-                <div onclick="setPrioColor(this)" class="txt-img medium active">
-                  <span>Medium</span>
-                  <div class="medium-img prio-img active"></div>
-                </div>
-                <div onclick="setPrioColor(this)" class="txt-img low">
-                  <span>Low</span>
-                  <div class="low-img prio-img"></div>
-                </div>
-              </div>
-            </div>
-            <div class="field-description assigned-to">
-              <span>Assigned to</span>
-              <div
-                onclick="toggleContactList()"
-                class="dropdown"
-                id="assigned_to"
-              >
-                <span>Select contacts to assign</span>
-                <button  aria-label="Dropdown open">
-                  <span id="dropdown_arrow" class="dropdown-arrow"></span>
-                </button>
-                <div id="contact_list" class="contacts-list">
-                  <ul id="contact_ul"></ul>
-                </div>
-              </div>
-              <div id="contact_icons" class="contacts-icons"></div>
-            </div>
-            <div class="field-description category">
-              <span>Category<span class="required">*</span></span>
-              <div
-                onclick="toggleCategories()"
-                id="category_dropdown"
-                class="dropdown"
-              >
-                <span id="selected_category">Select task category</span>
-                <button aria-label="Dropdown open">
-                  <span
-                    id="category_dropdown_arrow"
-                    class="dropdown-arrow"
-                  ></span>
-                </button>
-                <div id="category_list" class="category-list">
-                  <ul id="categories">
-                    <li onclick="selectCategory(this)">Technical task</li>
-                    <li onclick="selectCategory(this)">User story</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="alert-container"></div>
-            </div>
-            <div class="subtask-field-description">
-              <label for="subtask">Subtasks</label>
-              <div id="subtask_wrapper" class="subtask-wrapper">
-                <input
-                  id="subtask"
-                  class="subtask-input"
-                  type="text"
-                  placeholder="Add new subtask"
-                  onfocus="activateSubtask()"
-                  onblur="deactivateSubtask(event)"
-                  maxlength="50"
-                />
-                <div id="subtask_actions" class="subtask-actions">
-                  <button
-                    onclick="clearSubtaskInput()"
-                    class="subtask-close-btn"
-                    title="Cancel"
-                    type="button"
-                  ></button>
-                  <div class="subtask-btn-divider"></div>
-                  <button
-                    onclick="addSubtask()"
-                    class="subtask-submit-btn"
-                    title="Add"
-                    type="button"
-                  ></button>
-                </div>
-              </div>
-              <div class="added-tasks">
-                <ul id="subtask_list"></ul>
-              </div>
-            </div>
-          </section>
-        </section>
-        <p class="required-mobile"><span>*</span>This field is required</p>
-        <section class="bottom-container">
-           <p class="required-desktop"><span class="required">*</span>This field is required</p>
-          <div class="buttons">
-            <button onclick="clearTaskInput()">
-              Clear
-              <div class="clear-btn"></div>
-            </button>
-            <button onclick="addTask()">
-              Create Task
-              <img
-                src="../assets/img/check.svg"
-                alt="a button indicating to save the task typed into the input field"
-              />
-            </button>
-          </div>
-        </section>
-      </section>
-    </main>
-    <footer>
-      <a
-        id="summary_tab_mobile"
-        href="summary.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('summary')"
-      >
-        <img
-          src="../assets/img/summary.svg"
-          alt="icon leading to the summary page"
-        />
+
+      <!-- Submenu, mobile version -->
+      <div id="mobile_submenu" class="mobile-submenu">
+        <a href="help.html" aria-label="Opens Help section">Help</a>
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
+      </div>
+
+    </nav>
+  </header>
+
+  <aside>
+    <img class="sidebar-logo" src="../assets/img/join_logo_white.svg" alt="The logo of the app JOIN" />
+    <div class="sidebar-components">
+      <a id="summary_tab_pc" href="summary.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('summary')">
+        <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
         <p>Summary</p>
       </a>
-      <a
-        id="add_task_tab_mobile"
-        href="add-task.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('task')"
-      >
-        <img
-          src="../assets/img/add_task.svg"
-          alt="icon leading to the add task page"
-        />
+      <a id="add_task_tab_pc" href="add-task.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('task')">
+        <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
         <p>Add Task</p>
       </a>
-      <a
-        id="board_tab_mobile"
-        href="board.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('board')"
-      >
-        <img
-          src="../assets/img/board.svg"
-          alt="icon leading to the board page"
-        />
+      <a id="board_tab_pc" href="board.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('board')">
+        <img src="../assets/img/board.svg" alt="icon leading to the board page" />
         <p>Board</p>
       </a>
-      <a
-        id="contacts_tab_mobile"
-        href="contacts.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('contacts')"
-      >
-        <img
-          src="../assets/img/contacts.svg"
-          alt="icon leading to the contacts page"
-        />
+      <a id="contacts_tab_pc" href="contacts.html" class="sidebar-menu-elements"
+        onclick="setDesktopTabFocus('contacts')">
+        <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
         <p>Contacts</p>
       </a>
-    </footer>
-    <div id="orientation_warning" class="landscape-view-warning d-none">
-      <p>JOIN works best in portrait mode. Please rotate your device!</p>
-      <img
-        class="device-icon"
-        src="../assets/img/device_landscape.svg"
-        alt="A tablet positioned in landscape view"
-      />
     </div>
-  </body>
+    <div class="legal-notice-container">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="legal-notice.html">Legal Notice</a>
+    </div>
+  </aside>
+
+  <div id="overlay_container" class="overlay-container"></div>
+
+  <main>
+    <section class="main-content">
+      <h1>Add Task</h1>
+
+      <section class="page-container">
+        <section class="task-container">
+          <div class="field-description">
+            <label for="task_title">
+              Title
+              <span class="required">*</span>
+            </label>
+            <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="text"
+              id="task_title" required placeholder="Enter a title" maxlength="100" />
+            <div class="alert-container"></div>
+          </div>
+          <div class="field-description">
+            <label for="task_description">Description</label>
+            <textarea onfocus="handleTextarea(true)" onblur="handleTextarea(false)" name="description"
+              id="task_description" placeholder="Enter a description"></textarea>
+          </div>
+          <div class="field-description">
+            <label for="due_date">Due date<span class="required">*</span></label>
+            <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
+              id="due_date" required />
+            <div class="alert-container"></div>
+          </div>
+
+          <div class="field-description">
+            <span>Priority</span>
+            <div class="priority-stages">
+              <div onclick="setPrioColor(this)" class="txt-img urgent">
+                <span>Urgent</span>
+                <div class="urgent-img prio-img"></div>
+              </div>
+              <div onclick="setPrioColor(this)" class="txt-img medium active">
+                <span>Medium</span>
+                <div class="medium-img prio-img active"></div>
+              </div>
+              <div onclick="setPrioColor(this)" class="txt-img low">
+                <span>Low</span>
+                <div class="low-img prio-img"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="field-description category">
+            <span>Category<span class="required">*</span></span>
+            <div onclick="toggleCategories()" id="category_dropdown" class="dropdown">
+              <span id="selected_category">Select task category</span>
+              <button aria-label="Dropdown open">
+                <span id="category_dropdown_arrow" class="dropdown-arrow"></span>
+              </button>
+              <div id="category_list" class="category-list">
+                <ul id="categories">
+                  <li onclick="selectCategory(this)">Technical task</li>
+                  <li onclick="selectCategory(this)">User story</li>
+                </ul>
+              </div>
+            </div>
+            <div class="alert-container"></div>
+          </div>
+
+        </section>
+
+        <div class="separation-bar"></div>
+
+        <section class="priority-container">
+
+          <div class="field-description">
+            <label for="filepicker">Attachments</label>
+            <span class="file-description">Allowed file types are JPEG and PNG</span>
+            <input type="file" id="filepicker" accept="image/*" />
+            <div id="dragArea">Drag a file or browse</div>
+            <div class="alert-container"></div>
+            <div id="image_preview" class="image-preview"></div>
+          </div>
+
+          <div class="field-description">
+            <div id="gallery"> </div>
+          </div>
+
+          <div class="subtask-field-description">
+            <label for="subtask">Subtasks</label>
+            <div id="subtask_wrapper" class="subtask-wrapper">
+              <input id="subtask" class="subtask-input" type="text" placeholder="Add new subtask"
+                onfocus="activateSubtask()" onblur="deactivateSubtask(event)" maxlength="50" />
+              <div id="subtask_actions" class="subtask-actions">
+                <button onclick="clearSubtaskInput()" class="subtask-close-btn" title="Cancel" type="button"></button>
+                <div class="subtask-btn-divider"></div>
+                <button onclick="addSubtask()" class="subtask-submit-btn" title="Add" type="button"></button>
+              </div>
+            </div>
+            <div class="added-tasks">
+              <ul id="subtask_list"></ul>
+            </div>
+          </div>
+
+          <div class="field-description assigned-to">
+            <span>Assigned to</span>
+            <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
+              <span>Select contacts to assign</span>
+              <button aria-label="Dropdown open">
+                <span id="dropdown_arrow" class="dropdown-arrow"></span>
+              </button>
+              <div id="contact_list" class="contacts-list">
+                <ul id="contact_ul"></ul>
+              </div>
+            </div>
+            <div id="contact_icons" class="contacts-icons"></div>
+          </div>
+        </section>
+
+      </section>
+
+      <p class="required-mobile"><span>*</span>This field is required</p>
+
+      <section class="bottom-container">
+        <p class="required-desktop"><span class="required">*</span>This field is required</p>
+        <div class="buttons">
+          <button onclick="clearTaskInput()">
+            Clear
+            <div class="clear-btn"></div>
+          </button>
+          <button onclick="addTask()">
+            Create Task
+            <img src="../assets/img/check.svg" alt="a button indicating to save the task typed into the input field" />
+          </button>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <footer>
+    <a id="summary_tab_mobile" href="summary.html" class="footer-menu-elements" onclick="setMobileTabFocus('summary')">
+      <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
+      <p>Summary</p>
+    </a>
+    <a id="add_task_tab_mobile" href="add-task.html" class="footer-menu-elements" onclick="setMobileTabFocus('task')">
+      <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
+      <p>Add Task</p>
+    </a>
+    <a id="board_tab_mobile" href="board.html" class="footer-menu-elements" onclick="setMobileTabFocus('board')">
+      <img src="../assets/img/board.svg" alt="icon leading to the board page" />
+      <p>Board</p>
+    </a>
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
+      onclick="setMobileTabFocus('contacts')">
+      <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
+      <p>Contacts</p>
+    </a>
+  </footer>
+
+  <div id="orientation_warning" class="landscape-view-warning d-none">
+    <p>JOIN works best in portrait mode. Please rotate your device!</p>
+    <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view" />
+  </div>
+
+</body>
+
 </html>

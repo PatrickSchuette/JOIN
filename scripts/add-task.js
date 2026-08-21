@@ -14,6 +14,7 @@ window.onload = async () => {
   await createArrayOfContacts();
   setDateStart();
   renderActiveAvatar();
+  initFilePicker();
 };
 
 

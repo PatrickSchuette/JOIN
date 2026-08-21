@@ -35,6 +35,7 @@
   <script src="../scripts/board-tasks.js" defer></script>
   <script src="../scripts/templates.js" defer></script>
   <script src="../scripts/stakeholder.js" defer></script>
+  <script src="../scripts/imagePicker.js" defer></script>
 </head>
 
 <body>
@@ -213,9 +214,9 @@
                     <div id="creatorContact"> </div>
                   </div>
                 </div>
-
               </div>
             </div>
+
             <div class="field-description">
               <label class="color-description" for="due_date">Due date:<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
@@ -224,9 +225,6 @@
               <div class="alert-container"></div>
             </div>
 
-          </section>
-          <div class="separation-bar"></div>
-          <div class="priority-container">
             <section class="priority">
               <div class="field-description">
                 <span class="color-description">Priority</span>
@@ -248,22 +246,6 @@
               </div>
             </section>
 
-            <section class="assigned">
-              <div id="assigned_box" class="field-description assigned-to">
-                <span class="color-description">Assigned to</span>
-                <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
-                  <span>Select contacts to assign</span>
-                  <button>
-                    <span id="dropdown_arrow" class="dropdown-arrow"></span>
-                  </button>
-                  <div id="contact_list" class="contacts-list">
-                    <ul id="contact_ul"></ul>
-                  </div>
-                </div>
-                <div id="contact_icons" class="contacts-icons"></div>
-              </div>
-            </section>
-
             <section class="category">
               <div class="field-description category">
                 <span>Category<span class="required">*</span></span>
@@ -282,6 +264,43 @@
                 <div class="alert-container"></div>
               </div>
             </section>
+
+          </section>
+
+          <div class="separation-bar"></div>
+
+          <div class="priority-container">
+
+            <div class="field-description">
+              <label for="filepicker">Attachments</label>
+              <span class="file-description">Allowed file types are JPEG and PNG</span>
+              <input type="file" id="filepicker" accept="image/*" />
+              <div id="dragArea">Drag a file or browse</div>
+              <div class="alert-container"></div>
+              <div id="image_preview" class="image-preview"></div>
+            </div>
+            
+            <div class="field-description">
+              <div id="gallery"> </div>
+              </div>
+
+            <section class="assigned">
+              <div id="assigned_box" class="field-description assigned-to">
+                <span class="color-description">Assigned to</span>
+                <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
+                  <span>Select contacts to assign</span>
+                  <button>
+                    <span id="dropdown_arrow" class="dropdown-arrow"></span>
+                  </button>
+                  <div id="contact_list" class="contacts-list">
+                    <ul id="contact_ul"></ul>
+                  </div>
+                </div>
+                <div id="contact_icons" class="contacts-icons"></div>
+              </div>
+            </section>
+
+
 
             <section class="subtask">
               <div class="subtask-field-description">
@@ -346,8 +365,7 @@
       <img src="../assets/img/board.svg" alt="icon leading to the board page" />
       <p>Board</p>
     </a>
-    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
-      onclick="setMobileTabFocus('contacts')">
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"onclick="setMobileTabFocus('contacts')">
       <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
       <p>Contacts</p>
     </a>
