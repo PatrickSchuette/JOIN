@@ -87,6 +87,19 @@ function showOrientationWarning(isLandscape){
 }
 
 /**
+ * Returns avatar HTML for a contact. Uses profile image if available.
+ * @param {Object} user - Contact object.
+ * @returns {string} Avatar HTML string.
+ */
+function getContactAvatarHtml(user, className = "contactAvater") {
+    if (user.profileImage) {
+        return `<img class="${className}" src="${user.profileImage}" alt="${user.name}" style="width: 100%; height: 100%">`;
+    }
+    let initials = getUserItem(user.name);
+    return `<div class="${className}" style="background-color:${user.color}; width: 100%; height: 100%">${initials}</div>`;
+}
+
+/**
  * Triggers the orientation warning only on portrait mode and on viewport resize
  */
 window.matchMedia("(orientation: portrait)").addEventListener('change', checkOrientation);

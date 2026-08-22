@@ -1,306 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join - Add Contacts</title>
-    <link rel="icon" href="../assets/img/join_logo.svg" />
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style.css" />
-    <link rel="stylesheet" href="../styles/summary.css" />
-    <link rel="stylesheet" href="../styles/navigation.css">
-    <link rel="stylesheet" href="../styles/contacts.css">
-    <link rel="stylesheet" href="../styles/contacts-overview.css">
-    <link rel="stylesheet" href="../styles/contact-show.css">
-    <link rel="stylesheet" href="../styles/contacts-dialog.css">
-    <!-- JS files -->  
-    <script src="../scripts/config.js" defer></script>
-    <script src="../node_modules/dompurify/dist/purify.min.js"></script>
-    <script src="../script.js" defer></script>
-    <script src="../scripts/firebase.js"></script>
-    <script src="../scripts/templates.js"></script>
-    <script src="../scripts/signup.js"></script>
-    <script src="../scripts/contacts-overview.js" defer></script>
-    <script src="../scripts/contacts-dialog.js"></script>
-    <script src="../scripts/contacts.js"></script>
-    <script src="../scripts/navigation.js" defer></script>
-  </head>
-  <body onload="onloadFuncContact()">
-    <header>
-      <nav>
-        <img
-          class="mobile-navbar-logo"
-          src="../assets/img/join_logo.svg"
-          alt="The logo of the application"
-        />
-        <p>Kanban Projekt Management Tool</p>
-        <div class="user-help-container">
-          <a href="help.html" aria-label="Opens Help section"
-            ><img
-              class="help-btn"
-              src="../assets/img/help_btn.svg"
-              alt="a help button displaying a question mark"
-          /></a>
-          <button id="activeAvatar" class="nav-user-btn" onclick="toggleSubmenu()">G</button>
-        </div>
-        <!-- Submenu, desktop version -->
-        <div id="submenu" class="desktop-submenu d-none">
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a onclick="logOut()" href="#" aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-        <!-- Submenu, mobile version -->
-        <div id="mobile_submenu" class="mobile-submenu">
-          <a href="help.html" aria-label="Opens Help section">Help</a>
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a onclick="logOut()" href="#" aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-      </nav>
-    </header>
-    <aside>
-      <img
-        class="sidebar-logo"
-        src="../assets/img/join_logo_white.svg"
-        alt="The logo of the app JOIN"
-      />
-      <div class="sidebar-components">
-        <a
-          id="summary_tab_pc"
-          href="summary.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('summary')"
-        >
-          <img
-            src="../assets/img/summary.svg"
-            alt="icon leading to the summary page"
-          />
-          <p>Summary</p>
-        </a>
-        <a
-          id="add_task_tab_pc"
-          href="add-task.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('task')"
-        >
-          <img
-            src="../assets/img/add_task.svg"
-            alt="icon leading to the add task page"
-          />
-          <p>Add Task</p>
-        </a>
-        <a
-          id="board_tab_pc"
-          href="board.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('board')"
-        >
-          <img
-            src="../assets/img/board.svg"
-            alt="icon leading to the board page"
-          />
-          <p>Board</p>
-        </a>
-        <a
-          id="contacts_tab_pc"
-          href="contacts.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('contacts')"
-        >
-          <img
-            src="../assets/img/contacts.svg"
-            alt="icon leading to the contacts page"
-          />
-          <p>Contacts</p>
-        </a>
-      </div>
-      <div class="legal-notice-container">
-        <a href="privacy-policy.html">Privacy Policy</a>
-        <a href="legal-notice.html">Legal Notice</a>
-      </div>
-    </aside>
-    <main onclick="closeEditContainerMobile()">
-      <dialog id="add_contact_dialog" class="dialog-contact">
-        <div class="add-contact-container">
-          <section class="add-contact-left-box">
-            <div class="left-box-content">
-              <div class="btn-close-container-top">
-                <div class="btn-close-box-top" onclick="closeDialogAddContact()">
-                  <img class="close-img" src="../assets/img/close_btn_white.svg" alt="cross as close button">
-                </div>
-              </div>
-              <div class="overlay-box">
-                <div class="overlay-flex">
-                  <div class="overlay-center">
-                    <img class="join-img" src="../assets/img/join_logo_white.svg" alt="join logo in white">
-                    <span class="span-add">Add contact</span>
-                    <span class="span-team">Tasks are better with a team!</span>
-                    <hr class="add-contact-underline">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section class="add-contact-right-box">
-            <div class="btn-close-container">
-              <div class="btn-close-box" onclick="closeDialogAddContact()">
-                <img src="../assets/img/close_btn.svg" alt="cross as close button">
-              </div>
-            </div>
-            <div class="right-box-container">
-              <div class="person-container">
-                <img src="../assets/img/person_icon.svg" alt="person icon">
-              </div>
-              <form onsubmit="createContact(); return false" autocomplete="off">
-                <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="add_name">
-                <div class="mail-info">
-                  <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail" id="add_mail" onfocus="fieldMailOnFocus('add_mail', 'mail_span', 'btn_contact_form')"
-                  onblur="checkMailOnDialog('add_mail', 'mail_span', 'btn_contact_form')">
-                  <span id="mail_span" class="info-span hidden">Invalid mail</span>
-                </div>
-                <div class="mail-info">
-                  <input type="tel" required placeholder="Phone" class="bg-input bg-img-phone" id="add_phone" onblur="checkTelOnDialog('add_phone', 'tel_span', 'btn_contact_form')"
-                  onfocus="fieldTelOnFocus('add_phone', 'tel_span', 'btn_contact_form')">
-                  <span id="tel_span" class="info-span hidden">Invalid phone number</span>
-                </div>
-                <div class="form-ctrl-container">
-                  <div id="btn_cancel" class="btn-cancel" onmouseover="changeColorHover()" onmouseout="changeColorOut()"
-                  onmousedown="changeColorDown()" onclick="closeDialogAddContact()">
-                    <span id="cancel_span">Cancel</span>
-                    <img id="cancel_img" src="../assets/img/cancel_x.svg" alt="check symbol">
-                  </div>
-                  <button id="btn_contact_form" class="btn-contact">
-                    <span>Create Contact</span>
-                    <img src="../assets/img/check.svg" alt="check symbol">
-                  </button>
-                </div>
-              </form>
-            </div>
-          </section>
-        </div>
-      </dialog>
 
-      <dialog id="msg_contact_dialog" class="dialog-msg"></dialog>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join - Add Contacts</title>
+  <link rel="icon" href="../assets/img/join_logo.svg" />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../styles/summary.css" />
+  <link rel="stylesheet" href="../styles/navigation.css">
+  <link rel="stylesheet" href="../styles/contacts.css">
+  <link rel="stylesheet" href="../styles/contacts-overview.css">
+  <link rel="stylesheet" href="../styles/contact-show.css">
+  <link rel="stylesheet" href="../styles/contacts-dialog.css">
+  <!-- JS files -->
+  <script src="../scripts/config.js" defer></script>
+  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="../script.js" defer></script>
+  <script src="../scripts/firebase.js"></script>
+  <script src="../scripts/templates.js"></script>
+  <script src="../scripts/signup.js"></script>
+  <script src="../scripts/contacts-overview.js" defer></script>
+  <script src="../scripts/contacts-dialog.js"></script>
+  <script src="../scripts/contacts.js"></script>
+  <script src="../scripts/navigation.js" defer></script>
+  <script src="../scripts/imagePicker.js" defer></script>
+</head>
 
-      <dialog id="edit_contact_dialog" class="dialog-contact"></dialog>
-      
-      <section class="contacts-container">
-        <div id="contacts_list" class="contacts-list">
-          <div class="btn-add-contact-container">
-            <button id="btn_add_contact" class="btn-contact" onclick="openDialogAddContact()">
-              <div class="btn-add-contact-box">
-                <span>Add new contact</span>
-                <img src="../assets/img/add_person_icon.svg" alt="add person icon">
-              </div>
-            </button>
-          </div>
-          <div class="contactlist-container">
-            <div id="contactsList-content" class="contactlist-content"></div>
-            <div id="add_contact_mobile" class="add-contact-mobile" onclick="openDialogAddContact()">
-              <img src="../assets/img/add_person_icon.svg" alt="circle button with add person icon">
-            </div>
-          </div>
-        </div>
-        <div id="contacts_content" class="contacts-content">
-          <div class="head-container">
-            <div id="head_contacts" class="head-contacts">
-              <span class="head-description">Contacts</span>
-              <div class="line"></div>
-              <span class="aside-description">Better with a team</span>
-              <hr class="underline-mobile">
-            </div>
-            <div class="btn-back-container">
-              <div class="btn-back-left" onclick="goBackToContactsList()">
-                <img class="img-back-left" src="../assets/img/arrow_left_line_default.svg" alt="blue arrow button">
-              </div>
-            </div>
-          </div>
-          <div id="contact_container" class="contact-show-design"></div>
-          <div class="add-contact-mobile" onclick="showEditContainerMobile(event)">
-            <img src="../assets/img/vertical_dots.svg" alt="button with 3 vertical dots">
-          </div>
-          <div id="edit_mobile_container" class="ctrl-edit-mobile-container hidden">
-            <div class="ctrl-edit-mobile">
-              <div id="ctrl_edit_mobile" class="btn-edit-mobile" onmousedown="changeIconMobile('img_edit_mobile')" onmouseup="showEditDialogMobile()">
-                <img id="img_edit_mobile" class="btn-contact-ctrl" src="../assets/img/edit_contact.svg" alt="edit button with pen icon">
-              </div>
-              <div id="ctrl_delete_mobile" class="btn-edit-mobile" onmousedown="changeIconMobile('img_delete_mobile')" onmouseup="deleteContactMobileView()">
-                <img id="img_delete_mobile" class="btn-contact-ctrl" src="../assets/img/delete_contact.svg" alt="delete button with trash icon">
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-    <footer>
-      <a
-        id="summary_tab_mobile"
-        href="summary.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('summary')"
-      >
-        <img
-          src="../assets/img/summary.svg"
-          alt="icon leading to the summary page"
-        />
+<body onload="onloadFuncContact()">
+  <header>
+    <nav>
+      <img class="mobile-navbar-logo" src="../assets/img/join_logo.svg" alt="The logo of the application" />
+      <p>Kanban Projekt Management Tool</p>
+      <div class="user-help-container">
+        <a href="help.html" aria-label="Opens Help section">
+          <img class="help-btn" src="../assets/img/help_btn.svg" alt="a help button displaying a question mark" />
+        </a>
+        <button id="activeAvatar" class="nav-user-btn" onclick="toggleSubmenu()">G</button>
+      </div>
+
+      <!-- Submenu, desktop version -->
+      <div id="submenu" class="desktop-submenu d-none">
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
+      </div>
+
+      <!-- Submenu, mobile version -->
+      <div id="mobile_submenu" class="mobile-submenu">
+        <a href="help.html" aria-label="Opens Help section">Help</a>
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
+      </div>
+    </nav>
+
+  </header>
+
+  <aside>
+    <img class="sidebar-logo" src="../assets/img/join_logo_white.svg" alt="The logo of the app JOIN" />
+
+    <div class="sidebar-components">
+      <a id="summary_tab_pc" href="summary.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('summary')">
+        <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
         <p>Summary</p>
       </a>
-      <a
-        id="add_task_tab_mobile"
-        href="add-task.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('task')"
-      >
-        <img
-          src="../assets/img/add_task.svg"
-          alt="icon leading to the add task page"
-        />
+      <a id="add_task_tab_pc" href="add-task.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('task')">
+        <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
         <p>Add Task</p>
       </a>
-      <a
-        id="board_tab_mobile"
-        href="board.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('board')"
-      >
-        <img
-          src="../assets/img/board.svg"
-          alt="icon leading to the board page"
-        />
+      <a id="board_tab_pc" href="board.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('board')">
+        <img src="../assets/img/board.svg" alt="icon leading to the board page" />
         <p>Board</p>
       </a>
-      <a
-        id="contacts_tab_mobile"
-        href="contacts.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('contacts')"
-      >
-        <img
-          src="../assets/img/contacts.svg"
-          alt="icon leading to the contacts page"
-        />
+      <a id="contacts_tab_pc" href="contacts.html" class="sidebar-menu-elements"
+        onclick="setDesktopTabFocus('contacts')">
+        <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
         <p>Contacts</p>
       </a>
-    </footer>
-    <div id="orientation_warning" class="landscape-view-warning d-none">
-        <p>JOIN works best in portrait mode. Please rotate your device!</p>
-        <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view">
     </div>
-  </body>
+
+    <div class="legal-notice-container">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="legal-notice.html">Legal Notice</a>
+    </div>
+  </aside>
+
+  <main onclick="closeEditContainerMobile()">
+    <dialog id="add_contact_dialog" class="dialog-contact">
+      <div class="add-contact-container">
+
+        <section class="add-contact-left-box">
+          <div class="left-box-content">
+            <div class="btn-close-container-top">
+              <div class="btn-close-box-top" onclick="closeDialogAddContact()">
+                <img class="close-img" src="../assets/img/close_btn_white.svg" alt="cross as close button">
+              </div>
+            </div>
+            <div class="overlay-box">
+              <div class="overlay-flex">
+                <div class="overlay-center">
+                  <img class="join-img" src="../assets/img/join_logo_white.svg" alt="join logo in white">
+                  <span class="span-add">Add contact</span>
+                  <span class="span-team">Tasks are better with a team!</span>
+                  <hr class="add-contact-underline">
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="add-contact-right-box">
+          <div class="btn-close-container">
+            <div class="btn-close-box" onclick="closeDialogAddContact()">
+              <img src="../assets/img/close_btn.svg" alt="cross as close button">
+            </div>
+          </div>
+
+          <div class="right-box-container">
+            <div class="person-container" style="position: relative;">
+              <img id="person_icon" src="../assets/img/person_icon.svg" alt="person icon">
+              <div class="file-input-container">
+                <input type="file" id="filepicker" accept="image/*" class="file-input" style="display: none;"/>
+                <label for="filepicker" class="file-label">
+                  <img src="../assets/img/add_photo.svg" alt="camera icon" style="cursor: pointer;">
+                </label>
+              </div>
+            </div>
+
+            <form onsubmit="createContact(); return false" autocomplete="off">
+              <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="add_name">
+              <div class="mail-info">
+                <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail"
+                  id="add_mail" onfocus="fieldMailOnFocus('add_mail', 'mail_span', 'btn_contact_form')"
+                  onblur="checkMailOnDialog('add_mail', 'mail_span', 'btn_contact_form')">
+                <span id="mail_span" class="info-span hidden">Invalid mail</span>
+              </div>
+              <div class="mail-info">
+                <input type="tel" required placeholder="Phone" class="bg-input bg-img-phone" id="add_phone"
+                  onblur="checkTelOnDialog('add_phone', 'tel_span', 'btn_contact_form')"
+                  onfocus="fieldTelOnFocus('add_phone', 'tel_span', 'btn_contact_form')">
+                <span id="tel_span" class="info-span hidden">Invalid phone number</span>
+              </div>
+              <div class="form-ctrl-container">
+                <div id="btn_cancel" class="btn-cancel" onmouseover="changeColorHover()" onmouseout="changeColorOut()"
+                  onmousedown="changeColorDown()" onclick="closeDialogAddContact()">
+                  <span id="cancel_span">Cancel</span>
+                  <img id="cancel_img" src="../assets/img/cancel_x.svg" alt="check symbol">
+                </div>
+                <button id="btn_contact_form" class="btn-contact">
+                  <span>Create Contact</span>
+                  <img src="../assets/img/check.svg" alt="check symbol">
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </section>
+
+      </div>
+    </dialog>
+
+    <dialog id="msg_contact_dialog" class="dialog-msg"></dialog>
+
+    <dialog id="edit_contact_dialog" class="dialog-contact"></dialog>
+
+    <section class="contacts-container">
+      <div id="contacts_list" class="contacts-list">
+        <div class="btn-add-contact-container">
+          <button id="btn_add_contact" class="btn-contact" onclick="openDialogAddContact()">
+            <div class="btn-add-contact-box">
+              <span>Add new contact</span>
+              <img src="../assets/img/add_person_icon.svg" alt="add person icon">
+            </div>
+          </button>
+        </div>
+        <div class="contactlist-container">
+          <div id="contactsList-content" class="contactlist-content"></div>
+          <div id="add_contact_mobile" class="add-contact-mobile" onclick="openDialogAddContact()">
+            <img src="../assets/img/add_person_icon.svg" alt="circle button with add person icon">
+          </div>
+        </div>
+      </div>
+
+      <div id="contacts_content" class="contacts-content">
+        <div class="head-container">
+          <div id="head_contacts" class="head-contacts">
+            <span class="head-description">Contacts</span>
+            <div class="line"></div>
+            <span class="aside-description">Better with a team</span>
+            <hr class="underline-mobile">
+          </div>
+          <div class="btn-back-container">
+            <div class="btn-back-left" onclick="goBackToContactsList()">
+              <img class="img-back-left" src="../assets/img/arrow_left_line_default.svg" alt="blue arrow button">
+            </div>
+          </div>
+        </div>
+
+        <div id="contact_container" class="contact-show-design"></div>
+        <div class="add-contact-mobile" onclick="showEditContainerMobile(event)">
+          <img src="../assets/img/vertical_dots.svg" alt="button with 3 vertical dots">
+        </div>
+
+        <div id="edit_mobile_container" class="ctrl-edit-mobile-container hidden">
+          <div class="ctrl-edit-mobile">
+            <div id="ctrl_edit_mobile" class="btn-edit-mobile" onmousedown="changeIconMobile('img_edit_mobile')"
+              onmouseup="showEditDialogMobile()">
+              <img id="img_edit_mobile" class="btn-contact-ctrl" src="../assets/img/edit_contact.svg"
+                alt="edit button with pen icon">
+            </div>
+            <div id="ctrl_delete_mobile" class="btn-edit-mobile" onmousedown="changeIconMobile('img_delete_mobile')"
+              onmouseup="deleteContactMobileView()">
+              <img id="img_delete_mobile" class="btn-contact-ctrl" src="../assets/img/delete_contact.svg"
+                alt="delete button with trash icon">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <footer>
+
+    <a id="summary_tab_mobile" href="summary.html" class="footer-menu-elements" onclick="setMobileTabFocus('summary')">
+      <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
+      <p>Summary</p>
+    </a>
+    <a id="add_task_tab_mobile" href="add-task.html" class="footer-menu-elements" onclick="setMobileTabFocus('task')">
+      <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
+      <p>Add Task</p>
+    </a>
+    <a id="board_tab_mobile" href="board.html" class="footer-menu-elements" onclick="setMobileTabFocus('board')">
+      <img src="../assets/img/board.svg" alt="icon leading to the board page" />
+      <p>Board</p>
+    </a>
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
+      onclick="setMobileTabFocus('contacts')">
+      <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
+      <p>Contacts</p>
+    </a>
+  </footer>
+
+  <div id="orientation_warning" class="landscape-view-warning d-none">
+    <p>JOIN works best in portrait mode. Please rotate your device!</p>
+    <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view">
+  </div>
+
+</body>
+
 </html>

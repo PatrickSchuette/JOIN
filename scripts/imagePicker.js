@@ -1,130 +1,173 @@
-const filepicker = document.getElementById('filepicker');
-const gallery = document.getElementById('gallery');
-const error = document.querySelector('.alert-container');
-const dragArea = document.getElementById('dragArea');
-
-const MAX_WIDTH = 800;
-const MAX_HEIGHT = 800;
-
+/* Globals */
+let filepicker = null;
+let gallery = null;
+let errorContainer = null;
+let dragArea = null;
 let myGallery = null;
 let allImages = [];
+let profileImage = null;
+
+const TASK_MAX_WIDTH = 800;
+const TASK_MAX_HEIGHT = 600;
+const PROFILE_SIZE = 120;
+const TASK_MAX_COUNT = 5;
 
 /**
- * Saves the global images array to the local storage as a string.
+ * Save allImages to localStorage.
+ * @returns {void}
  */
-function save() {
+function saveAllImages() {
     try {
         localStorage.setItem('allImages', JSON.stringify(allImages));
     } catch (e) {
-        error.textContent = "Speicherlimit erreicht.";
+        if (errorContainer) errorContainer.textContent = 'Storage limit reached.';
     }
 }
 
 /**
- * Destroys the existing viewer instance if it is currently active.
+ * Save profileImage to localStorage.
+ * @returns {void}
+ */
+function saveProfileImage() {
+    try {
+        if (profileImage) localStorage.setItem('profileImage', JSON.stringify(profileImage));
+    } catch (e) {
+        if (errorContainer) errorContainer.textContent = 'Storage limit reached.';
+    }
+}
+
+/**
+ * Destroy existing Viewer instance if present.
+ * @returns {void}
  */
 function destroyOldViewer() {
     if (myGallery && typeof myGallery.destroy === 'function') {
         myGallery.destroy();
+        myGallery = null;
     }
 }
 
 /**
- * Renders all images from the global array into the gallery DOM element.
+ * Render gallery from allImages if gallery element exists.
+ * @returns {void}
  */
-function render() {
+function renderGallery() {
     destroyOldViewer();
+    if (!gallery) return;
     gallery.innerHTML = '';
-    allImages.forEach(image => {
-        gallery.innerHTML += `<img src="${image.base64}" alt="${image.filename}">`;
-    });
-    if (allImages.length > 0 && typeof Viewer !== 'undefined') {
-        myGallery = new Viewer(gallery);
+    allImages.forEach(img => gallery.innerHTML += `<img src="${img.base64}" alt="${img.filename}">`);
+    if (allImages.length > 0 && typeof Viewer !== 'undefined') myGallery = new Viewer(gallery);
+}
+
+/**
+ * Load stored images and profile image from localStorage.
+ * @returns {void}
+ */
+function loadStoredImages() {
+    const a = localStorage.getItem('allImages');
+    if (a) {
+        try { allImages = JSON.parse(a); } catch (e) { allImages = []; }
     }
-}
-
-/**
- * Loads images from local storage and triggers the initial rendering.
- */
-function load() {
-    const arrayAsString = localStorage.getItem('allImages');
-    if (arrayAsString) {
-        allImages = JSON.parse(arrayAsString);
-        render();
+    const p = localStorage.getItem('profileImage');
+    if (p) {
+        try { profileImage = JSON.parse(p); } catch (e) { profileImage = null; }
     }
+    renderGallery();
 }
 
 /**
- * Adds a new image object to the global array, saves, and updates the view.
- * @param {File} file - The uploaded file object.
- * @param {string} base64 - The compressed image data string.
+ * Store a task image and persist.
+ * @param {File} file
+ * @param {string} base64
+ * @returns {void}
  */
-function storeImageData(file, base64) {
-    allImages.push({
-        filename: file.name,
-        fileType: file.type,
-        base64: base64
-    });
-    save();
-    render();
+function storeTaskImage(file, base64) {
+    allImages.push({ filename: file.name, fileType: file.type, base64: base64 });
+    saveAllImages();
+    renderGallery();
 }
 
 /**
- * Compresses an image file and stores it in the global state.
- * @param {File} file - The image file to be processed.
+ * Store a profile image and persist.
+ * @param {File} file
+ * @param {string} base64
+ * @returns {void}
  */
-async function processImageFile(file) {
-    error.textContent = '';
-    if (!file.type.startsWith('image/')) {
-        error.textContent = `Die Datei "${file.name}" ist kein Bild.`;
+function storeContactProfileImage(file, base64) {
+    profileImage = { filename: file.name, fileType: file.type, base64: base64 };
+    saveProfileImage();
+}
+
+/**
+ * Process a file: validate, compress and store according to context.
+ * @param {File} file
+ * @param {number} targetW
+ * @param {number} targetH
+ * @param {number} quality
+ * @param {boolean} isProfile
+ * @returns {Promise<void>}
+ */
+async function processFile(file, targetW, targetH, quality, isProfile = false) {
+    if (!errorContainer) errorContainer = document.querySelector('.alert-container');
+    if (!file || !file.type || !file.type.startsWith('image/')) {
+        if (errorContainer) errorContainer.textContent = `File "${file?.name ?? ''}" is not an image.`;
         return;
     }
     try {
-        const compressed = await compressImage(file, MAX_WIDTH, MAX_HEIGHT, 0.7);
-        storeImageData(file, compressed);
+        const base64 = await compressImage(file, targetW, targetH, quality);
+        if (isProfile) storeContactProfileImage(file, base64); else storeTaskImage(file, base64);
     } catch (err) {
-        error.textContent = err;
+        if (errorContainer) errorContainer.textContent = String(err);
     }
 }
 
 /**
- * Loops through selected files and passes them to the processor.
+ * Handle file selection for tasks (multiple, limited).
+ * @returns {void}
  */
-function handleFileSelection() {
-    if (filepicker.files.length > 0) {
-        Array.from(filepicker.files).forEach(file => {
-            processImageFile(file);
-        });
-    }
+function handleFileSelectionForTasks() {
+    if (!filepicker || !filepicker.files) return;
+    const files = Array.from(filepicker.files);
+    const slots = Math.max(0, TASK_MAX_COUNT - allImages.length);
+    files.slice(0, slots).forEach(f => processFile(f, TASK_MAX_WIDTH, TASK_MAX_HEIGHT, 0.7, false));
+    if (files.length > slots && errorContainer) errorContainer.textContent = `Maximum ${TASK_MAX_COUNT} images allowed.`;
+    filepicker.value = '';
 }
 
 /**
- * Computes new image dimensions while preserving the original aspect ratio.
- * @param {HTMLImageElement} img - The image element with original sizes.
- * @returns {{width: number, height: number}} The calculated dimensions.
+ * Handle file selection for profile (single).
+ * @returns {void}
  */
-function calculateDimensions(img) {
-    let width = img.width;
-    let height = img.height;
-    if (width > MAX_WIDTH || height > MAX_HEIGHT) {
-        if (width > height) {
-            height = (height * MAX_WIDTH) / width;
-            width = MAX_WIDTH;
-        } else {
-            width = (width * MAX_HEIGHT) / height;
-            height = MAX_HEIGHT;
-        }
-    }
-    return { width, height };
+function handleFileSelectionForProfile() {
+    if (!filepicker || !filepicker.files || filepicker.files.length === 0) return;
+    const f = filepicker.files[0];
+    processFile(f, PROFILE_SIZE, PROFILE_SIZE, 0.8, true);
+    filepicker.value = '';
 }
 
 /**
- * Creates a canvas to draw and compress an image into a base64 string.
- * @param {HTMLImageElement} img - The image element.
- * @param {number} w - Target width.
- * @param {number} h - Target height.
- * @param {number} q - Compression quality.
- * @returns {string} Compressed base64 string.
+ * Calculate scaled dimensions preserving aspect ratio and not exceeding targets.
+ * @param {HTMLImageElement} img
+ * @param {number} targetW
+ * @param {number} targetH
+ * @returns {{width:number,height:number}}
+ */
+function calculateDimensions(img, targetW, targetH) {
+    let w = img.width;
+    let h = img.height;
+    const ratio = Math.min(targetW / w, targetH / h, 1);
+    w = Math.round(w * ratio);
+    h = Math.round(h * ratio);
+    return { width: w, height: h };
+}
+
+/**
+ * Draw image to canvas and return compressed base64 string.
+ * @param {HTMLImageElement} img
+ * @param {number} w
+ * @param {number} h
+ * @param {number} q
+ * @returns {string}
  */
 function drawAndCompress(img, w, h, q) {
     const canvas = document.createElement('canvas');
@@ -136,86 +179,155 @@ function drawAndCompress(img, w, h, q) {
 }
 
 /**
- * Sets up the internal loading hooks for FileReader and Image.
- * @param {FileReader} reader - The reader instance.
- * @param {Function} resolve - Promise success callback.
- * @param {Function} reject - Promise failure callback.
- * @param {number} q - Quality factor.
+ * Setup FileReader and Image load/error handlers for compression.
+ * @param {FileReader} reader
+ * @param {Function} resolve
+ * @param {Function} reject
+ * @param {number} targetW
+ * @param {number} targetH
+ * @param {number} q
+ * @returns {void}
  */
-function setupCompressionHooks(reader, resolve, reject, q) {
-    reader.onload = (event) => {
+function setupCompressionHooks(reader, resolve, reject, targetW, targetH, q) {
+    reader.onload = (ev) => {
         const img = new Image();
         img.onload = () => {
-            const size = calculateDimensions(img);
-            resolve(drawAndCompress(img, size.width, size.height, q));
+            const s = calculateDimensions(img, targetW, targetH);
+            resolve(drawAndCompress(img, s.width, s.height, q));
         };
-        img.onerror = () => reject('Fehler beim Laden des Bildes.');
-        img.src = event.target.result;
+        img.onerror = () => reject('Error loading image.');
+        img.src = ev.target.result;
     };
-    reader.onerror = () => reject('Fehler beim Lesen der Datei.');
+    reader.onerror = () => reject('Error reading file.');
 }
 
 /**
- * Wraps the file compression logic into a manageable Promise.
- * @param {File} file - The file to compress.
- * @param {number} q - Quality settings.
- * @returns {Promise<string>} Promise resolving to base64.
+ * Compress a file to base64 with target dimensions and quality.
+ * @param {File} file
+ * @param {number} targetW
+ * @param {number} targetH
+ * @param {number} q
+ * @returns {Promise<string>}
  */
-function compressImage(file, q) {
+function compressImage(file, targetW, targetH, q) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        setupCompressionHooks(reader, resolve, reject, q);
+        setupCompressionHooks(reader, resolve, reject, targetW, targetH, q);
         reader.readAsDataURL(file);
     });
 }
 
 /**
- * Applies default prevention for standard drag and drop browser events.
- * @param {Event} e - The drag event.
+ * Prevent default drag events.
+ * @param {Event} e
+ * @returns {void}
  */
 function preventDragDefaults(e) {
     e.preventDefault();
+    e.stopPropagation();
 }
 
 /**
- * Handles the drop event by extracting files and passing them onward.
- * @param {DragEvent} e - The drop event object.
+ * Handle drop for tasks (multiple, limited).
+ * @param {DragEvent} e
+ * @returns {void}
  */
-function handleDrop(e) {
-    e.preventDefault();
-    dragArea.classList.remove('highlight');
-    if (e.dataTransfer.files.length > 0) {
-        Array.from(e.dataTransfer.files).forEach(file => {
-            processImageFile(file);
-        });
-    }
+function handleDropForTasks(e) {
+    preventDragDefaults(e);
+    if (dragArea) dragArea.classList.remove('highlight');
+    if (!e.dataTransfer || !e.dataTransfer.files) return;
+    const files = Array.from(e.dataTransfer.files);
+    const slots = Math.max(0, TASK_MAX_COUNT - allImages.length);
+    files.slice(0, slots).forEach(f => processFile(f, TASK_MAX_WIDTH, TASK_MAX_HEIGHT, 0.7, false));
+    if (files.length > slots && errorContainer) errorContainer.textContent = `Maximum ${TASK_MAX_COUNT} images allowed.`;
 }
 
 /**
- * Binds all necessary event listeners for drag and drop interactions.
+ * Handle drop for profile (single).
+ * @param {DragEvent} e
+ * @returns {void}
  */
-function initDragAndDrop() {
+function handleDropForProfile(e) {
+    preventDragDefaults(e);
+    if (dragArea) dragArea.classList.remove('highlight');
+    if (!e.dataTransfer || !e.dataTransfer.files || e.dataTransfer.files.length === 0) return;
+    processFile(e.dataTransfer.files[0], PROFILE_SIZE, PROFILE_SIZE, 0.8, true);
+}
+
+/**
+ * Initialize drag & drop for tasks if dragArea exists.
+ * @returns {void}
+ */
+function initDragAndDropForTasks() {
     if (!dragArea) return;
-    dragArea.addEventListener('click', () => filepicker.click());
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(name => {
-        dragArea.addEventListener(name, preventDragDefaults, false);
-    });
-    ['dragenter', 'dragover'].forEach(name => {
-        dragArea.addEventListener(name, () => dragArea.classList.add('highlight'), false);
-    });
-    ['dragleave', 'drop'].forEach(name => {
-        dragArea.addEventListener(name, () => dragArea.classList.remove('highlight'), false);
-    });
-    dragArea.addEventListener('drop', handleDrop);
+    dragArea.addEventListener('click', () => filepicker && filepicker.click());
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(n => dragArea.addEventListener(n, preventDragDefaults, false));
+    ['dragenter', 'dragover'].forEach(n => dragArea.addEventListener(n, () => dragArea.classList.add('highlight'), false));
+    ['dragleave', 'drop'].forEach(n => dragArea.addEventListener(n, () => dragArea.classList.remove('highlight'), false));
+    dragArea.addEventListener('drop', handleDropForTasks);
 }
 
 /**
- * Main initializer for event handling and application startup.
+ * Initialize drag & drop for profile if dragArea exists.
+ * @returns {void}
+ */
+function initDragAndDropForProfile() {
+    if (!dragArea) return;
+    dragArea.addEventListener('click', () => filepicker && filepicker.click());
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(n => dragArea.addEventListener(n, preventDragDefaults, false));
+    ['dragenter', 'dragover'].forEach(n => dragArea.addEventListener(n, () => dragArea.classList.add('highlight'), false));
+    ['dragleave', 'drop'].forEach(n => dragArea.addEventListener(n, () => dragArea.classList.remove('highlight'), false));
+    dragArea.addEventListener('drop', handleDropForProfile);
+}
+
+/**
+ * Initialize file picker for task page. Call this from the task page only.
+ * @returns {void}
  */
 function initFilePicker() {
-    filepicker.addEventListener('change', handleFileSelection);
-    initDragAndDrop();
-    load();
+    filepicker = document.getElementById('filepicker');
+    gallery = document.getElementById('gallery');
+    dragArea = document.getElementById('dragArea');
+    errorContainer = document.querySelector('.alert-container');
+    if (!filepicker) return;
+    filepicker.multiple = true;
+    filepicker.accept = 'image/*';
+    filepicker.removeEventListener('change', handleFileSelectionForProfile);
+    filepicker.addEventListener('change', handleFileSelectionForTasks);
+    initDragAndDropForTasks();
+    loadStoredImages();
 }
 
-document.addEventListener('DOMContentLoaded', initFilePicker);
+/**
+ * Initialize file picker for contact page. Call this from the contact page only.
+ * @returns {void}
+ */
+function initProfilePicturePicker() {
+    filepicker = document.getElementById('filepicker');
+    gallery = document.getElementById('gallery');
+    dragArea = document.getElementById('dragArea');
+    errorContainer = document.querySelector('.alert-container');
+    if (!filepicker) return;
+    filepicker.multiple = false;
+    filepicker.accept = 'image/*';
+    filepicker.removeEventListener('change', handleFileSelectionForTasks);
+    filepicker.addEventListener('change', handleFileSelectionForProfile);
+    initDragAndDropForProfile();
+    loadStoredImages();
+}
+
+/**
+ * Return current profile image object.
+ * @returns {Object|null}
+ */
+function getProfileImage() {
+    return profileImage;
+}
+
+/**
+ * Return current task images array.
+ * @returns {Array}
+ */
+function getAllImages() {
+    return allImages;
+}

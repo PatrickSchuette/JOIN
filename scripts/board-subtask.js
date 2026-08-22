@@ -117,7 +117,7 @@ function renderAssignedUser(contact) {
 
     return `<div class="assignedUser">
                 <div class="contactAvater" style="background-color:${contact.color}"> 
-                    ${getUserItem(contact.name)} </div>
+                ${getContactAvatarHtml(contact)} </div>
                     <div class="userName">${contact.name}</div>
                 </div>`;
 }

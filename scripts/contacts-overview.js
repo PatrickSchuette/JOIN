@@ -19,6 +19,7 @@ async function onloadFuncContact() {
     renderContacts(contactList, arrOfContacts); 
     renderActiveAvatar();
     checkUrlForContact();
+    initProfilePicturePicker()
 }
 
 /**
@@ -100,9 +101,7 @@ function createArrayForIdInContactList(userResponse){
 function renderContactInfo(user, id) {
     return `
     <div id="id_${id}" class="contactID" onmouseover="changeBackgroundIfNotActivated(${id})" onmouseout="changeBackgroundOut(${id})" onclick="showClickedContact('${user.mail}')">
-        <div class="contactAvater" style="background-color: ${user.color}">
-            ${getUserItem(user.name)}
-        </div>
+        ${getContactAvatarHtml(user)}
         <div>
             <span id="spanId_${id}" class="contact-name contact-entry">${user.name}</span><br>
             <span class="contact-email contact-entry">${user.mail}</span>
@@ -195,3 +194,5 @@ function checkUrlForContact() {
     window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
   }
 }
+
+

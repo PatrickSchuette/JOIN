@@ -39,24 +39,26 @@ async function createArrayOfContacts(){
 }
 
 /**
- * This subfunction of crateArrayOfContacts() pushes the loaded contacts of firbase into the array
- * 
- * @param {Array} objKeysArr - an array with object keys of firebase contacts
- * @param {Object} contactsObj - includes all of loaded contacts data of firebase 
+ * Fills the contacts array with Firebase contacts including profile image.
+ * @param {Array} objKeysArr - Firebase contact keys.
+ * @param {Object} contactsObj - Firebase contacts object.
+ * @returns {void}
  */
-function fillArrayOfContacts(objKeysArr, contactsObj){
+function fillArrayOfContacts(objKeysArr, contactsObj) {
     joinContacts = [];
     let keysArr = objKeysArr;
     let amountOfContacts = keysArr.length;
     for (let index = 0; index < amountOfContacts; index++) {
         joinContacts.push({
-            "name" : `${contactsObj[keysArr[index]].name}`,
-            "mail" : `${contactsObj[keysArr[index]].mail}`,
-            "phone" : `${contactsObj[keysArr[index]].phone}`,
-            "color" : `${contactsObj[keysArr[index]].color}`
+            name: contactsObj[keysArr[index]].name,
+            mail: contactsObj[keysArr[index]].mail,
+            phone: contactsObj[keysArr[index]].phone,
+            color: contactsObj[keysArr[index]].color,
+            profileImage: contactsObj[keysArr[index]].profileImage || null
         });
     }
 }
+
 
 /**
  * This function is used to check if the new contact already exist
@@ -240,19 +242,24 @@ async function saveChangedData(mail){
 }
 
 /**
- * This function customizes the data of contact person on firebase
- * 
- * @param {Object} dataObjStruct - includes all neceesary data for update the data of person 
+ * Saves edited contact data and profile image to Firebase.
+ * @param {Object} dataObjStruct - Structure containing contact data and keys.
+ * @returns {Promise<void>}
  */
-async function saveDataInStore(dataObjStruct){
+async function saveDataInStore(dataObjStruct) {
     let dataObj = dataObjStruct.data;
-    let contactsKeysArr = dataObjStruct.keys;
-    for (let index = 0; index < contactsKeysArr.length; index++) {
-        if(dataObj.contactsResponse[contactsKeysArr[index]].mail == dataObj.mailAddress){
-            let changedObj = getInputFieldsEditDialog();
-            dataObj.mailAddress = changedObj.mail;
-            changedObj.color = dataObj.contactsResponse[contactsKeysArr[index]].color;
-            await putData(`contacts/${contactsKeysArr[index]}`, changedObj);
+    let keys = dataObjStruct.keys;
+    for (let i = 0; i < keys.length; i++) {
+        if (dataObj.contactsResponse[keys[i]].mail == dataObj.mailAddress) {
+            let changed = getInputFieldsEditDialog();
+            dataObj.mailAddress = changed.mail;
+            changed.color = dataObj.contactsResponse[keys[i]].color;
+            if (localStorage.getItem('profileImage')) {
+                let img = JSON.parse(localStorage.getItem('profileImage'));
+                changed.profileImage = img.base64;
+                localStorage.removeItem('profileImage');
+            }
+            await putData(`contacts/${keys[i]}`, changed);
             dataObj.contactChanged = true;
             break;
         }
@@ -397,4 +404,16 @@ function changeIconMobile(id){
     }else if(id == 'img_delete_mobile'){
         document.getElementById(id).src = '../assets/img/delete_contact_hover.svg';
     }
+}
+
+/**
+ * Updates the profile image of a contact in Firebase.
+ * @param {string} contactKey - Firebase key of the contact.
+ * @param {string} base64 - Base64 encoded image.
+ * @returns {Promise<void>}
+ */
+async function updateContactProfileImage(contactKey, base64) {
+    let obj = { profileImage: base64 };
+    await patchData(`contacts/${contactKey}`, obj);
+    localStorage.removeItem('profileImage');
 }

@@ -229,7 +229,8 @@ function getUserData(usersObj) {
     for (const user of USERS_ARRAY) {
         USERS[user.mail] = {
             name: user.name,
-            color: user.color
+            color: user.color,
+            profileImage: user.profileImage || null
         };
     }
     return USERS;

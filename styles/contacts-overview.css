@@ -1,4 +1,4 @@
-.contactlist-container{
+.contactlist-container {
     padding-top: 120px;
 }
 
@@ -19,43 +19,45 @@
     background: linear-gradient(to top, #F0F0F0, #F9F9F9);
 }
 
-.contactID-activated{
-    background-color:  #2A3647;
+.contactID-activated {
+    background-color: #2A3647;
 }
 
 .contactAvater {
     min-width: 42px;
     min-height: 42px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     border: #fff 2px solid;
+    object-fit: cover;
 }
 
-.contact-name{
+.contact-name {
     color: black;
     word-break: break-word;
 }
 
-.contact-name-override{
+.contact-name-override {
     color: white !important;
 }
 
-.contact-email{
+.contact-email {
     color: #007CEE;
 }
 
 .contact-entry {
-  display: inline-block;      
-  width: 18ch;                 
-  white-space: nowrap;         
-  overflow: hidden;            
-  text-overflow: ellipsis;     
+    display: inline-block;
+    width: 18ch;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-h5{
+h5 {
     font-size: 20px;
     font-weight: 400;
     padding-top: 16px;
@@ -63,15 +65,15 @@ h5{
     padding-left: 32px;
 }
 
-.capitalLatter{
+.capitalLatter {
     padding-bottom: 8px;
 }
 
-.hr-underline{
+.hr-underline {
     border-top: 1px solid #d1d1d1;
 }
 
-.add-contact-mobile{
+.add-contact-mobile {
     display: none;
     padding-top: 8px;
     padding-bottom: 6px;
@@ -87,73 +89,73 @@ h5{
 
 }
 
-.add-contact-mobile:hover{
+.add-contact-mobile:hover {
     cursor: pointer;
 }
 
-.add-contact-mobile:active{
+.add-contact-mobile:active {
     background-color: #29ABE2;
 }
 
-@media(max-width:1180px){
-    .contactID{
+@media(max-width:1180px) {
+    .contactID {
         gap: 8px;
         padding-left: 8px;
         padding-right: 8px;
     }
 
-    h5{
+    h5 {
         padding-left: 20px;
     }
 
-    .contactAvater{
+    .contactAvater {
         min-width: 36px;
         min-height: 36px;
         font-size: 14px;
     }
 
-    .contact-name{
+    .contact-name {
         font-size: 14px;
     }
 
-    .contact-email{
+    .contact-email {
         font-size: 14px;
     }
 }
 
-@media(max-width:850px){
-    .contactlist-container{
+@media(max-width:850px) {
+    .contactlist-container {
         padding-top: 0px;
     }
 
-    .contactlist-content{
+    .contactlist-content {
         padding-top: 0px;
     }
 
-    .contactAvater{
+    .contactAvater {
         min-width: 42px;
         min-height: 42px;
         font-size: 16px;
     }
 
-    .contact-name{
+    .contact-name {
         font-size: 16px;
     }
 
-    .contact-email{
+    .contact-email {
         font-size: 16px;
     }
 
-    .contactID{
+    .contactID {
         gap: 18px;
         padding-left: 18px;
     }
 
-    .contactID-activated{
-         background: linear-gradient(to top, #F0F0F0, #F9F9F9);
+    .contactID-activated {
+        background: linear-gradient(to top, #F0F0F0, #F9F9F9);
     }
 
-    .add-contact-mobile{
+    .add-contact-mobile {
         display: block;
     }
 }

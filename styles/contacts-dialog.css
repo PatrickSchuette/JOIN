@@ -7,7 +7,7 @@
     top: 50%;
     left: 50%;
     transform: translate(100%, -50%);
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .dialog-contact::-webkit-scrollbar {
@@ -409,7 +409,7 @@ input::placeholder{
         border: 3px solid white;
         width: 100px;
         height: 100px;
-        position: absolute;
+        position: absolute !important;
         top: calc(30vh - 50px);
 
     }

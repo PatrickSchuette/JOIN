@@ -19,8 +19,8 @@ function getDialogMsgTemplate(text) {
  */
 function getTemplateShowContact(obj, initials) {
   return `<div class="contact-head">
-              <div class="contact-circle" style="background-color:${obj.color}">
-                  <span>${initials}</span>
+              <div class="contact-circle">
+                ${getContactAvatarHtml(obj)}
               </div>
               <div class="contact-box">
                 <span id="name_data" class="name-line">${obj.name}</span>
@@ -44,68 +44,80 @@ function getTemplateShowContact(obj, initials) {
 }
 
 /**
- * This function includes the html code for the edit dialog, if the edit button is clicked on indicated contact
- *
- * @param {object} obj - includes the data object of showed contact person
- * @param {*} initials - includes the first characters of name and last name of showed person
- * @returns - html tags for render function
+ * Returns the edit dialog HTML for a contact including avatar and form fields.
+ * @param {Object} obj - Contact object.
+ * @param {string} initials - Initials of the contact.
+ * @returns {string} HTML string for the edit dialog.
  */
 function getTemplateEditDialog(obj, initials) {
-  return `<div class="add-contact-container">
-                <section class="add-contact-left-box">
-                    <div class="left-box-content">
-                        <div id="btn_close_edit" class="btn-close-container-top">
-                            <div class="btn-close-box-top" onclick="closeDialogEditContact()">
-                                <img class="close-img" src="../assets/img/close_btn_white.svg" alt="cross as close button">
-                            </div>
-                        </div>
-                        <div class="overlay-box">
-                            <div class="overlay-flex">
-                                <div class="overlay-center">
-                                    <img class="join-img" src="../assets/img/join_logo_white.svg" alt="join logo in white">
-                                    <span class="span-add">Edit contact</span>
-                                    <hr class="add-contact-underline">  
-                                </div>
-                            </div>
+    return `
+    <div class="add-contact-container">
+        <section class="add-contact-left-box">
+            <div class="left-box-content">
+                <div id="btn_close_edit" class="btn-close-container-top">
+                    <div class="btn-close-box-top" onclick="closeDialogEditContact()">
+                        <img class="close-img" src="../assets/img/close_btn_white.svg" alt="close">
+                    </div>
+                </div>
+                <div class="overlay-box">
+                    <div class="overlay-flex">
+                        <div class="overlay-center">
+                            <img class="join-img" src="../assets/img/join_logo_white.svg" alt="logo">
+                            <span class="span-add">Edit contact</span>
+                            <hr class="add-contact-underline">
                         </div>
                     </div>
-                </section>
-                <section class="add-contact-right-box">
-                    <div class="btn-close-container">
-                        <div class="btn-close-box" onclick="closeDialogEditContact()">
-                            <img src="../assets/img/close_btn.svg" alt="cross as close button">
-                        </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="add-contact-right-box">
+            <div class="btn-close-container">
+                <div class="btn-close-box" onclick="closeDialogEditContact()">
+                    <img src="../assets/img/close_btn.svg" alt="close">
+                </div>
+            </div>
+
+            <div class="right-box-container">
+                <div class="person-container" style="position: relative;">
+                    ${getContactAvatarHtml(obj)}
+                    <div class="file-input-container">
+                        <input type="file" id="filepicker" accept="image/*" class="file-input" style="display:none;">
+                        <label for="filepicker" class="file-label">
+                            <img src="../assets/img/add_photo.svg" alt="add photo">
+                        </label>
                     </div>
-                    <div class="right-box-container">
-                        <div class="person-container" style="background-color:${obj.color}">
-                            <span class="edit-initials">${initials}</span>
-                        </div>
-                        <form onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off">
-                            <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="edit_name" value='${obj.name}'>
-                            <div class="mail-info">
-                              <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail" id="edit_mail" value='${obj.mail}'
-                              onfocus="fieldMailOnFocus('edit_mail', 'edit_span', 'btn_edit_form')" onblur="checkMailOnDialog('edit_mail', 'edit_span', 'btn_edit_form')">
-                              <span id="edit_span" class="info-span hidden">Invalid mail</span>
-                            </div>
-                            <div class="mail-info">
-                              <input type="tel" required placeholder="Phone" class="bg-input bg-img-phone" id="edit_phone" value='${obj.phone}'
-                              onfocus="fieldTelOnFocus('edit_phone', 'edit_span_tel', 'btn_edit_form')" onblur="checkTelOnDialog('edit_phone', 'edit_span_tel', 'btn_edit_form')"">
-                              <span id="edit_span_tel" class="info-span hidden">Invalid phone number</span>
-                            </div>
-                            <div class="form-ctrl-container">
-                                <div class="btn-delete" onclick="deleteContactOnDialog('${obj.mail}')">
-                                    <span>Delete</span>
-                                </div>
-                                <button id="btn_edit_form" class="btn-contact">
-                                    <span>Save</span>
-                                    <img src="../assets/img/check.svg" alt="check symbol">
-                                </button>
-                            </div>
-                        </form>
+                </div>
+
+                <form onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off">
+                    <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="edit_name" value="${obj.name}">
+                    <div class="mail-info">
+                        <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail" id="edit_mail" value="${obj.mail}"
+                        onfocus="fieldMailOnFocus('edit_mail','edit_span','btn_edit_form')" 
+                        onblur="checkMailOnDialog('edit_mail','edit_span','btn_edit_form')">
+                        <span id="edit_span" class="info-span hidden">Invalid mail</span>
                     </div>
-                </section>
-            </div>`;
+                    <div class="mail-info">
+                        <input type="tel" required placeholder="Phone" class="bg-input bg-img-phone" id="edit_phone" value="${obj.phone}"
+                        onfocus="fieldTelOnFocus('edit_phone','edit_span_tel','btn_edit_form')" 
+                        onblur="checkTelOnDialog('edit_phone','edit_span_tel','btn_edit_form')">
+                        <span id="edit_span_tel" class="info-span hidden">Invalid phone number</span>
+                    </div>
+                    <div class="form-ctrl-container">
+                        <div class="btn-delete" onclick="deleteContactOnDialog('${obj.mail}')">
+                            <span>Delete</span>
+                        </div>
+                        <button id="btn_edit_form" class="btn-contact">
+                            <span>Save</span>
+                            <img src="../assets/img/check.svg" alt="check">
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>`;
 }
+
 
 // ------------Template functions for Add Task --------------//
 
@@ -325,7 +337,7 @@ function setProgress(subtasks) {
  */
 function renderAvatar(contact) {
   return `<div class="contactAvater" style="background-color:${contact.color}">
-                ${getUserItem(contact.name)}
+                ${getContactAvatarHtml(contact)}
             </div>`;
 }
 
