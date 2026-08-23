@@ -262,12 +262,18 @@ async function timeout(ms){
 }
 
 function generateIssueCollector(creatorType, email){
+    if (email == "guest@test.de") {
+        dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagMember.svg' alt='Guest User' />";
+        dialogBoardTaskRev.creatorContact.innerHTML = "";
+        dialogBoardTaskRev.aiGenerated.innerHTML = "";
+        return;
+    }
     if (creatorType == "intern") {
         dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagMember.svg' alt='Intern Member' />"
         dialogBoardTaskRev.creatorContact.innerHTML = ` <a href="./contacts.html?contactMail=${email}" aria-label="See Profile">
             <img src="../assets/img/seeProfile.svg" alt="see Profile" /> </a> `;
         dialogBoardTaskRev.aiGenerated.innerHTML = ""
-    } else {
+    } else  {
         dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagExtern.svg' alt='Extern Member' />"
         dialogBoardTaskRev.creatorContact.innerHTML =  `<a href="mailto:${email}" aria-label="See Profile"><img src='../assets/img/sendEmail.svg' alt='send Email' /></a>`
         dialogBoardTaskRev.aiGenerated.innerHTML = "<img src='../assets/img/Note _ KI generiert.svg' alt='AI Generated' />"
