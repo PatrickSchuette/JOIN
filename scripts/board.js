@@ -75,6 +75,7 @@ async function showDialogTask(id) {
 
     await prepareDialogForTask();
     fillDialogFields(actualToDo);
+    renderGalleryFromTaskImages(actualToDo.images || []);
     renderDialogActions();
     getAssignedUser();
     initTitleAutosize();
@@ -155,6 +156,7 @@ async function closeDialog() {
     dialogBoardTaskRev.dialog.classList.remove('addTaskDialogOpened');
     dialogBoardTaskRev.dialog.classList.remove('addTaskDialogClosed');
     getCssTheme('');
+    clearTaskImagesFromLocalStorage();
     onloadFuncBoard();
 }
 

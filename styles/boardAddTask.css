@@ -95,6 +95,10 @@
     display: none;
 }
 
+.filpicker-content {
+    display: block;
+}
+
 @media(max-width: 1290px) {
     .add-task-dialog-board .buttons {
         width: 40%;

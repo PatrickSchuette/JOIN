@@ -338,25 +338,21 @@ function checkForLoggedInUser() {
 }
 
 /**
- * Adds a new task if valid.
- * Collects input, validates, uploads to Firebase, clears the form, and redirects the user to the board page.
+ * Creates a new task including stored images.
+ * @returns {void}
  */
 function addTask() {
-  let task = getTaskInput();
-  if (!checkIfTaskIsValid(task)) {
-    return;
-  }
-  tasks.push(task);
-  uploadTaskToFirebase("tasks", task)
-    .then((res) => {
-      console.log("Task uploaded with ID:", res.name);
-      clearTaskInput();
-    })
-    .catch((err) => {
-      console.error("Upload failed:", err);
+    const task = getTaskInput();
+    if (!checkIfTaskIsValid(task)) return;
+    const imgs = getTaskImagesFromLocalStorage();
+    task.images = imgs.length ? imgs : [];
+    uploadTaskToFirebase("tasks", task).then(() => {
+        clearTaskImagesFromLocalStorage();
+        clearTaskInput();
+        redirectUser();
     });
-  redirectUser();
 }
+
 
 
 

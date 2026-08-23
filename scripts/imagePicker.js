@@ -76,16 +76,18 @@ function loadStoredImages() {
 }
 
 /**
- * Store a task image and persist.
+ * Stores a task image in localStorage.
  * @param {File} file
  * @param {string} base64
  * @returns {void}
  */
 function storeTaskImage(file, base64) {
-    allImages.push({ filename: file.name, fileType: file.type, base64: base64 });
-    saveAllImages();
-    renderGallery();
+    const imgs = getTaskImagesFromLocalStorage();
+    imgs.push({ filename: file.name, fileType: file.type, base64 });
+    localStorage.setItem('allImages', JSON.stringify(imgs));
+    renderGalleryFromTaskImages(imgs);
 }
+
 
 /**
  * Store a profile image and persist.
@@ -330,4 +332,46 @@ function getProfileImage() {
  */
 function getAllImages() {
     return allImages;
+}
+
+/**
+ * Clear all task images and persist.
+ * @returns {void}
+ */
+function clearAllImages() {
+    allImages = [];
+    localStorage.removeItem('allImages');
+    renderGallery();
+}
+
+/**
+ * Returns stored task images from localStorage.
+ * @returns {Array}
+ */
+function getTaskImagesFromLocalStorage() {
+    const data = localStorage.getItem('allImages');
+    if (!data) return [];
+    try { return JSON.parse(data); }
+    catch { return []; }
+}
+
+/**
+ * Clears stored task images from localStorage.
+ * @returns {void}
+ */
+function clearTaskImagesFromLocalStorage() {
+    localStorage.removeItem('allImages');
+    if (!gallery) return;
+    gallery.innerHTML = '';
+}
+
+/**
+ * Renders gallery from task images.
+ * @param {Array} images
+ * @returns {void}
+ */
+function renderGalleryFromTaskImages(images) {
+    if (!gallery) return;
+    gallery.innerHTML = '';
+    images.forEach(i => gallery.innerHTML += `<img src="${i.base64}" alt="${i.filename}">`);
 }

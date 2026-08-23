@@ -272,17 +272,18 @@
           <div class="priority-container">
 
             <div class="field-description">
-              <label for="filepicker">Attachments</label>
-              <span class="file-description">Allowed file types are JPEG and PNG</span>
-              <input type="file" id="filepicker" accept="image/*" />
-              <div id="dragArea">Drag a file or browse</div>
-              <div class="alert-container"></div>
-              <div id="image_preview" class="image-preview"></div>
+              <div class="filpicker-content">
+                <label for="filepicker">Attachments</label>
+                <span class="file-description">Allowed file types are JPEG and PNG</span>
+                <input type="file" id="filepicker" accept="image/*" style="display: none;" />
+                <div id="dragArea">Drag a file or browse</div>
+                <div class="alert-container"></div>
+              </div>
             </div>
-            
+
             <div class="field-description">
               <div id="gallery"> </div>
-              </div>
+            </div>
 
             <section class="assigned">
               <div id="assigned_box" class="field-description assigned-to">
@@ -365,7 +366,8 @@
       <img src="../assets/img/board.svg" alt="icon leading to the board page" />
       <p>Board</p>
     </a>
-    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"onclick="setMobileTabFocus('contacts')">
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
+      onclick="setMobileTabFocus('contacts')">
       <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
       <p>Contacts</p>
     </a>

@@ -316,6 +316,10 @@ textarea {
     display: none;
 }
 
+.filpicker-content {
+    display: block;
+}
+
 @media(max-width: 950px) {
 
     .txt-img span,

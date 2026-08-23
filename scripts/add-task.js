@@ -103,6 +103,7 @@ function clearTaskInput() {
   resetCheckboxesAndPriorityVisuals();
   resetAllSubtasks();
   resetAllFieldVisuals();
+  //clearAllImages();
 }
 
 /**
@@ -132,7 +133,7 @@ function resetBasicFields(){
   document.getElementById("contact_icons").innerHTML = "";
   document.getElementById("selected_category").textContent = "Select task category";
   document.getElementById("subtask").value = "";
-  document.getElementById("creator").textContent="";
+  //document.getElementById("creator").textContent="";
   selectedContacts.clear();
 }
 

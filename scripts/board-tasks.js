@@ -3,6 +3,8 @@
  */
 async function addDialogTask() {
     let task = getTaskInput();
+    const imgs = getTaskImagesFromLocalStorage();
+    task.images = imgs.length ? imgs : [];
     if (!checkIfTaskIsValid(task)) { return; }
     task.status = startStatusColumn;
     dialogBoardTaskRev.dialog.close()
@@ -14,6 +16,7 @@ async function addDialogTask() {
         .catch((err) => {
             console.error("Upload failed:", err);
         });
+    clearTaskImagesFromLocalStorage();
     addTaskOverlay();
     onloadFuncBoard();
 }
@@ -39,6 +42,8 @@ function addTaskOverlay() {
 async function editDialogTask() {
     let oldStatus = actualToDo.status;
     let task = getTaskInput();
+    let imgs = getTaskImagesFromLocalStorage();
+        task.images = imgs.length ? imgs : actualToDo.images || [];
     let subtaskStatus = getSubtaskStatus(actualToDo.subtasks);
     if (!checkIfTaskIsValid(task)) return;
     if (subtaskStatus != null) {
@@ -48,6 +53,7 @@ async function editDialogTask() {
     }
     dialogBoardTaskRev.dialog.close();
     await patchData('tasks/' + currentDraggedElement, task);
+    clearTaskImagesFromLocalStorage();
     task.id = currentDraggedElement;
     await notifyExternalCreatorOnChange(task, oldStatus);
     onloadFuncBoard();

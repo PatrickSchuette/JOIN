@@ -417,6 +417,18 @@ textarea {
     margin-right: 8px;
 }
 
+.filpicker-content{
+    display: none;
+}
+
+#gallery img {
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    object-fit: cover;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 @media(max-width:650px) {
     #dialaogBoardTask {
         margin-left: 0;

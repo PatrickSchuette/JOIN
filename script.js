@@ -121,6 +121,11 @@ let whitelist = [
    let htmlIndex = currentPath.indexOf('/html/');
    
    let dynamicBase = currentPath.substring(0, htmlIndex);
-   
-   window.location.href = dynamicBase + '/html/welcome.html';
+
+   if(ACTIVATE_N8N){ 
+    window.location.href = dynamicBase + '/html/welcome.html';
+    } else {
+    window.location.href = dynamicBase + '/html/login.html';
+    }
+
  }
