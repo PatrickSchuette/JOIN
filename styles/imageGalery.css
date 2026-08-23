@@ -27,8 +27,6 @@
     font-size: 1.1rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-
-    /* Flexbox, um den Text und ein optionales Plus-Zeichen zu zentrieren */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,4 +96,203 @@
 .task-gallery-download:hover .task-gallery-tooltip,
 .task-gallery-delete:hover .task-gallery-tooltip {
     opacity: 1;
+}
+
+.viewer-container {
+    transform: scale(0.8);
+    transform-origin: center center;
+}
+
+.viewer-canvas {
+    position: relative;
+}
+
+.viewer-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 10;
+}
+
+.viewer-canvas:hover .viewer-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.viewer-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+}
+
+.viewer-info {
+    color: #fff;
+    background: #0008;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 40vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.viewer-zoom-controls {
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.viewer-zoom {
+    background: #0008;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.viewer-header-right {
+    display: flex;
+    gap: 8px;
+}
+
+.viewer-download,
+.viewer-close {
+    background: #0008;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.viewer-close::before {
+    content: none;
+}
+
+.viewer-left,
+.viewer-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #0008;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.viewer-left {
+    left: 16px;
+}
+
+.viewer-right {
+    right: 16px;
+}
+
+.viewer-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: #1a5276;
+    /* blauer Balken */
+}
+
+.viewer-header {
+    background: #1a5276;
+    /* einheitlicher blauer Balken statt Verlauf */
+}
+
+.viewer-footer-nav {
+    background: transparent;
+    color: #fff;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 8px 12px;
+}
+
+/* Sichtbarkeit standardmäßig: Desktop-Layout aktiv, Footer versteckt */
+.mobile-only {
+    display: none;
+}
+
+.viewer-container:hover .viewer-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+
+    /* Overlay auf Mobile immer sichtbar, kein Hover nötig */
+    .viewer-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Viewer nimmt volle Bildschirmgröße ein */
+    .viewer-container {
+        transform: none;
+    }
+
+    .viewer-container.viewer-fixed {
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+    }
+
+    #customViewerBackdrop {
+        z-index: 2015;
+    }
+
+    /* Desktop-Elemente ausblenden, mobile Footer-Bar zeigen */
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: flex;
+    }
+
+    .viewer-header {
+        height: 48px;
+        padding: 0 12px;
+    }
+
+    .viewer-info {
+        font-size: 12px;
+        padding: 4px 8px;
+        max-width: 45vw;
+    }
+
+    .viewer-download,
+    .viewer-close {
+        font-size: 16px;
+        padding: 6px 10px;
+    }
 }
