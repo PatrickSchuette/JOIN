@@ -493,7 +493,7 @@ h4 {
 
 html,
 body {
-    overflow-y: scroll !important;
+    /*overflow-y: scroll !important;*/
     height: 100%;
 }
 
