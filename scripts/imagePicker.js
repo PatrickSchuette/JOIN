@@ -366,12 +366,31 @@ function clearTaskImagesFromLocalStorage() {
 }
 
 /**
- * Renders gallery from task images.
+ * Renders gallery for task images and activates ViewerJS.
  * @param {Array} images
  * @returns {void}
  */
 function renderGalleryFromTaskImages(images) {
+    const gallery = document.getElementById('gallery');
     if (!gallery) return;
     gallery.innerHTML = '';
-    images.forEach(i => gallery.innerHTML += `<img src="${i.base64}" alt="${i.filename}">`);
+
+    images.forEach(img => {
+        const el = document.createElement('img');
+        el.src = img.base64;
+        el.classList.add('task-gallery-img');
+        gallery.appendChild(el);
+    });
+
+    new Viewer(gallery, {
+        toolbar: true,
+        navbar: false,
+        title: false,
+        movable: false,
+        zoomable: true,
+        scalable: false,
+        fullscreen: false,
+        rotatable: false,
+        transition: true
+    });
 }

@@ -60,6 +60,7 @@ function showDialogAddTask(column) {
     document.getElementById('btnDialogRightContent').innerHTML = "Create Task";
     document.getElementById("btnDialogRight").onclick = addDialogTask;
     dialogBoardTaskRev.dialog.showModal();
+    renderGalleryFromTaskImages(getTaskImagesFromLocalStorage());
     dialogBoardTaskRev.dialog.classList.add('addTaskDialogOpened');
     startStatusColumn = column;
 }

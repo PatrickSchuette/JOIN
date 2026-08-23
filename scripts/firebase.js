@@ -162,7 +162,8 @@ function getTaskArr(ALL_TASKS) {
             priority: value.priority,
             subtasks: value.subtasks,
             assignedTo: value.assignedTo,
-            status: statusValue
+            status: statusValue,
+            images: value.images || []
         });
 
         if (!boardPos[statusValue]) {
