@@ -3,7 +3,6 @@ let filepicker = null;
 let gallery = null;
 let errorContainer = null;
 let dragArea = null;
-let myGallery = null;
 let allImages = [];
 let profileImage = null;
 let viewerInstance = null;
@@ -42,27 +41,10 @@ function saveProfileImage() {
  * @returns {void}
  */
 function destroyOldViewer() {
-    if (myGallery && typeof myGallery.destroy === 'function') {
-        myGallery.destroy();
-        myGallery = null;
-    }
     if (viewerInstance) {
         viewerInstance.destroy();
         viewerInstance = null;
     }
-    
-}
-
-/**
- * Render gallery from allImages if gallery element exists.
- * @returns {void}
- */
-function renderGallery() {
-    destroyOldViewer();
-    if (!gallery) return;
-    gallery.innerHTML = '';
-    allImages.forEach(img => gallery.innerHTML += `<img src="${img.base64}" alt="${img.filename}">`);
-    if (allImages.length > 0 && typeof Viewer !== 'undefined') myGallery = new Viewer(gallery);
 }
 
 /**
@@ -78,7 +60,6 @@ function loadStoredImages() {
     if (p) {
         try { profileImage = JSON.parse(p); } catch (e) { profileImage = null; }
     }
-    renderGallery();
 }
 
 /**
@@ -93,7 +74,6 @@ function storeTaskImage(file, base64) {
     localStorage.setItem('allImages', JSON.stringify(imgs));
     renderGalleryFromTaskImages(imgs);
 }
-
 
 /**
  * Store a profile image and persist.
@@ -347,7 +327,6 @@ function getAllImages() {
 function clearAllImages() {
     allImages = [];
     localStorage.removeItem('allImages');
-    renderGallery();
 }
 
 /**
@@ -380,14 +359,99 @@ function renderGalleryFromTaskImages(images) {
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
     gallery.innerHTML = '';
-
-    images.forEach(img => {
-        const el = document.createElement('img');
-        el.src = img.base64;
-        el.classList.add('task-gallery-img');
-        gallery.appendChild(el);
+    images.forEach(function (img, index) {
+        const wrapper = createGalleryWrapper(img, index);
+        addGalleryButtons(wrapper, img, index);
+        gallery.appendChild(wrapper);
     });
+    initViewer(gallery);
+}
 
+/**
+ * Downloads a base64 image with correct file extension.
+ * @param {string} base64
+ * @param {number} index
+ * @returns {void}
+ */
+function downloadTaskImage(base64, index) {
+    const type = base64.substring(5, base64.indexOf(';'));
+    const ext = type.split('/')[1];
+    const link = document.createElement('a');
+    link.href = base64;
+    link.download = 'task-image-' + index + '.' + ext;
+    link.click();
+}
+
+/**
+ * Deletes a task image from localStorage.
+ * @param {number} index
+ * @returns {void}
+ */
+function deleteTaskImage(index) {
+    const data = localStorage.getItem('allImages');
+    if (!data) return;
+    const arr = JSON.parse(data);
+    arr.splice(index, 1);
+    localStorage.setItem('allImages', JSON.stringify(arr));
+    renderGalleryFromTaskImages(arr);
+}
+
+/**
+ * Creates a gallery wrapper with image.
+ * @param {Object} img
+ * @param {number} index
+ * @returns {HTMLElement}
+ */
+function createGalleryWrapper(img, index) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('task-gallery-wrapper');
+    const el = document.createElement('img');
+    el.src = img.base64;
+    el.classList.add('task-gallery-img');
+    wrapper.appendChild(el);
+    return wrapper;
+}
+
+/**
+ * Creates a tooltip element.
+ * @param {string} text
+ * @returns {HTMLElement}
+ */
+function createTooltip(text) {
+    const tip = document.createElement('div');
+    tip.classList.add('task-gallery-tooltip');
+    tip.textContent = text;
+    return tip;
+}
+
+/**
+ * Adds gallery buttons to wrapper.
+ * @param {HTMLElement} wrapper
+ * @param {Object} img
+ * @param {number} index
+ * @returns {void}
+ */
+function addGalleryButtons(wrapper, img, index) {
+    const dl = document.createElement('button');
+    dl.classList.add('task-gallery-download');
+    dl.textContent = '⬇';
+    dl.appendChild(createTooltip('Download image'));
+    dl.onclick = function () {downloadTaskImage(img.base64, index);};
+    wrapper.appendChild(dl);
+    const del = document.createElement('button');
+    del.classList.add('task-gallery-delete');
+    del.textContent = '✖';
+    del.appendChild(createTooltip('Delete image'));
+    del.onclick = function () {deleteTaskImage(index);};
+    wrapper.appendChild(del);
+}
+
+/**
+ * Initializes ViewerJS for gallery.
+ * @param {HTMLElement} gallery
+ * @returns {void}
+ */
+function initViewer(gallery) {
     viewerInstance = new Viewer(gallery, {
         toolbar: true,
         navbar: false,
@@ -398,11 +462,9 @@ function renderGalleryFromTaskImages(images) {
         fullscreen: false,
         rotatable: false,
         transition: true,
-  
         show() {
             dialogBoardTaskRev.dialog.close();
         },
-    
         hidden() {
             dialogBoardTaskRev.dialog.showModal();
             dialogBoardTaskRev.dialog.classList.add('taskDialogOpened');

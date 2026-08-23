@@ -190,3 +190,11 @@
         padding: 14px 4px;
     }
 }
+
+.task-gallery-download {
+    display: none !important;
+}
+
+.task-gallery-delete {
+    display: block !important;
+}

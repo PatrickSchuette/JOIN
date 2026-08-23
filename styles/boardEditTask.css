@@ -425,3 +425,11 @@ textarea {
         gap: 2px;
     }
 }
+
+.task-gallery-download {
+    display: none !important;
+}
+
+.task-gallery-delete {
+    display: block !important;
+}

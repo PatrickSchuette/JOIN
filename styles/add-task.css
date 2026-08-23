@@ -235,3 +235,10 @@ button {
     border: 1px solid #d5dbdb; 
 }
 
+.task-gallery-download {
+    display: none !important;
+}
+
+.task-gallery-delete {
+    display: block !important;
+}

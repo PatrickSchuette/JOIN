@@ -457,3 +457,14 @@ textarea {
     }
 }
 
+.task-gallery-download {
+    display: block !important;
+}
+
+.task-gallery-delete {
+    display: none !important;
+}
+
+#gallery img {
+    cursor: pointer !important;
+}

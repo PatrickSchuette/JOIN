@@ -7,7 +7,7 @@
 #gallery img {
     height: 100px;
     width: 100px;
-    cursor: pointer;
+    cursor: auto;
     object-fit: cover;
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -45,4 +45,57 @@
     font-size: 1.3rem;
     font-weight: 300;
     color: #7f8c8d;
+}
+
+.task-gallery-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.task-gallery-download,
+.task-gallery-delete {
+    position: absolute;
+    top: 6px;
+    border-radius: 50%;
+    padding: 4px 6px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+}
+
+.task-gallery-download {
+    right: 6px;
+    background: #0008;
+    color: white;
+    border: none;
+}
+
+.task-gallery-delete {
+    left: 6px;
+    background: #c00;
+    color: white;
+    border: none;
+
+}
+
+.task-gallery-tooltip {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.task-gallery-download:hover .task-gallery-tooltip,
+.task-gallery-delete:hover .task-gallery-tooltip {
+    opacity: 1;
 }
