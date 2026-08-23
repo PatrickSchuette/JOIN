@@ -77,6 +77,7 @@ async function showDialogTask(id) {
     await prepareDialogForTask();
     destroyOldViewer();
     fillDialogFields(actualToDo);
+    localStorage.setItem('allImages', JSON.stringify(actualToDo.images || []));
     renderGalleryFromTaskImages(actualToDo.images || []);
     renderDialogActions();
     getAssignedUser();
