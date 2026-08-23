@@ -317,7 +317,12 @@ textarea {
 }
 
 .filpicker-content {
-    display: block;
+    display: flex;
+    width: 100%;
+}
+
+.onlyShowTask {
+    display: none !important;
 }
 
 @media(max-width: 950px) {

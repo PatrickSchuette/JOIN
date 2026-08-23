@@ -421,6 +421,10 @@ textarea {
     display: none;
 }
 
+.onlyShowTask {
+    display: block !important;
+}
+
 @media(max-width:650px) {
     #dialaogBoardTask {
         margin-left: 0;

@@ -31,6 +31,8 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    margin-top: 8px;
+    width: 100%;
 }
 
 #dragArea:hover {
@@ -47,7 +49,29 @@
 
 .task-gallery-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border-radius: 12px;
+    background: #f8f9fa;
+    border: 1px solid #dcdcdc;
+    width: 120px;
+}
+
+.task-gallery-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.task-gallery-filename {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+    word-break: break-all;
 }
 
 .task-gallery-download,
@@ -244,6 +268,10 @@
 .viewer-container:hover .viewer-overlay {
     opacity: 1;
     pointer-events: auto;
+}
+
+.filpicker-content{
+    width: 100%;
 }
 
 @media (max-width: 768px) {

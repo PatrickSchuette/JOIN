@@ -242,3 +242,7 @@ button {
 .task-gallery-delete {
     display: block !important;
 }
+
+.onlyShowTask {
+    display: none !important;
+}

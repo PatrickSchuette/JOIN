@@ -358,7 +358,15 @@ function clearTaskImagesFromLocalStorage() {
 function renderGalleryFromTaskImages(images) {
     const gallery = document.getElementById('gallery');
     if (!gallery) return;
+    const oldLabel = gallery.parentElement.querySelector('.task-attachments-label');
+    if (oldLabel) {
+        oldLabel.remove();
+    }
+
     gallery.innerHTML = '';
+    if (!images || images.length === 0) return;
+    gallery.insertAdjacentHTML('beforebegin', '<div class="task-attachments-label"><span class="color-description onlyShowTask" >Attachments: </span></div>');
+
     images.forEach(function (img, index) {
         const wrapper = createGalleryWrapper(img, index);
         addGalleryButtons(wrapper, img, index);
@@ -366,6 +374,8 @@ function renderGalleryFromTaskImages(images) {
     });
     initViewer(gallery);
 }
+
+
 
 /**
  * Downloads a base64 image using its original filename.
@@ -407,10 +417,17 @@ function deleteTaskImage(index) {
 function createGalleryWrapper(img, index) {
     const wrapper = document.createElement('div');
     wrapper.classList.add('task-gallery-wrapper');
+
     const el = document.createElement('img');
     el.src = img.base64;
     el.classList.add('task-gallery-img');
     wrapper.appendChild(el);
+
+    const name = document.createElement('div');
+    name.classList.add('task-gallery-filename');
+    name.textContent = img.filename;
+    wrapper.appendChild(name);
+
     return wrapper;
 }
 
