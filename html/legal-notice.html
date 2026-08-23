@@ -1,325 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Join - Legal Notice</title>
-    <link rel="icon" href="../assets/img/join_logo.svg" />
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style.css" />
-    <link rel="stylesheet" href="../styles/summary.css" />
-    <link rel="stylesheet" href="../styles/navigation.css" />
-    <link rel="stylesheet" href="../styles/privacy-policy.css" />
-    <link rel="stylesheet" href="../styles/legal-notice.css" />
-    <!-- JS files -->
-    <script src="../scripts/navigation.js" defer></script>
-    <script src="../scripts/help.js" defer></script>
-    <script src="../script.js" defer></script>
-  </head>
-  <body onload="renderActiveAvatar()" class="legal-notice">
-    <header>
-      <nav>
-        <img
-          class="mobile-navbar-logo"
-          src="../assets/img/join_logo.svg"
-          alt="The logo of the application"
-        />
-        <p>Kanban Projekt Management Tool</p>
-        <div class="user-help-container">
-          <a href="help.html" aria-label="Opens Help section"
-            ><img
-              class="help-btn"
-              src="../assets/img/help_btn.svg"
-              alt="a help button displaying a question mark"
-          /></a>
-          <button
-            id="activeAvatar"
-            class="nav-user-btn"
-            onclick="toggleSubmenu()"
-          >
-            G
-          </button>
-        </div>
-        <!-- Submenu, desktop version -->
-        <div id="submenu" class="desktop-submenu d-none">
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-        <!-- Submenu, mobile version -->
-        <div id="mobile_submenu" class="mobile-submenu">
-          <a href="help.html" aria-label="Opens Help section">Help</a>
-          <a href="legal-notice.html" aria-label="Opens Legal Notice section"
-            >Legal Notice</a
-          >
-          <a
-            href="privacy-policy.html"
-            aria-label="Opens Privacy Policy section"
-            >Privacy Policy</a
-          >
-          <a
-            onclick="logOut()"
-            href="#"
-            aria-label="Logs the user out of the application"
-            >Log out</a
-          >
-        </div>
-      </nav>
-    </header>
-    <aside>
-      <img
-        class="sidebar-logo"
-        src="../assets/img/join_logo_white.svg"
-        alt="The logo of the app JOIN"
-      />
-      <div class="sidebar-components">
-        <a
-          id="summary_tab_pc"
-          href="summary.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('summary')"
-        >
-          <img
-            src="../assets/img/summary.svg"
-            alt="icon leading to the summary page"
-          />
-          <p>Summary</p>
-        </a>
-        <a
-          id="add_task_tab_pc"
-          href="add-task.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('task')"
-        >
-          <img
-            src="../assets/img/add_task.svg"
-            alt="icon leading to the add task page"
-          />
-          <p>Add Task</p>
-        </a>
-        <a
-          id="board_tab_pc"
-          href="board.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('board')"
-        >
-          <img
-            src="../assets/img/board.svg"
-            alt="icon leading to the board page"
-          />
-          <p>Board</p>
-        </a>
-        <a
-          id="contacts_tab_pc"
-          href="contacts.html"
-          class="sidebar-menu-elements"
-          onclick="setDesktopTabFocus('contacts')"
-        >
-          <img
-            src="../assets/img/contacts.svg"
-            alt="icon leading to the contacts page"
-          />
-          <p>Contacts</p>
-        </a>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join - Legal Notice</title>
+  <link rel="icon" href="../assets/img/join_logo.svg" />
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../styles/summary.css" />
+  <link rel="stylesheet" href="../styles/navigation.css" />
+  <link rel="stylesheet" href="../styles/privacy-policy.css" />
+  <link rel="stylesheet" href="../styles/legal-notice.css" />
+  <!-- JS files -->
+  <script src="../scripts/navigation.js" defer></script>
+  <script src="../scripts/help.js" defer></script>
+  <script src="../script.js" defer></script>
+</head>
+
+<body onload="renderActiveAvatar()" class="legal-notice">
+  <header>
+    <nav>
+      <img class="mobile-navbar-logo" src="../assets/img/join_logo.svg" alt="The logo of the application" />
+      <p>Kanban Projekt Management Tool</p>
+      <div class="user-help-container">
+        <a href="help.html" aria-label="Opens Help section"><img class="help-btn" src="../assets/img/help_btn.svg"
+            alt="a help button displaying a question mark" /></a>
+        <button id="activeAvatar" class="nav-user-btn" onclick="toggleSubmenu()">
+          G
+        </button>
       </div>
-      <div class="legal-notice-container">
-        <a
-          onclick="setPolicyFocusTabPc('privacyPolicy')"
-          id="privacy_policy_pc"
-          class="legal-notice-elements"
-          href="privacy-policy.html"
-          >Privacy Policy</a
-        >
-        <a
-          onclick="setPolicyFocusTabPc('legalNotice')"
-          id="legal_notice_pc"
-          class="legal-notice-elements"
-          href="legal-notice.html"
-          >Legal Notice</a
-        >
+      <!-- Submenu, desktop version -->
+      <div id="submenu" class="desktop-submenu d-none">
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
       </div>
-    </aside>
-    <main>
-      <div class="main-content">
-        <section class="title-arrow">
-          <h1 class="legal-notice-title">Legal Notice</h1>
-          <a href="#"
-            ><img
-              onclick="goBack()"
-              id="left_arrow"
-              class="arrow-left"
-              src="../assets/img/arrow_left_line_default.svg"
-              alt="left arrow leading to the summary page"
-          /></a>
-        </section>
-        <h3>Imprint</h3>
-        <ul>
-          <li>Miruna Agopian</li>
-          <li>Patrick Schütte</li>
-          <li>Benjamin Mahalbasic</li>
-          <br />
-          <li>Musterstrasse 1</li>
-          <li>01234 Musterstadt</li>
-        </ul>
-        <h5>Exploring the Board</h5>
-        <p>Email:</p>
-        <a href="mailto:agopian.miruna@yahoo.com">agopian.miruna@yahoo.com</a>
-        <a href="mailto:patrick18685@gmail.com">patrick18685@gmail.com</a>
-        <a href="mailto:benbasic@outlook.de">benbasic@outlook.de</a>
-
-        <h5>Acceptance of terms</h5>
-        <p>
-          By accessing and using
-          <a href="http://join-1340.developerakademie.net">Join</a> (Product),
-          you acknowledge and agree to the following terms and conditions, and
-          any policies, guidelines, or amendments thereto that may be presented
-          to you from time to time. We, the listed students, may update or
-          change the terms and conditions from time to time without notice.
-        </p>
-
-        <h3>Scope and ownership of the product</h3>
-        <p>
-          <a href="http://join-1340.developerakademie.net">Join</a> has been
-          developed as part of a student group project in a web development
-          bootcamp at the
-          <a href="https://developerakademie.com/">Developer Akademie GmbH</a>.
-          It has an educational purpose and is not intended for extensive
-          personal &amp; business usage. As such, we cannot guarantee consistent
-          availability, reliability, accuracy, or any other aspect of quality
-          regarding this Product
-        </p>
-        <p>
-          The design of
-          <a href="http://join-1340.developerakademie.net">Join</a> is owned by
-          the
-          <a href="https://developerakademie.com/">Developer Akademie GmbH</a>.
-          Unauthorized use, reproduction, modification, distribution, or
-          replication of the design is strictly prohibited.
-        </p>
-
-        <h5>Proprietary rights</h5>
-        <p>
-          Aside from the design owned by
-          <a href="https://developerakademie.com/">Developer Akademie GmbH</a>,
-          we, the listed students, retain all proprietary rights in
-          <a href="http://join-1340.developerakademie.net">Join</a>, including
-          any associated copyrighted material, trademarks, and other proprietary
-          information.
-        </p>
-
-        <h5>Use of the product</h5>
-        <p>
-          <a href="http://join-1340.developerakademie.net">Join</a> is intended
-          to be used for lawful purposes only, in accordance with all applicable
-          laws and regulations. Any use of
-          <a href="http://join-1340.developerakademie.net">Join</a> for illegal
-          activities, or to harass, harm, threaten, or intimidate another
-          person, is strictly prohibited. You are solely responsible for your
-          interactions with other users of
-          <a href="http://join-1340.developerakademie.net">Join</a>.
-        </p>
-
-        <h5>Disclaimer of warranties and limitation of liability</h5>
-        <p>
-          <a href="http://join-1340.developerakademie.net">Join</a> is provided
-          “as is” without warranty of any kind, whether express or implied,
-          including but not limited to the implied warranties of
-          merchantability, fitness for a particular purpose, and
-          non-infringement. In no event will we, the listed students, or the
-          <a href="https://developerakademie.com/">Developer Akademie</a>, be
-          liable for any direct, indirect, incidental, special, consequential or
-          exemplary damages, including but not limited to damages for loss of
-          profits, goodwill, use, data, or other intangible losses, even if we
-          have been advised of the possibility of such damages, arising out of
-          or in connection with the use or performance of
-          <a href="http://join-1340.developerakademie.net">Join</a>.
-        </p>
-
-        <h5>Indemnity</h5>
-        <p>
-          You agree to indemnify, defend and hold harmless us, the listed
-          students, the
-          <a href="https://developerakademie.com/">Developer Akademie</a>, and
-          our affiliates, partners, officers, directors, agents, and employees,
-          from and against any claim, demand, loss, damage, cost, or liability
-          (including reasonable legal fees) arising out of or relating to your
-          use of
-          <a href="http://join-1340.developerakademie.net">Join</a> and/or your
-          breach of this Legal Notice.
-        </p> <br />
-        <p>For any questions or notices, please contact us at:</p> <br/>
-        <a href="mailto:agopian.miruna@yahoo.com">agopian.miruna@yahoo.com</a>
-        <a href="mailto:patrick18685@gmail.com">patrick18685@gmail.com</a>
-        <a href="mailto:benbasic@outlook.de">benbasic@outlook.de</a>
-        <br />
-        <p>Date: 01.11.2025</p>
+      <!-- Submenu, mobile version -->
+      <div id="mobile_submenu" class="mobile-submenu">
+        <a href="help.html" aria-label="Opens Help section">Help</a>
+        <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
+        <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
+        <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
       </div>
-      >
-    </main>
-    <footer>
-      <a
-        id="summary_tab_mobile"
-        href="summary.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('summary')"
-      >
-        <img
-          src="../assets/img/summary.svg"
-          alt="icon leading to the summary page"
-        />
+    </nav>
+  </header>
+  <aside>
+    <img class="sidebar-logo" src="../assets/img/join_logo_white.svg" alt="The logo of the app JOIN" />
+    <div class="sidebar-components">
+      <a id="summary_tab_pc" href="summary.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('summary')">
+        <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
         <p>Summary</p>
       </a>
-      <a
-        id="add_task_tab_mobile"
-        href="add-task.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('task')"
-      >
-        <img
-          src="../assets/img/add_task.svg"
-          alt="icon leading to the add task page"
-        />
+      <a id="add_task_tab_pc" href="add-task.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('task')">
+        <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
         <p>Add Task</p>
       </a>
-      <a
-        id="board_tab_mobile"
-        href="board.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('board')"
-      >
-        <img
-          src="../assets/img/board.svg"
-          alt="icon leading to the board page"
-        />
+      <a id="board_tab_pc" href="board.html" class="sidebar-menu-elements" onclick="setDesktopTabFocus('board')">
+        <img src="../assets/img/board.svg" alt="icon leading to the board page" />
         <p>Board</p>
       </a>
-      <a
-        id="contacts_tab_mobile"
-        href="contacts.html"
-        class="footer-menu-elements"
-        onclick="setMobileTabFocus('contacts')"
-      >
-        <img
-          src="../assets/img/contacts.svg"
-          alt="icon leading to the contacts page"
-        />
+      <a id="contacts_tab_pc" href="contacts.html" class="sidebar-menu-elements"
+        onclick="setDesktopTabFocus('contacts')">
+        <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
         <p>Contacts</p>
       </a>
-    </footer>
-    <div id="orientation_warning" class="landscape-view-warning d-none">
-        <p>JOIN works best in portrait mode. Please rotate your device!</p>
-        <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view">
     </div>
-  </body>
+    <div class="legal-notice-container">
+      <a onclick="setPolicyFocusTabPc('privacyPolicy')" id="privacy_policy_pc" class="legal-notice-elements"
+        href="privacy-policy.html">Privacy Policy</a>
+      <a onclick="setPolicyFocusTabPc('legalNotice')" id="legal_notice_pc" class="legal-notice-elements"
+        href="legal-notice.html">Legal Notice</a>
+    </div>
+  </aside>
+  <main>
+    <div class="main-content">
+      <section class="title-arrow">
+        <h1 class="legal-notice-title">Legal Notice</h1>
+        <a href="#"><img onclick="goBack()" id="left_arrow" class="arrow-left"
+            src="../assets/img/arrow_left_line_default.svg" alt="left arrow leading to the summary page" /></a>
+      </section>
+      <h3>Imprint</h3>
+      <ul>
+        <li>Miruna Agopian</li>
+        <li>Patrick Schütte</li>
+        <li>Benjamin Mahalbasic</li>
+        <br />
+        <li>Musterstrasse 1</li>
+        <li>01234 Musterstadt</li>
+      </ul>
+      <h5>Exploring the Board</h5>
+      <p>Email:</p>
+      <a href="mailto:agopian.miruna@yahoo.com">agopian.miruna@yahoo.com</a>
+      <a href="mailto:patrick18685@gmail.com">patrick18685@gmail.com</a>
+      <a href="mailto:benbasic@outlook.de">benbasic@outlook.de</a>
+
+      <h5>Acceptance of terms</h5>
+      <p>
+        By accessing and using
+        <a href="http://join-1340.developerakademie.net">Join</a> (Product),
+        you acknowledge and agree to the following terms and conditions, and
+        any policies, guidelines, or amendments thereto that may be presented
+        to you from time to time. We, the listed students, may update or
+        change the terms and conditions from time to time without notice.
+      </p>
+
+      <h3>Scope and ownership of the product</h3>
+      <p>
+        <a href="http://join-1340.developerakademie.net">Join</a> has been
+        developed as part of a student group project in a web development
+        bootcamp at the
+        <a href="https://developerakademie.com/">Developer Akademie GmbH</a>.
+        It has an educational purpose and is not intended for extensive
+        personal &amp; business usage. As such, we cannot guarantee consistent
+        availability, reliability, accuracy, or any other aspect of quality
+        regarding this Product
+      </p>
+      <p>
+        The design of
+        <a href="http://join-1340.developerakademie.net">Join</a> is owned by
+        the
+        <a href="https://developerakademie.com/">Developer Akademie GmbH</a>.
+        Unauthorized use, reproduction, modification, distribution, or
+        replication of the design is strictly prohibited.
+      </p>
+
+      <h5>Proprietary rights</h5>
+      <p>
+        Aside from the design owned by
+        <a href="https://developerakademie.com/">Developer Akademie GmbH</a>,
+        we, the listed students, retain all proprietary rights in
+        <a href="http://join-1340.developerakademie.net">Join</a>, including
+        any associated copyrighted material, trademarks, and other proprietary
+        information.
+      </p>
+
+      <h5>Use of the product</h5>
+      <p>
+        <a href="http://join-1340.developerakademie.net">Join</a> is intended
+        to be used for lawful purposes only, in accordance with all applicable
+        laws and regulations. Any use of
+        <a href="http://join-1340.developerakademie.net">Join</a> for illegal
+        activities, or to harass, harm, threaten, or intimidate another
+        person, is strictly prohibited. You are solely responsible for your
+        interactions with other users of
+        <a href="http://join-1340.developerakademie.net">Join</a>.
+      </p>
+
+      <h5>Disclaimer of warranties and limitation of liability</h5>
+      <p>
+        <a href="http://join-1340.developerakademie.net">Join</a> is provided
+        “as is” without warranty of any kind, whether express or implied,
+        including but not limited to the implied warranties of
+        merchantability, fitness for a particular purpose, and
+        non-infringement. In no event will we, the listed students, or the
+        <a href="https://developerakademie.com/">Developer Akademie</a>, be
+        liable for any direct, indirect, incidental, special, consequential or
+        exemplary damages, including but not limited to damages for loss of
+        profits, goodwill, use, data, or other intangible losses, even if we
+        have been advised of the possibility of such damages, arising out of
+        or in connection with the use or performance of
+        <a href="http://join-1340.developerakademie.net">Join</a>.
+      </p>
+
+      <h5>Indemnity</h5>
+      <p>
+        You agree to indemnify, defend and hold harmless us, the listed
+        students, the
+        <a href="https://developerakademie.com/">Developer Akademie</a>, and
+        our affiliates, partners, officers, directors, agents, and employees,
+        from and against any claim, demand, loss, damage, cost, or liability
+        (including reasonable legal fees) arising out of or relating to your
+        use of
+        <a href="http://join-1340.developerakademie.net">Join</a> and/or your
+        breach of this Legal Notice.
+      </p> <br />
+      <p>For any questions or notices, please contact us at:</p> <br />
+      <a href="mailto:agopian.miruna@yahoo.com">agopian.miruna@yahoo.com</a>
+      <a href="mailto:patrick18685@gmail.com">patrick18685@gmail.com</a>
+      <a href="mailto:benbasic@outlook.de">benbasic@outlook.de</a>
+      <br />
+      <p>Date: 01.11.2025</p>
+    </div>
+    >
+  </main>
+  <footer>
+    <a id="summary_tab_mobile" href="summary.html" class="footer-menu-elements" onclick="setMobileTabFocus('summary')">
+      <img src="../assets/img/summary.svg" alt="icon leading to the summary page" />
+      <p>Summary</p>
+    </a>
+    <a id="add_task_tab_mobile" href="add-task.html" class="footer-menu-elements" onclick="setMobileTabFocus('task')">
+      <img src="../assets/img/add_task.svg" alt="icon leading to the add task page" />
+      <p>Add Task</p>
+    </a>
+    <a id="board_tab_mobile" href="board.html" class="footer-menu-elements" onclick="setMobileTabFocus('board')">
+      <img src="../assets/img/board.svg" alt="icon leading to the board page" />
+      <p>Board</p>
+    </a>
+    <a id="contacts_tab_mobile" href="contacts.html" class="footer-menu-elements"
+      onclick="setMobileTabFocus('contacts')">
+      <img src="../assets/img/contacts.svg" alt="icon leading to the contacts page" />
+      <p>Contacts</p>
+    </a>
+  </footer>
+  <div id="orientation_warning" class="landscape-view-warning d-none">
+    <p>JOIN works best in portrait mode. Please rotate your device!</p>
+    <img class="device-icon" src="../assets/img/device_landscape.svg" alt="A tablet positioned in landscape view">
+  </div>
+</body>
+
 </html>

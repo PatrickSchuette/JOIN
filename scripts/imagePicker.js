@@ -391,13 +391,21 @@ function renderGalleryFromTaskImages(images) {
     viewerInstance = new Viewer(gallery, {
         toolbar: true,
         navbar: false,
-        title: false,
+        title: true,
         movable: false,
         zoomable: true,
         scalable: false,
         fullscreen: false,
         rotatable: false,
         transition: true,
-        zIndex: 999999,
+  
+        show() {
+            dialogBoardTaskRev.dialog.close();
+        },
+    
+        hidden() {
+            dialogBoardTaskRev.dialog.showModal();
+            dialogBoardTaskRev.dialog.classList.add('taskDialogOpened');
+        }
     });
 }
