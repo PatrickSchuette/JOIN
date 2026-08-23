@@ -6,6 +6,7 @@ let dragArea = null;
 let myGallery = null;
 let allImages = [];
 let profileImage = null;
+let viewerInstance = null;
 
 const TASK_MAX_WIDTH = 800;
 const TASK_MAX_HEIGHT = 600;
@@ -45,6 +46,11 @@ function destroyOldViewer() {
         myGallery.destroy();
         myGallery = null;
     }
+    if (viewerInstance) {
+        viewerInstance.destroy();
+        viewerInstance = null;
+    }
+    
 }
 
 /**
@@ -382,7 +388,7 @@ function renderGalleryFromTaskImages(images) {
         gallery.appendChild(el);
     });
 
-    new Viewer(gallery, {
+    viewerInstance = new Viewer(gallery, {
         toolbar: true,
         navbar: false,
         title: false,
@@ -391,6 +397,7 @@ function renderGalleryFromTaskImages(images) {
         scalable: false,
         fullscreen: false,
         rotatable: false,
-        transition: true
+        transition: true,
+        zIndex: 999999,
     });
 }

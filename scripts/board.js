@@ -75,6 +75,7 @@ async function showDialogTask(id) {
     currentDraggedElement = id;
 
     await prepareDialogForTask();
+    destroyOldViewer();
     fillDialogFields(actualToDo);
     renderGalleryFromTaskImages(actualToDo.images || []);
     renderDialogActions();
