@@ -145,6 +145,8 @@ function getRandomColor(){
  * @param {String} mail - incudes the mail address from clicked person 
  */
 async function showClickedContact(mail){
+    if (!document.getElementById('contact_container')) return;
+
     await createArrayOfContacts();
     let amountOfContacts = joinContacts.length;
     let contactObj = {};
@@ -222,7 +224,7 @@ function changeImgOut(id){
 function renderEditDialog(mail, initials){
     let obj = joinContacts.find(c => c.mail == mail);
     const contentEditDialogRef = document.getElementById('edit_contact_dialog');
-    contentEditDialogRef.innerHTML = getTemplateEditDialog(obj, initials);
+    contentEditDialogRef.innerHTML = getTemplateEditDialog(obj);
     openDialogEditContact();
 }
 
@@ -234,10 +236,20 @@ function renderEditDialog(mail, initials){
 async function saveChangedData(mail){
     let editDataObj = await checkIfDataChanged(mail);
     let areDataChanged = editDataObj.isChanged;
-    if((isMailValid && isTelValid) || (areDataChanged)){
-      await saveDataInStore(editDataObj);  
-    }else if(!areDataChanged){
-        if(isMailValid && isTelValid){closeDialogEditContact();}
+
+    if ((isMailValid && isTelValid) || areDataChanged) {
+        await saveDataInStore(editDataObj);
+
+        if (window.location.pathname.includes("contacts.html")) {
+            showClickedContact(mail);
+        } else {
+            closeDialogEditContact();
+        }
+
+    } else if (!areDataChanged) {
+        if (isMailValid && isTelValid) {
+            closeDialogEditContact();
+        }
     }
 }
 
@@ -333,7 +345,7 @@ async function closeDialogIfDataChanged(isChanged){
         let dialog = document.getElementById('edit_contact_dialog');
         dialog.close();
         dialog.classList.remove('dialogOpened');
-        await onloadFuncContact();
+        if (window.location.pathname.includes("contacts.html")) { await onloadFuncContact();}
     }
 }
 

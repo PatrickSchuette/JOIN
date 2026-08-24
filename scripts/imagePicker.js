@@ -327,6 +327,8 @@ function initProfilePicturePicker() {
     loadStoredImages();
 }
 
+initProfilePicturePicker();
+
 /**
  * Return current profile image object.
  * @returns {Object|null}

@@ -31,6 +31,7 @@ async function closeDialogAddContact(){
  */
 function closeDialogAfterCreatedContact(){
     const contentDialogContactRef = document.getElementById('add_contact_dialog');
+    if (!contentDialogContactRef) return;
     contentDialogContactRef.close();
     contentDialogContactRef.classList.remove('dialogOpened');
 }
@@ -71,10 +72,15 @@ function createContactObj(name, mail, phone){
  * 
  */
 function clearInputFields(){
-    document.getElementById('add_name').value = '';
-    document.getElementById('add_mail').value = '';
-    document.getElementById('add_phone').value = '';
+    const name = document.getElementById('add_name');
+    const mail = document.getElementById('add_mail');
+    const phone = document.getElementById('add_phone');
+
+    if (name) name.value = "";
+    if (mail) mail.value = "";
+    if (phone) phone.value = "";
 }
+
 
 /**
  * This function is used to change the color and img from the cancel button of add contact dialog during hover
@@ -121,6 +127,8 @@ function changeColorDown(){
 async function openContactMsgDialog(text){
     closeDialogAfterCreatedContact();
     const contentDialogRef = document.getElementById('msg_contact_dialog');
+    if (!contentDialogRef) return;
+
     contentDialogRef.innerHTML = '';
     contentDialogRef.innerHTML = getDialogMsgTemplate(text);
     contentDialogRef.showModal();

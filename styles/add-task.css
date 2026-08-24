@@ -246,3 +246,7 @@ button {
 .onlyShowTask {
     display: none !important;
 }
+
+main{
+    padding-left: 0;
+}

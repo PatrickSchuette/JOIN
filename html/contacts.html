@@ -26,6 +26,7 @@
   <script src="../scripts/contacts.js"></script>
   <script src="../scripts/navigation.js" defer></script>
   <script src="../scripts/imagePicker.js" defer></script>
+  <script src="../scripts/account.js" defer></script>
 </head>
 
 <body onload="onloadFuncContact()">
@@ -42,6 +43,7 @@
 
       <!-- Submenu, desktop version -->
       <div id="submenu" class="desktop-submenu d-none">
+        <a href="#" onclick="showActiveProfile()" aria-label="show Active Userprofile">Account</a>
         <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
         <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
         <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>

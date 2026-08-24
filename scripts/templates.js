@@ -46,10 +46,9 @@ function getTemplateShowContact(obj, initials) {
 /**
  * Returns the edit dialog HTML for a contact including avatar and form fields.
  * @param {Object} obj - Contact object.
- * @param {string} initials - Initials of the contact.
  * @returns {string} HTML string for the edit dialog.
  */
-function getTemplateEditDialog(obj, initials) {
+function getTemplateEditDialog(obj) {
     return `
     <div class="add-contact-container">
         <section class="add-contact-left-box">

@@ -21,6 +21,7 @@ h2 {
 main {
     display: flex;
     justify-content: center;
+    padding-left: 0;
 }
 
 .mainContent {

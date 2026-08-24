@@ -36,6 +36,7 @@ main {
     display: flex;
     justify-content: center;
     position: relative;
+    padding-left: 0;
 }
 
 .main-content {

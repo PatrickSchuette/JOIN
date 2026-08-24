@@ -9,6 +9,10 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="../styles/navigation.css">
+  <link rel="stylesheet" href="../styles/contacts.css">
+  <link rel="stylesheet" href="../styles/contacts-overview.css">
+  <link rel="stylesheet" href="../styles/contact-show.css">
+  <link rel="stylesheet" href="../styles/contacts-dialog.css">
   <link rel="stylesheet" href="../styles/summary.css" />
   <link rel="stylesheet" href="../styles/board.css">
   <link rel="stylesheet" href="../styles/add-task-interactions.css" id="cssAddTaskInteractions">
@@ -30,6 +34,7 @@
   <script src="../scripts/templates.js" defer></script>
   <script src="../scripts/contacts-overview.js" defer></script>
   <script src="../scripts/firebase.js" defer></script>
+  <script src="../scripts/contacts-dialog.js" defer></script>
   <script src="../scripts/contacts.js" defer></script>
   <script src="../scripts/board-design.js" defer></script>
   <script src="../scripts/board.js" defer></script>
@@ -39,6 +44,7 @@
   <script src="../scripts/stakeholder.js" defer></script>
   <script src="../scripts/imagePicker.js" defer></script>
   <script src="../node_modules/viewerjs/dist/viewer.min.js" defer></script>
+  <script src="../scripts/account.js" defer></script>
 </head>
 
 <body>
@@ -54,12 +60,14 @@
       </div>
       <!-- Submenu, desktop version -->
       <div id="submenu" class="desktop-submenu d-none">
+        <a href="#" onclick="showActiveProfile()" aria-label="show Active Userprofile">Account</a>
         <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
         <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
         <a onclick="logOut()" href="#" aria-label="Logs the user out of the application">Log out</a>
       </div>
       <!-- Submenu, mobile version -->
       <div id="mobile_submenu" class="mobile-submenu">
+        <a href="#" onclick="showActiveProfile()" aria-label="show Active Userprofile">Account</a>
         <a href="help.html" aria-label="Opens Help section">Help</a>
         <a href="legal-notice.html" aria-label="Opens Legal Notice section">Legal Notice</a>
         <a href="privacy-policy.html" aria-label="Opens Privacy Policy section">Privacy Policy</a>
@@ -96,6 +104,7 @@
   </aside>
 
   <div id="overlay_container" class="overlay-container"></div>
+  <dialog id="edit_contact_dialog" class="dialog-contact">   </dialog>
 
   <main>
     <div class="mainContent">
