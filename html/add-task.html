@@ -170,6 +170,22 @@
             <div id="gallery"> </div>
           </div>
 
+
+          <div class="field-description assigned-to">
+            <span>Assigned to</span>
+            <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
+              <span>Select contacts to assign</span>
+              <button aria-label="Dropdown open">
+                <span id="dropdown_arrow" class="dropdown-arrow"></span>
+              </button>
+              <div id="contact_list" class="contacts-list">
+                <ul id="contact_ul"></ul>
+              </div>
+            </div>
+            <div id="contact_icons" class="contacts-icons"></div>
+          </div>
+
+          
           <div class="subtask-field-description">
             <label for="subtask">Subtasks</label>
             <div id="subtask_wrapper" class="subtask-wrapper">
@@ -186,19 +202,7 @@
             </div>
           </div>
 
-          <div class="field-description assigned-to">
-            <span>Assigned to</span>
-            <div onclick="toggleContactList()" class="dropdown" id="assigned_to">
-              <span>Select contacts to assign</span>
-              <button aria-label="Dropdown open">
-                <span id="dropdown_arrow" class="dropdown-arrow"></span>
-              </button>
-              <div id="contact_list" class="contacts-list">
-                <ul id="contact_ul"></ul>
-              </div>
-            </div>
-            <div id="contact_icons" class="contacts-icons"></div>
-          </div>
+
         </section>
 
       </section>
