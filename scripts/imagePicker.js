@@ -123,15 +123,38 @@ function handleFileSelectionForTasks() {
 }
 
 /**
- * Handle file selection for profile (single).
+ * Handles file selection for profile image.
  * @returns {void}
  */
-function handleFileSelectionForProfile() {
+async function handleFileSelectionForProfile() {
     if (!filepicker || !filepicker.files || filepicker.files.length === 0) return;
     const f = filepicker.files[0];
-    processFile(f, PROFILE_SIZE, PROFILE_SIZE, 0.8, true);
+    await processFile(f, PROFILE_SIZE, PROFILE_SIZE, 0.8, true);
+    const target = document.getElementById('editContactAvatar');
+    renderProfileImage(target);
     filepicker.value = '';
 }
+
+/**
+ * Renders profile image into target element.
+ * @param {HTMLElement} target
+ * @returns {void}
+ */
+function renderProfileImage(target) {
+    if (!target || !profileImage) return;
+    if (target.tagName === 'IMG') {
+        target.src = profileImage.base64;
+        return;
+    }
+    const img = document.createElement('img');
+    img.id = 'editContactAvatar';
+    img.className = 'contactAvater';
+    img.src = profileImage.base64;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    target.replaceWith(img);
+}
+
 
 /**
  * Calculate scaled dimensions preserving aspect ratio and not exceeding targets.

@@ -91,13 +91,15 @@ function showOrientationWarning(isLandscape){
  * @param {Object} user - Contact object.
  * @returns {string} Avatar HTML string.
  */
-function getContactAvatarHtml(user, className = "contactAvater") {
+function getContactAvatarHtml(user) {
+    const id = "editContactAvatar";
     if (user.profileImage) {
-        return `<img class="${className}" src="${user.profileImage}" alt="${user.name}" style="width: 100%; height: 100%">`;
+        return `<img id="${id}" class="contactAvater" src="${user.profileImage}" alt="${user.name}" style="width:100%;height:100%">`;
     }
-    let initials = getUserItem(user.name);
-    return `<div class="${className}" style="background-color:${user.color}; width: 100%; height: 100%">${initials}</div>`;
+    const initials = getUserItem(user.name);
+    return `<div id="${id}" class="contactAvater" style="background-color:${user.color};width:100%;height:100%">${initials}</div>`;
 }
+
 
 /**
  * Triggers the orientation warning only on portrait mode and on viewport resize
