@@ -170,6 +170,7 @@ form {
   transition: ease-in-out 125ms;
   cursor: pointer;
   font-size: 18px;
+  white-space: nowrap;
 }
 
 .btnPrimary {
@@ -345,6 +346,13 @@ footer {
   gap: 18px;
 }
 
+footer {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 @media (max-width: 768px) {
   .onlyMobile {
     display: flex;
@@ -408,12 +416,7 @@ footer {
   }
 }
 
-footer {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+
 
 @media (max-height: 700px) {
   footer {

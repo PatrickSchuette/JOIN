@@ -42,8 +42,13 @@
                     </div>
                 </div>
             </div>
-            <form onsubmit="createUser(); return false" autocomplete="off">
-                <input type="text" required placeholder="Name" class="bg-input bg-img-name" id="create_name">
+            <form onsubmit="createUser(); return false" autocomplete="off" novalidate>
+                <div class="input-container">
+                    <input type="text" placeholder="Name" class="bg-input bg-img-name" id="create_name"
+                        onfocus="clearBorderClass('create_name', 'name_info')" onblur="checkNameInput()">
+                
+                    <span id="name_info" class="info-input invisible">Name must be at least 3 characters</span>
+                </div>                
                 <div class="input-container">
                     <input type="mail" required placeholder="Email" class="bg-input bg-img-mail" id="create_mail"
                         onclick="clearBorderClass('create_mail', 'mail_info')" onblur="checkMailInput()">
@@ -69,7 +74,7 @@
                 </div>
 
                 <div class="btn-box">
-                    <button id="btn_signup" class="btn-signup" disabled>Sign up</button>
+                    <button id="btn_signup" class="btn-signup" onclick="createUser()">Sign up</button>
                 </div>
             </form>
         </div>

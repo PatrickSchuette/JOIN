@@ -109,7 +109,11 @@ input::placeholder {
 }
 
 .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     position: relative;
+    min-height: 68px;
 }
 
 .toggle-icon {
@@ -291,25 +295,28 @@ footer {
 
 #create_name,
 #create_pw {
-    margin-bottom: 17px;
-}
-
-.input-container {
-    min-height: 68px;
+    /*margin-bottom: 17px;*/
 }
 
 .info-input {
+    margin-top: -8px;
+    min-height: 20px;
     padding-left: 8px;
     font-size: 14px;
     color: #E60026;
 }
 
 .visible {
-    display: block;
+    visibility: visible;
 }
 
 .invisible {
-    display: none;
+    visibility: hidden;
+}
+
+.checkbox-error {
+    border: 1px solid #E60026;
+    border-radius: 6px;
 }
 
 @media(max-width:950px) {

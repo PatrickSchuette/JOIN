@@ -1,3 +1,10 @@
+const elementSignUpRev = {
+    "name": document.getElementById('create_name'),
+    "mail": document.getElementById('create_mail'),
+    "password": document.getElementById('create_pw'),
+    "confirmPassword": document.getElementById('create_confirm_pw'), // Korrigiert
+};
+
 /**
  * This variable gives an iformation if the accept policy checkbox on signup is checked
  * 
@@ -40,12 +47,13 @@ function acceptPolicy() {
  * 
  */
 async function createUser() {
-    if (passwordConfirmed) {
-        let userData = getInput();
-        await createArrayOfUsers();
-        await checkNewUser(userData, joinUsers);
-    }
+    if (!validateSignup()) return;
+
+    let userData = getInput();
+    await createArrayOfUsers();
+    await checkNewUser(userData, joinUsers);
 }
+
 
 /**
  * This subfunction of createUser() is used to read the input fields of form and put the data in an object 
@@ -264,6 +272,26 @@ function changeIcon(id) {
 }
 
 /**
+ * This function checks the name if it is valid and gives a feedback if its invalid
+ * 
+ */
+function checkNameInput() {
+    const nameInput = document.getElementById('create_name');
+    const nameInfo = document.getElementById('name_info');
+    const value = nameInput.value.trim();
+
+    if (value.length < 3) {
+        nameInput.classList.add('bg-invalid-input');
+        nameInfo.classList.remove('invisible');
+        nameInfo.classList.add('visible');
+    } else {
+        nameInput.classList.remove('bg-invalid-input');
+        nameInfo.classList.remove('visible');
+        nameInfo.classList.add('invisible');
+    }
+}
+
+/**
  * This function checks the input mail if it is valid and gives a feedback if its invalid
  * 
  */
@@ -318,3 +346,66 @@ function checkPassword() {
         passwordConfirmed = true;
     }
 }
+
+/**
+ * Validates the signup form input fields and policy acceptance.
+ * Checks for non-empty name and password, a valid email format, matching password confirmation, and accepted terms.
+ * Visually marks invalid fields and shows corresponding error messages if validation fails.
+ * 
+ * @global {Object} elementSignUpRev - Object containing references to the signup DOM elements.
+ * @global {boolean} policyAccepted - Boolean flag indicating if the terms and conditions policy is checked.
+ * @returns {boolean} True if all signup inputs are valid and policy is accepted, otherwise false.
+ */
+function validateSignup() {
+    let valid = true;
+
+    const nameValue = elementSignUpRev.name.value.trim();
+    if (nameValue.length < 3) {
+        elementSignUpRev.name.classList.add('bg-invalid-input');
+        document.getElementById('name_info').classList.remove('invisible');
+        valid = false;
+    } else {
+        elementSignUpRev.name.classList.remove('bg-invalid-input');
+        document.getElementById('name_info').classList.add('invisible');
+    }
+    
+
+    if (!checkValidEmail(elementSignUpRev.mail.value)) {
+        elementSignUpRev.mail.classList.add('bg-invalid-input');
+        document.getElementById('mail_info').classList.remove('invisible');
+        valid = false;
+    } else {
+        elementSignUpRev.mail.classList.remove('bg-invalid-input');
+        document.getElementById('mail_info').classList.add('invisible');
+    }
+
+    if (elementSignUpRev.password.value.trim() === "") {
+        elementSignUpRev.password.classList.add('bg-invalid-input');
+        valid = false;
+    } else {
+        elementSignUpRev.password.classList.remove('bg-invalid-input');
+    }
+
+    const passwordValue = elementSignUpRev.password.value;
+    const confirmValue = elementSignUpRev.confirmPassword.value;
+
+    if (confirmValue.trim() === "" || passwordValue !== confirmValue) {
+        elementSignUpRev.confirmPassword.classList.add('bg-invalid-input');
+        document.getElementById('confirm_pw_info').classList.remove('invisible');
+        valid = false;
+    } else {
+        elementSignUpRev.confirmPassword.classList.remove('bg-invalid-input');
+        document.getElementById('confirm_pw_info').classList.add('invisible');
+    }
+
+    if (!policyAccepted) {
+        document.getElementById('checkbox').classList.add('checkbox-error');
+        valid = false;
+    } else {
+        document.getElementById('checkbox').classList.remove('checkbox-error');
+    }
+
+    return valid;
+}
+
+

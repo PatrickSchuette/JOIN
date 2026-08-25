@@ -171,7 +171,7 @@ function wrongUserLogin() {
 function emailCheck() {
     validEmail = checkValidEmail(elementLoginRev.email.value);
     if (validEmail == true) {
-        elementLoginRev.loginStatus.innerHTML = "";
+        elementLoginRev.loginStatus.innerHTML = "&nbsp;";
     } else {
         elementLoginRev.email.classList.add("inputFail");
         elementLoginRev.loginStatus.innerHTML = "Please enter a valid email address";
