@@ -82,6 +82,7 @@ async function showDialogTask(id) {
     renderDialogActions();
     getAssignedUser();
     initTitleAutosize();
+    //initDialogBackdropClose();
 }
 
 /** Prepares dialog appearance and resets inputs */
@@ -135,7 +136,6 @@ function renderDialogActions() {
     document.getElementById('btn_edit_task').onclick = showDialogEdit;
 }
 
-
 /** 
  * Switches the dialog into edit mode for the currently selected task.
  */
@@ -174,6 +174,26 @@ function checkTheDialog(){
         dialogBoardTaskRev.dialog.classList.add('addTaskDialogClosed');
     }
 }
+
+/**
+ * Initializes the backdrop click listener for the specific task dialog.
+ */
+function initDialogBackdropClose() {
+    dialogBoardTaskRev.dialog.addEventListener('click', (event) => {
+        const rect = dialogBoardTaskRev.dialog.getBoundingClientRect();
+        const isInDialog = (
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom
+        );
+        
+        if (!isInDialog) {
+            closeDialog();
+        }
+    });
+}
+
 
 //################ Mobile Move Overlay ###############
 /**

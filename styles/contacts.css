@@ -16,7 +16,7 @@ main {
     gap: 0;
 }
 
-.contacts-list {
+.contacts-list-overview {
     display: block;
     background-color: #FFFFFF;
     padding-top: 0px;
@@ -211,7 +211,7 @@ main {
         font-size: 18px;
     }
 
-    .contacts-list {
+    .contacts-list-overview {
         padding-left: 16px;
         padding-right: 12px;
         max-width: 258px;
@@ -255,7 +255,7 @@ main {
         display: none;
     }
 
-    .contacts-list {
+    .contacts-list-overview{
         max-width: none;
         width: 100%;
         left: 0px;
@@ -285,7 +285,7 @@ main {
 }
 
 @media(min-width:850px) {
-    .contacts-list {
+    .contacts-list-overview {
         display: block;
     }
 }

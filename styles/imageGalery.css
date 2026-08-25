@@ -117,6 +117,22 @@
     z-index: 1000;
 }
 
+.filename {
+    max-width: 55ch;
+    min-width: 50px;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: normal;
+    margin-right: 4px;
+}
+
+.filesize {
+    flex-shrink: 0;
+    margin-left: 4px;
+}
+
 .task-gallery-download:hover .task-gallery-tooltip,
 .task-gallery-delete:hover .task-gallery-tooltip {
     opacity: 1;
@@ -163,11 +179,15 @@
     background: #0008;
     padding: 6px 10px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 19px;
     max-width: 40vw;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: 6px;
 }
 
 .viewer-zoom-controls {
@@ -243,12 +263,11 @@
     justify-content: space-between;
     padding: 0 16px;
     background: #1a5276;
-    /* blauer Balken */
+    display: none;
 }
 
 .viewer-header {
     background: #1a5276;
-    /* einheitlicher blauer Balken statt Verlauf */
 }
 
 .viewer-footer-nav {
@@ -260,7 +279,6 @@
     padding: 8px 12px;
 }
 
-/* Sichtbarkeit standardmäßig: Desktop-Layout aktiv, Footer versteckt */
 .mobile-only {
     display: none;
 }
@@ -270,19 +288,17 @@
     pointer-events: auto;
 }
 
-.filpicker-content{
+.filpicker-content {
     width: 100%;
 }
 
 @media (max-width: 768px) {
 
-    /* Overlay auf Mobile immer sichtbar, kein Hover nötig */
     .viewer-overlay {
         opacity: 1;
         pointer-events: auto;
     }
 
-    /* Viewer nimmt volle Bildschirmgröße ein */
     .viewer-container {
         transform: none;
     }
@@ -298,7 +314,6 @@
         z-index: 2015;
     }
 
-    /* Desktop-Elemente ausblenden, mobile Footer-Bar zeigen */
     .desktop-only {
         display: none;
     }
@@ -322,5 +337,9 @@
     .viewer-close {
         font-size: 16px;
         padding: 6px 10px;
+    }
+
+    .viewer-footer {
+        display: flex;
     }
 }

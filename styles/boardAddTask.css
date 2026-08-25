@@ -104,6 +104,10 @@
     display: none !important;
 }
 
+dialog {
+    width: 80%;
+}
+
 @media(max-width: 1290px) {
     .add-task-dialog-board .buttons {
         width: 40%;
@@ -198,6 +202,13 @@
     #dialaogBoardTask {
         width: 100vw;
         height: 100vh;
+        top: 0;
+        left: 0;
+    }
+
+    dialog {
+        width: 95vw;
+        height: 95vh;
         top: 0;
         left: 0;
     }

@@ -439,7 +439,7 @@ dialog {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 80%;
+    /*width: 80%;*/
     margin: auto;
     padding: 32px;
     background-color: #fff;
@@ -451,6 +451,9 @@ dialog {
     max-width: 1300px;
 }
 
+#edit_contact_dialog{
+    margin: 0!important;
+}
 
 .taskDialogOpened {
     transform: translateX(0px) translateY(0px);

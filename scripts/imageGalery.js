@@ -181,45 +181,84 @@ function createViewerOverlay(img, index) {
 }
 
 /**
- * Creates the top header bar with filename/size, zoom controls and download/close buttons.
+ * Creates the info block showing filename and file size with a tooltip.
  * @param {Object} img
- * @param {number} index
  * @returns {HTMLElement}
  */
-function createViewerHeader(img, index) {
-    const header = document.createElement('div');
-    header.classList.add('viewer-header');
-
+function createViewerInfo(img) {
     const info = document.createElement('div');
     info.classList.add('viewer-info');
-    const fullText = img.filename + ' / ' + getBase64SizeLabel(img.base64);
-    info.textContent = fullText;
-    info.title = fullText;
-    header.appendChild(info);
+    const filenameSpan = document.createElement('p');
+    filenameSpan.classList.add('filename');
+    filenameSpan.textContent = img.filename;
+    const filesizeSpan = document.createElement('p');
+    filesizeSpan.classList.add('filesize');
+    filesizeSpan.textContent = getBase64SizeLabel(img.base64);
+    info.append(filenameSpan, ' / ', filesizeSpan);
+    info.title = `${img.filename} / ${getBase64SizeLabel(img.base64)}`;
+    return info;
+}
 
-    const zoomWrap = document.createElement('div');
-    zoomWrap.classList.add('viewer-zoom-controls', 'desktop-only');
-    zoomWrap.appendChild(createZoomButton('+', 0.1));
-    zoomWrap.appendChild(createZoomButton('−', -0.1));
-    header.appendChild(zoomWrap);
+/**
+ * Creates a wrapper containing zoom-in and zoom-out buttons.
+ * @param {...string} classNames
+ * @returns {HTMLElement}
+ */
+function createZoomControls(...classNames) {
+    const wrap = document.createElement('div');
+    wrap.classList.add('viewer-zoom-controls', ...classNames);
+    wrap.appendChild(createZoomButton('+', 0.1));
+    wrap.appendChild(createZoomButton('−', -0.1));
+    return wrap;
+}
 
-    const rightWrap = document.createElement('div');
-    rightWrap.classList.add('viewer-header-right');
-
+/**
+ * Creates the download and close buttons shown on the right side of the header.
+ * @param {Object} img
+ * @returns {HTMLElement}
+ */
+function createHeaderRightControls(img) {
+    const wrap = document.createElement('div');
+    wrap.classList.add('viewer-header-right');
     const dl = document.createElement('button');
     dl.classList.add('viewer-download');
     dl.textContent = '⬇';
     dl.onclick = function () { downloadTaskImage(img.base64, img); };
-    rightWrap.appendChild(dl);
-
     const close = document.createElement('button');
     close.classList.add('viewer-close');
     close.textContent = '✖';
     close.onclick = function () { viewerInstance.hide(); };
-    rightWrap.appendChild(close);
+    wrap.append(dl, close);
+    return wrap;
+}
 
-    header.appendChild(rightWrap);
+/**
+ * Creates the top header bar with filename/size, zoom controls and download/close buttons.
+ * @param {Object} img
+ * @returns {HTMLElement}
+ */
+function createViewerHeader(img) {
+    const header = document.createElement('div');
+    header.classList.add('viewer-header');
+    header.appendChild(createViewerInfo(img));
+    header.appendChild(createZoomControls('desktop-only'));
+    header.appendChild(createHeaderRightControls(img));
     return header;
+}
+
+/**
+ * Creates a single navigation button with the given class, label and click handler.
+ * @param {string} className
+ * @param {string} label
+ * @param {Function} onClick
+ * @returns {HTMLElement}
+ */
+function createNavButton(className, label, onClick) {
+    const btn = document.createElement('button');
+    btn.classList.add(className);
+    btn.textContent = label;
+    btn.onclick = onClick;
+    return btn;
 }
 
 /**
@@ -229,42 +268,21 @@ function createViewerHeader(img, index) {
 function createViewerSideNav() {
     const wrap = document.createElement('div');
     wrap.classList.add('desktop-only');
-    const left = document.createElement('button');
-    left.classList.add('viewer-left');
-    left.textContent = '<';
-    left.onclick = function () { viewerPrev(); };
-    wrap.appendChild(left);
-    const right = document.createElement('button');
-    right.classList.add('viewer-right');
-    right.textContent = '>';
-    right.onclick = function () { viewerNext(); };
-    wrap.appendChild(right);
+    wrap.appendChild(createNavButton('viewer-left', '<', viewerPrev));
+    wrap.appendChild(createNavButton('viewer-right', '>', viewerNext));
     return wrap;
 }
 
 /**
  * Creates the mobile-only footer bar with prev, zoom controls and next.
- * @param {number} index
  * @returns {HTMLElement}
  */
-function createViewerFooter(index) {
+function createViewerFooter() {
     const footer = document.createElement('div');
     footer.classList.add('viewer-footer', 'mobile-only');
-    const left = document.createElement('button');
-    left.classList.add('viewer-footer-nav');
-    left.textContent = '<';
-    left.onclick = function () { viewerPrev(); };
-    footer.appendChild(left);
-    const zoomWrap = document.createElement('div');
-    zoomWrap.classList.add('viewer-zoom-controls');
-    zoomWrap.appendChild(createZoomButton('+', 0.1));
-    zoomWrap.appendChild(createZoomButton('−', -0.1));
-    footer.appendChild(zoomWrap);
-    const right = document.createElement('button');
-    right.classList.add('viewer-footer-nav');
-    right.textContent = '>';
-    right.onclick = function () { viewerNext(); };
-    footer.appendChild(right);
+    footer.appendChild(createNavButton('viewer-footer-nav', '<', viewerPrev));
+    footer.appendChild(createZoomControls());
+    footer.appendChild(createNavButton('viewer-footer-nav', '>', viewerNext));
     return footer;
 }
 
