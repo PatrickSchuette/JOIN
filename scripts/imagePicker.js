@@ -96,7 +96,7 @@ function storeContactProfileImage(file, base64) {
  * @returns {Promise<void>}
  */
 async function processFile(file, targetW, targetH, quality, isProfile = false) {
-    if (!errorContainer) errorContainer = document.querySelector('.alert-container');
+    if (!errorContainer) errorContainer = filepicker.closest('.field-description').querySelector('.alert-container');
     if (!file || !file.type || !file.type.startsWith('image/')) {
         if (errorContainer) errorContainer.textContent = `File "${file?.name ?? ''}" is not an image.`;
         return;
@@ -299,7 +299,7 @@ function initFilePicker() {
     filepicker = document.getElementById('filepicker');
     gallery = document.getElementById('gallery');
     dragArea = document.getElementById('dragArea');
-    errorContainer = document.querySelector('.alert-container');
+    errorContainer = filepicker.closest('.field-description').querySelector('.alert-container');
     if (!filepicker) return;
     filepicker.multiple = true;
     filepicker.accept = 'image/*';
@@ -307,7 +307,7 @@ function initFilePicker() {
     filepicker.addEventListener('change', handleFileSelectionForTasks);
     initDragAndDropForTasks();
     loadStoredImages();
-}
+   }
 
 /**
  * Initialize file picker for contact page. Call this from the contact page only.
@@ -328,6 +328,16 @@ function initProfilePicturePicker() {
 }
 
 initProfilePicturePicker();
+
+/**
+ * Handles keyboard events on the drag area to trigger the file picker.
+ * @param {KeyboardEvent} e - The keyboard event object triggered by the user.
+ */
+function handleDragAreaKey(e) {
+    if (e.key === "Enter" || e.key === " ") {
+        document.getElementById("filepicker").click();
+    }
+}
 
 /**
  * Return current profile image object.

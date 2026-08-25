@@ -288,7 +288,7 @@
                 <label class="color-description" for="filepicker">Attachments</label>
                 <span  style="color: #848484;">Allowed file types are JPEG and PNG</span>
                 <input type="file" id="filepicker" accept="image/*" style="display: none;" />
-                <div id="dragArea">Drag a file or browse</div>
+                <div id="dragArea"  tabindex="0"role="button"aria-label="Upload file"onkeydown="handleDragAreaKey(event)">Drag a file or browse</div>
                 <div class="alert-container"></div>
               </div>
             </div>
