@@ -354,3 +354,13 @@ function viewerNext() {
         viewerInstance.next();
     }
 }
+
+/**
+ * Calculates the binary size of a Base64 data URL.
+ * @param {string} base64
+ * @returns {number}
+ */
+function getBase64Size(base64) {
+  const base64Data = base64.split(",")[1] || "";
+  return Math.ceil((base64Data.length * 3) / 4);
+}

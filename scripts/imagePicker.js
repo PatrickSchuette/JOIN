@@ -78,9 +78,9 @@ function loadStoredImages() {
  * @param {string} base64
  * @returns {void}
  */
-function storeTaskImage(file, base64) {
+function storeTaskImage(file, imageData) {
     const imgs = getTaskImagesFromLocalStorage();
-    imgs.push({ filename: file.name, fileType: file.type, base64 });
+    imgs.push({filename: file.name,fileType: file.type, width: imageData.width, height: imageData.height, fileSize: imageData.fileSize, base64: imageData.base64});
     localStorage.setItem("allImages", JSON.stringify(imgs));
     allImages = imgs;
     renderGalleryFromTaskImages(imgs);
@@ -92,42 +92,47 @@ function storeTaskImage(file, base64) {
  * @param {string} base64
  * @returns {void}
  */
-function storeContactProfileImage(file, base64) {
-  profileImage = { filename: file.name, fileType: file.type, base64: base64 };
+function storeContactProfileImage(file, imageData) {
+  profileImage = {filename: file.name, fileType: file.type, width: imageData.width, height: imageData.height, fileSize: imageData.fileSize,base64: imageData.base64};
   saveProfileImage();
 }
 
 /**
- * Process a file: validate, compress and store according to context.
+ * Processes, compresses and stores an image file.
  * @param {File} file
- * @param {number} targetW
- * @param {number} targetH
+ * @param {number} targetWidth
+ * @param {number} targetHeight
  * @param {number} quality
  * @param {boolean} isProfile
  * @returns {Promise<void>}
  */
-async function processFile(file, targetW, targetH, quality, isProfile = false) {
-  if (!errorContainer)
-    errorContainer = filepicker
-      .closest(".field-description")
-      .querySelector(".alert-container");
-  if (!file || !file.type || !file.type.startsWith("image/")) {
-    if (errorContainer)
-      errorContainer.textContent = `File "${file?.name ?? ""}" is not an image.`;
-    return;
+async function processFile(file,  targetWidth,  targetHeight,  quality,  isProfile = false) {
+  if (!validateImageFile(file)) return;
+  const imageData = await compressImage(file, targetWidth, targetHeight, quality);
+  if (isProfile) {
+    storeContactProfileImage(file, imageData);
+  } else {
+    storeTaskImage(file, imageData);
+  }
+}
+
+/**
+ * Validates an image file before processing.
+ * @param {File} file
+ * @returns {boolean}
+ */
+function validateImageFile(file) {
+  if (!file || !file.type?.startsWith("image/")) {
+    if (errorContainer) errorContainer.textContent = "File is not an image.";
+    return false;
   }
   if (!isFileSizeValid(file)) {
-    if (errorContainer)
-      errorContainer.textContent = `File "${file.name}" exceeds the maximum size of ${MAX_PICTURE_SIZE}MB.`;
-    return;
+    if (errorContainer) {
+      errorContainer.textContent = `File "${file.name}" exceeds ${MAX_PICTURE_SIZE}MB.`;
+    }
+    return false;
   }
-  try {
-    const base64 = await compressImage(file, targetW, targetH, quality);
-    if (isProfile) storeContactProfileImage(file, base64);
-    else storeTaskImage(file, base64);
-  } catch (err) {
-    if (errorContainer) errorContainer.textContent = String(err);
-  }
+  return true;
 }
 
 /**
@@ -225,40 +230,42 @@ function drawAndCompress(img, w, h, q) {
 }
 
 /**
- * Setup FileReader and Image load/error handlers for compression.
+ * Handles image loading and compression callbacks.
  * @param {FileReader} reader
  * @param {Function} resolve
  * @param {Function} reject
- * @param {number} targetW
- * @param {number} targetH
- * @param {number} q
+ * @param {number} targetWidth
+ * @param {number} targetHeight
+ * @param {number} quality
  * @returns {void}
  */
-function setupCompressionHooks(reader, resolve, reject, targetW, targetH, q) {
-  reader.onload = (ev) => {
-    const img = new Image();
-    img.onload = () => {
-      const s = calculateDimensions(img, targetW, targetH);
-      resolve(drawAndCompress(img, s.width, s.height, q));
+function setupCompressionHooks(reader,  resolve,  reject,  targetWidth,  targetHeight,  quality) {
+  reader.onload = (event) => {
+    const image = new Image();
+    image.onload = () => {
+      const dimensions = calculateDimensions(image, targetWidth, targetHeight);
+      const base64 = drawAndCompress(image, dimensions.width, dimensions.height, quality);
+      resolve({base64, width: dimensions.width, height: dimensions.height, fileSize: getBase64Size(base64)
+      });
     };
-    img.onerror = () => reject("Error loading image.");
-    img.src = ev.target.result;
+    image.onerror = () => reject("Error loading image.");
+    image.src = event.target.result;
   };
   reader.onerror = () => reject("Error reading file.");
 }
 
 /**
- * Compress a file to base64 with target dimensions and quality.
+ * Compresses an image and returns its data and metadata.
  * @param {File} file
- * @param {number} targetW
- * @param {number} targetH
- * @param {number} q
- * @returns {Promise<string>}
+ * @param {number} targetWidth
+ * @param {number} targetHeight
+ * @param {number} quality
+ * @returns {Promise<Object>}
  */
-function compressImage(file, targetW, targetH, q) {
+function compressImage(file, targetWidth, targetHeight, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    setupCompressionHooks(reader, resolve, reject, targetW, targetH, q);
+    setupCompressionHooks(reader, resolve, reject, targetWidth, targetHeight, quality);
     reader.readAsDataURL(file);
   });
 }

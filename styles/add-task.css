@@ -5,7 +5,7 @@
     width: 100%;
     height: 100%;
     z-index: 500;
-    background-color: rgb(209,209,209, 0.3);
+    background-color: rgb(209, 209, 209, 0.3);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,7 +45,8 @@
     position: relative;
 }
 
-.task-container, .priority-container {
+.task-container,
+.priority-container {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -179,7 +180,7 @@ select {
     align-items: center;
     width: 40%;
     padding: 0 8px;
-} 
+}
 
 button {
     display: flex;
@@ -193,7 +194,7 @@ button {
     white-space: nowrap;
 }
 
-.buttons button:first-child{
+.buttons button:first-child {
     background-color: white;
 }
 
@@ -205,14 +206,14 @@ button {
     width: 24px;
 }
 
-.buttons button:nth-child(2){
+.buttons button:nth-child(2) {
     background-color: #2A3647;
     color: white;
     font-weight: 800;
 }
 
 #filepicker {
-    display: none; 
+    display: none;
 }
 
 .alert-container {
@@ -233,7 +234,7 @@ button {
     max-height: 150px;
     border-radius: 8px;
     object-fit: cover;
-    border: 1px solid #d5dbdb; 
+    border: 1px solid #d5dbdb;
 }
 
 .task-gallery-download {
@@ -248,7 +249,15 @@ button {
     display: none !important;
 }
 
-main{
+main {
     justify-content: center;
     padding-left: 0;
+}
+
+@media (max-width: 850px) {
+
+    .task-container,
+    .priority-container {
+        gap: 8px;
+    }
 }
