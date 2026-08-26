@@ -59,7 +59,9 @@ function showDialogAddTask(column) {
     document.getElementById("btnDialogLeft").onclick = closeDialog;
     document.getElementById('btnDialogRightContent').innerHTML = "Create Task";
     document.getElementById("btnDialogRight").onclick = addDialogTask;
-    dialogBoardTaskRev.dialog.showModal();
+    showTaskDialogOverlay();
+    //dialogBoardTaskRev.dialog.showModal();
+    dialogBoardTaskRev.dialog.show();
     renderGalleryFromTaskImages(getTaskImagesFromLocalStorage());
     dialogBoardTaskRev.dialog.classList.add('addTaskDialogOpened');
     startStatusColumn = column;
@@ -82,14 +84,15 @@ async function showDialogTask(id) {
     renderDialogActions();
     getAssignedUser();
     initTitleAutosize();
-    //initDialogBackdropClose();
 }
 
 /** Prepares dialog appearance and resets inputs */
 async function prepareDialogForTask() {
     getCssTheme('cssShowTask');
     clearTaskInput();
-    dialogBoardTaskRev.dialog.showModal();
+    showTaskDialogOverlay();
+    //dialogBoardTaskRev.dialog.showModal();
+    dialogBoardTaskRev.dialog.show();
     await timeout(200);
     dialogBoardTaskRev.dialog.classList.add('taskDialogOpened');
 }
@@ -149,6 +152,7 @@ function showDialogEdit() {
 
 /** close the dialog and re render the board */
 async function closeDialog() {
+    hideTaskDialogOverlay();
     isShowTaskActive = false;
     checkTheDialog();
     await timeout(600);
@@ -174,26 +178,6 @@ function checkTheDialog(){
         dialogBoardTaskRev.dialog.classList.add('addTaskDialogClosed');
     }
 }
-
-/**
- * Initializes the backdrop click listener for the specific task dialog.
- */
-function initDialogBackdropClose() {
-    dialogBoardTaskRev.dialog.addEventListener('click', (event) => {
-        const rect = dialogBoardTaskRev.dialog.getBoundingClientRect();
-        const isInDialog = (
-            event.clientX >= rect.left &&
-            event.clientX <= rect.right &&
-            event.clientY >= rect.top &&
-            event.clientY <= rect.bottom
-        );
-        
-        if (!isInDialog) {
-            closeDialog();
-        }
-    });
-}
-
 
 //################ Mobile Move Overlay ###############
 /**
@@ -251,6 +235,12 @@ document.addEventListener('click', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const taskDialogOverlay = document.getElementById('task_dialog_overlay');
+
+    taskDialogOverlay.addEventListener('click', () => {
+        closeDialog();
+    });
+
     onloadFuncBoard();
 });
 
@@ -316,4 +306,18 @@ function initTitleAutosize() {
   } else {
     titleElement.style.fontSize = '57px';
   }
+}
+
+/**
+ * Active overlay Div for dialog
+ */
+function showTaskDialogOverlay() {
+   document.getElementById('task_dialog_overlay').classList.add('active');
+}
+
+/**
+ * Deactive overlay Div for dialog
+ */
+function hideTaskDialogOverlay() {
+    document.getElementById('task_dialog_overlay').classList.remove('active');
 }

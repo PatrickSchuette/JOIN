@@ -1,20 +1,20 @@
 /* Input fields styling */
 
 input:focus {
-  outline: none;
+    outline: none;
 }
 
 textarea:focus {
-    outline:none;
+    outline: none;
 }
 
-.subtask-input:focus{
+.subtask-input:focus {
     outline: none;
 }
 
 .subtask-edit[contenteditable="true"]:focus {
-  outline: none;
-  border: none; 
+    outline: none;
+    border: none;
 }
 
 .required {
@@ -27,7 +27,8 @@ textarea:focus {
 }
 
 .alert-container {
-    height: 1em;;
+    height: 1em;
+    ;
 }
 
 /* Hover effects and boxes styling */
@@ -97,13 +98,13 @@ textarea:focus {
     border-radius: 50%
 }
 
-.buttons button:first-child:hover{
+.buttons button:first-child:hover {
     box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.2);
     color: #29abe2;
     border: 1px solid #29abe2;
 }
 
-.buttons button:first-child:hover .clear-btn{
+.buttons button:first-child:hover .clear-btn {
     background-image: url(../assets/img/cancel_x_hover.svg);
 }
 
@@ -116,7 +117,7 @@ textarea:focus {
 .subtask-edit-btn,
 .subtask-delete-btn,
 .subtask-btn-divider-secondary {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .subtask-list:hover {
@@ -126,12 +127,12 @@ textarea:focus {
 .subtask-list:hover .subtask-edit-btn,
 .subtask-list:hover .subtask-delete-btn,
 .subtask-list:hover .subtask-btn-divider-secondary {
-  visibility: visible;
+    visibility: visible;
 }
 
 .subtask-edit-btn:hover,
 .subtask-delete-btn:hover {
-  background-size: 32px 32px;
+    background-size: 32px 32px;
 }
 
 .subtask-save-btn:hover,
@@ -151,11 +152,11 @@ textarea:focus {
 
 /* Category dropdown field */
 .field-description.active .dropdown {
-  border: 2px solid #29abe2;
+    border: 2px solid #29abe2;
 }
 
 .field-description.alert .dropdown {
-  border: 2px solid red;
+    border: 2px solid red;
 }
 
 textarea.active {
@@ -171,9 +172,9 @@ textarea.active {
 }
 
 .contacts-list.active {
-  opacity: 1;
-  transform: translateY(0);
-  max-height: 200px;
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 200px;
 }
 
 .subtask-field-description .subtask-input.active {
@@ -186,17 +187,16 @@ textarea.active {
     align-items: center;
 }
 
+.buttons {
+    width: auto;
+    justify-content: space-around;
+    padding-right: 8px;
+    gap: 24px;
+}
 
 /* Media queries */
 
-@media(max-width: 1500px) {
-    .buttons {
-        width: 40%;
-        padding-right: 8px;
-    }
-}
-
-@media(max-width: 1220px){
+@media(max-width: 1220px) {
     .page-container {
         gap: 16px;
         font-size: 20px;
@@ -206,7 +206,7 @@ textarea.active {
         gap: 8px;
     }
 
-    .field-description input, 
+    .field-description input,
     .field-description textarea,
     .subtask-field-description input {
         font-size: 20px;
@@ -226,12 +226,6 @@ textarea.active {
     }
 }
 
-@media(max-width: 1050px) {
-    .buttons {
-        width: 40%;
-    }
-}
-
 @media(max-width: 950px) {
     .main-content h1 {
         font-size: 54px;
@@ -241,7 +235,7 @@ textarea.active {
         font-size: 16px;
     }
 
-    .field-description input, 
+    .field-description input,
     .field-description textarea,
     .subtask-field-description input {
         font-size: 16px;
@@ -255,12 +249,8 @@ textarea.active {
         font-size: 16px;
     }
 
-   .buttons button {
+    .buttons button {
         padding: 12px;
-    }
-
-    .buttons {
-        width: 45%;
     }
 
     .prio-img {
@@ -280,36 +270,31 @@ textarea.active {
     }
 
     .bottom-container {
-    position: fixed;
-    bottom: 96px;
-    left: 0;
-    width: 100%;
-    background-color: #f6f7f8; 
-    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
-    z-index: 20;
-    display: flex;
-    justify-content: flex-end;
-  }
+        position: fixed;
+        bottom: 96px;
+        left: 0;
+        width: 100%;
+        background-color: #f6f7f8;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
+        z-index: 20;
+        display: flex;
+        justify-content: flex-end;
+    }
 
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-  }
 }
 
-@media(max-width:650px){
+@media(max-width:650px) {
     .page-container {
         flex-direction: column;
     }
 
-    .buttons:nth-child(2){
+    .buttons:nth-child(2) {
         align-self: flex-end;
         width: 60%;
     }
 }
 
-@media(max-width: 450px){
+@media(max-width: 450px) {
     .buttons:nth-child(2) {
         width: 85%;
     }

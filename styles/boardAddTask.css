@@ -163,6 +163,7 @@ dialog {
 
     #dialaogBoardTask {
         padding: 16px !important;
+        z-index: 999999 !important;
     }
 
     #buttons_dialog {

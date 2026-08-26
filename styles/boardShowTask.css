@@ -255,6 +255,7 @@ button {
     width: 525px;
     border: none;
     border-radius: 30px;
+    z-index: 999999 !important;
 }
 
 #dialaogBoardTask::-webkit-scrollbar {

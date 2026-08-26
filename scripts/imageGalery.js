@@ -4,13 +4,20 @@
  * @returns {void}
  */
 function renderGalleryFromTaskImages(images) {
-    const gallery = document.getElementById('gallery');
+    const gallery = document.getElementById("gallery");
     if (!gallery) return;
-    const oldLabel = gallery.parentElement.querySelector('.task-attachments-label');
-    if (oldLabel) {oldLabel.remove();}
-    gallery.innerHTML = '';
+    const oldLabel = gallery.parentElement.querySelector(
+        ".task-attachments-label",
+    );
+    if (oldLabel) {
+        oldLabel.remove();
+    }
+    gallery.innerHTML = "";
     if (!images || images.length === 0) return;
-    gallery.insertAdjacentHTML('beforebegin', '<div class="task-attachments-label"><span class="color-description onlyShowTask" >Attachments: </span></div>');
+    gallery.insertAdjacentHTML(
+        "beforebegin",
+        '<div class="task-attachments-label"><span class="color-description onlyShowTask" >Attachments: </span></div>',
+    );
     images.forEach(function (img, index) {
         const wrapper = createGalleryWrapper(img, index);
         addGalleryButtons(wrapper, img, index);
@@ -26,10 +33,10 @@ function renderGalleryFromTaskImages(images) {
  * @returns {void}
  */
 function downloadTaskImage(base64, img) {
-    const type = base64.substring(5, base64.indexOf(';'));
-    const ext = type.split('/')[1];
-    const name = img.filename || ('image.' + ext);
-    const link = document.createElement('a');
+    const type = base64.substring(5, base64.indexOf(";"));
+    const ext = type.split("/")[1];
+    const name = img.filename || "image." + ext;
+    const link = document.createElement("a");
     link.href = base64;
     link.download = name;
     link.click();
@@ -41,12 +48,14 @@ function downloadTaskImage(base64, img) {
  * @returns {void}
  */
 function deleteTaskImage(index) {
-    const data = localStorage.getItem('allImages');
+    const data = localStorage.getItem("allImages");
     if (!data) return;
     const arr = JSON.parse(data);
     arr.splice(index, 1);
-    localStorage.setItem('allImages', JSON.stringify(arr));
+    localStorage.setItem("allImages", JSON.stringify(arr));
+    allImages = arr;
     renderGalleryFromTaskImages(arr);
+    if (errorContainer) errorContainer.textContent = "";
 }
 
 /**
@@ -56,14 +65,14 @@ function deleteTaskImage(index) {
  * @returns {HTMLElement}
  */
 function createGalleryWrapper(img, index) {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('task-gallery-wrapper');
-    const el = document.createElement('img');
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("task-gallery-wrapper");
+    const el = document.createElement("img");
     el.src = img.base64;
-    el.classList.add('task-gallery-img');
+    el.classList.add("task-gallery-img");
     wrapper.appendChild(el);
-    const name = document.createElement('div');
-    name.classList.add('task-gallery-filename');
+    const name = document.createElement("div");
+    name.classList.add("task-gallery-filename");
     name.textContent = img.filename;
     wrapper.appendChild(name);
     return wrapper;
@@ -75,8 +84,8 @@ function createGalleryWrapper(img, index) {
  * @returns {HTMLElement}
  */
 function createTooltip(text) {
-    const tip = document.createElement('div');
-    tip.classList.add('task-gallery-tooltip');
+    const tip = document.createElement("div");
+    tip.classList.add("task-gallery-tooltip");
     tip.textContent = text;
     return tip;
 }
@@ -89,17 +98,21 @@ function createTooltip(text) {
  * @returns {void}
  */
 function addGalleryButtons(wrapper, img, index) {
-    const dl = document.createElement('button');
-    dl.classList.add('task-gallery-download');
-    dl.textContent = '⬇';
-    dl.appendChild(createTooltip('Download image'));
-    dl.onclick = function () {downloadTaskImage(img.base64, img);};
+    const dl = document.createElement("button");
+    dl.classList.add("task-gallery-download");
+    dl.textContent = "⬇";
+    dl.appendChild(createTooltip("Download image"));
+    dl.onclick = function () {
+        downloadTaskImage(img.base64, img);
+    };
     wrapper.appendChild(dl);
-    const del = document.createElement('button');
-    del.classList.add('task-gallery-delete');
-    del.textContent = '✖';
-    del.appendChild(createTooltip('Delete image'));
-    del.onclick = function () {deleteTaskImage(index);};
+    const del = document.createElement("button");
+    del.classList.add("task-gallery-delete");
+    del.textContent = "✖";
+    del.appendChild(createTooltip("Delete image"));
+    del.onclick = function () {
+        deleteTaskImage(index);
+    };
     wrapper.appendChild(del);
 }
 
@@ -129,8 +142,8 @@ function initViewer(gallery) {
         hidden() {
             removeViewerOverlay();
             dialogBoardTaskRev.dialog.showModal();
-            dialogBoardTaskRev.dialog.classList.add('taskDialogOpened');
-        }
+            dialogBoardTaskRev.dialog.classList.add("taskDialogOpened");
+        },
     });
 }
 
@@ -146,7 +159,7 @@ function updateViewerOverlay() {
 
     removeViewerOverlay();
 
-    const container = document.querySelector('.viewer-container');
+    const container = document.querySelector(".viewer-container");
     if (!container) return;
 
     const overlay = createViewerOverlay(img, index);
@@ -158,7 +171,7 @@ function updateViewerOverlay() {
  * @returns {void}
  */
 function removeViewerOverlay() {
-    const existing = document.querySelector('.viewer-container .viewer-overlay');
+    const existing = document.querySelector(".viewer-container .viewer-overlay");
     if (existing) existing.remove();
 }
 
@@ -170,8 +183,8 @@ function removeViewerOverlay() {
  * @returns {HTMLElement}
  */
 function createViewerOverlay(img, index) {
-    const overlay = document.createElement('div');
-    overlay.classList.add('viewer-overlay');
+    const overlay = document.createElement("div");
+    overlay.classList.add("viewer-overlay");
 
     overlay.appendChild(createViewerHeader(img, index));
     overlay.appendChild(createViewerSideNav());
@@ -186,15 +199,15 @@ function createViewerOverlay(img, index) {
  * @returns {HTMLElement}
  */
 function createViewerInfo(img) {
-    const info = document.createElement('div');
-    info.classList.add('viewer-info');
-    const filenameSpan = document.createElement('p');
-    filenameSpan.classList.add('filename');
+    const info = document.createElement("div");
+    info.classList.add("viewer-info");
+    const filenameSpan = document.createElement("p");
+    filenameSpan.classList.add("filename");
     filenameSpan.textContent = img.filename;
-    const filesizeSpan = document.createElement('p');
-    filesizeSpan.classList.add('filesize');
+    const filesizeSpan = document.createElement("p");
+    filesizeSpan.classList.add("filesize");
     filesizeSpan.textContent = getBase64SizeLabel(img.base64);
-    info.append(filenameSpan, ' / ', filesizeSpan);
+    info.append(filenameSpan, " / ", filesizeSpan);
     info.title = `${img.filename} / ${getBase64SizeLabel(img.base64)}`;
     return info;
 }
@@ -205,10 +218,10 @@ function createViewerInfo(img) {
  * @returns {HTMLElement}
  */
 function createZoomControls(...classNames) {
-    const wrap = document.createElement('div');
-    wrap.classList.add('viewer-zoom-controls', ...classNames);
-    wrap.appendChild(createZoomButton('+', 0.1));
-    wrap.appendChild(createZoomButton('−', -0.1));
+    const wrap = document.createElement("div");
+    wrap.classList.add("viewer-zoom-controls", ...classNames);
+    wrap.appendChild(createZoomButton("+", 0.1));
+    wrap.appendChild(createZoomButton("−", -0.1));
     return wrap;
 }
 
@@ -218,16 +231,20 @@ function createZoomControls(...classNames) {
  * @returns {HTMLElement}
  */
 function createHeaderRightControls(img) {
-    const wrap = document.createElement('div');
-    wrap.classList.add('viewer-header-right');
-    const dl = document.createElement('button');
-    dl.classList.add('viewer-download');
-    dl.textContent = '⬇';
-    dl.onclick = function () { downloadTaskImage(img.base64, img); };
-    const close = document.createElement('button');
-    close.classList.add('viewer-close');
-    close.textContent = '✖';
-    close.onclick = function () { viewerInstance.hide(); };
+    const wrap = document.createElement("div");
+    wrap.classList.add("viewer-header-right");
+    const dl = document.createElement("button");
+    dl.classList.add("viewer-download");
+    dl.textContent = "⬇";
+    dl.onclick = function () {
+        downloadTaskImage(img.base64, img);
+    };
+    const close = document.createElement("button");
+    close.classList.add("viewer-close");
+    close.textContent = "✖";
+    close.onclick = function () {
+        viewerInstance.hide();
+    };
     wrap.append(dl, close);
     return wrap;
 }
@@ -238,10 +255,10 @@ function createHeaderRightControls(img) {
  * @returns {HTMLElement}
  */
 function createViewerHeader(img) {
-    const header = document.createElement('div');
-    header.classList.add('viewer-header');
+    const header = document.createElement("div");
+    header.classList.add("viewer-header");
     header.appendChild(createViewerInfo(img));
-    header.appendChild(createZoomControls('desktop-only'));
+    header.appendChild(createZoomControls("desktop-only"));
     header.appendChild(createHeaderRightControls(img));
     return header;
 }
@@ -254,7 +271,7 @@ function createViewerHeader(img) {
  * @returns {HTMLElement}
  */
 function createNavButton(className, label, onClick) {
-    const btn = document.createElement('button');
+    const btn = document.createElement("button");
     btn.classList.add(className);
     btn.textContent = label;
     btn.onclick = onClick;
@@ -266,10 +283,10 @@ function createNavButton(className, label, onClick) {
  * @returns {HTMLElement}
  */
 function createViewerSideNav() {
-    const wrap = document.createElement('div');
-    wrap.classList.add('desktop-only');
-    wrap.appendChild(createNavButton('viewer-left', '<', viewerPrev));
-    wrap.appendChild(createNavButton('viewer-right', '>', viewerNext));
+    const wrap = document.createElement("div");
+    wrap.classList.add("desktop-only");
+    wrap.appendChild(createNavButton("viewer-left", "<", viewerPrev));
+    wrap.appendChild(createNavButton("viewer-right", ">", viewerNext));
     return wrap;
 }
 
@@ -278,11 +295,11 @@ function createViewerSideNav() {
  * @returns {HTMLElement}
  */
 function createViewerFooter() {
-    const footer = document.createElement('div');
-    footer.classList.add('viewer-footer', 'mobile-only');
-    footer.appendChild(createNavButton('viewer-footer-nav', '<', viewerPrev));
+    const footer = document.createElement("div");
+    footer.classList.add("viewer-footer", "mobile-only");
+    footer.appendChild(createNavButton("viewer-footer-nav", "<", viewerPrev));
     footer.appendChild(createZoomControls());
-    footer.appendChild(createNavButton('viewer-footer-nav', '>', viewerNext));
+    footer.appendChild(createNavButton("viewer-footer-nav", ">", viewerNext));
     return footer;
 }
 
@@ -293,10 +310,12 @@ function createViewerFooter() {
  * @returns {HTMLElement}
  */
 function createZoomButton(label, ratio) {
-    const btn = document.createElement('button');
-    btn.classList.add('viewer-zoom');
+    const btn = document.createElement("button");
+    btn.classList.add("viewer-zoom");
     btn.textContent = label;
-    btn.onclick = function () { viewerInstance.zoom(ratio); };
+    btn.onclick = function () {
+        viewerInstance.zoom(ratio);
+    };
     return btn;
 }
 
@@ -307,7 +326,7 @@ function createZoomButton(label, ratio) {
  */
 function getBase64SizeLabel(base64) {
     const bytes = Math.round((base64.length * 3) / 4);
-    return Math.round(bytes / 1024) + ' KB';
+    return Math.round(bytes / 1024) + " KB";
 }
 
 /**
