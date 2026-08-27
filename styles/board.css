@@ -456,6 +456,8 @@ dialog {
 }
 
 .taskDialogOpened {
+    max-height: 95vh;
+    /*max-width: 97vw;*/
     transform: translateX(0px) translateY(0px);
     transition: all 0.3s ease-in;
 }
@@ -648,6 +650,10 @@ dialog::backdrop {
 
     .onlyDesktop {
         display: none;
+    }
+
+    .taskDialogOpened{
+        margin: 0;
     }
 }
 
