@@ -43,6 +43,7 @@
     padding: 20px 0;
     margin-right: 20px;
     position: relative;
+    overflow-y: auto;
 }
 
 .task-container,

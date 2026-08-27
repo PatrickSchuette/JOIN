@@ -48,15 +48,15 @@
           <h1 class="loginTitle">Log in</h1>
           <hr class="headline-underline" />
         </div>
-        <form onsubmit="userLogin();  return false;" id="loginForm">
+        <form onsubmit="userLogin();  return false;" id="loginForm" novalidate>
 
           <div class="mail-wrapper">
-            <input id="txtEMail" type="email" placeholder="Email" required class="inputLogin" />
+            <input id="txtEMail" type="email" placeholder="Email" class="inputLogin" />
             <span class="formMailIcon"></span>
           </div>
 
           <div class="password-wrapper">
-            <input id="txtPassword" type="password" placeholder="Password" required class="inputLogin formPassIcon" />
+            <input id="txtPassword" type="password" placeholder="Password" class="inputLogin formPassIcon" />
             <span id="togglePassword" class="toggle-icon"></span>
           </div>
           <!-- </div> -->

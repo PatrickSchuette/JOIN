@@ -115,21 +115,50 @@ function animateLogo() {
   runSplashAnimation(splashLogo, pageContent);
 }
 
+/**
+ * Validates whether both email and password fields contain user input.
+ * Highlights empty fields with the "inputFail" class and displays an error message.
+ *
+ * @function checkInputFieldsFilled
+ * @returns {boolean} Returns true when both fields are filled; 
+ *                    returns false when one or both fields are empty.
+ */
+function checkInputFieldsFilled(){
+    const email = elementLoginRev.email.value.trim();
+    const password = elementLoginRev.password.value.trim();  
+    
+    if (!email || !password) {
+        if (!email) {
+            elementLoginRev.email.classList.add("inputFail");
+        }
+        if (!password) {
+            elementLoginRev.password.classList.add("inputFail");
+        }
+        elementLoginRev.loginStatus.innerHTML = "Please enter email and password.";
+        return false;
+    } else {
+        return true;
+    }
+}
 
 
 /**  start of Login Seassion  */
 function userLogin() {
-    if (validEmail == false) { return; };
-
-    let selUser = null;
-    selUser = checkUserDatabase(selUser);
-
-    if (selUser) {
-        rightUserLogin(selUser);
-    } else {
-        wrongUserLogin()
+    resetLoginElemnts();
+    if (!checkInputFieldsFilled()){return;}
+    if (!validEmail) {
+      elementLoginRev.email.classList.add("inputFail");
+      elementLoginRev.loginStatus.innerHTML = "Please enter a valid email address.";
+      return;
     }
-}
+    let selUser = checkUserDatabase(null);
+    if (selUser) {
+      rightUserLogin(selUser);
+    } else {
+      wrongUserLogin();
+    }
+  }
+  
 
 /** check if User is part of Database
  * @param {Object} selUser selected User  */

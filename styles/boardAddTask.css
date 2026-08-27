@@ -146,10 +146,11 @@ dialog {
     .page-container {
         width: 100%;
         height: calc(80vh - 100px);
-        overflow-y: scroll;
+        overflow-y: auto;
         flex-direction: column;
         margin-right: 0;
-        padding-bottom: 200px;
+        /*padding-bottom: 200px;*/
+        margin-bottom: 110px;
     }
 
     .taskHeader {

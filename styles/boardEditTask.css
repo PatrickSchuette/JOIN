@@ -246,7 +246,7 @@ button {
     font-family: 'Inter';
     width: 100%;
     height: 80vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 textarea {
@@ -367,8 +367,7 @@ dialog {
 
     .page-container {
         flex: 1;
-
-        padding-bottom: 200px;
+        padding-bottom: 40px;
     }
 
     .field-description textarea {
@@ -430,6 +429,11 @@ dialog {
         height: 95vh;
         top: 0;
         left: 0;
+    }
+
+    .buttons {
+        padding-right: 20px;
+        padding-bottom: 5px;
     }
 }
 

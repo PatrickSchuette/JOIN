@@ -54,6 +54,7 @@ async function editDialogTask() {
     dialogBoardTaskRev.dialog.close();
     await patchData('tasks/' + currentDraggedElement, task);
     clearTaskImagesFromLocalStorage();
+    hideTaskDialogOverlay();
     task.id = currentDraggedElement;
     await notifyExternalCreatorOnChange(task, oldStatus);
     onloadFuncBoard();
