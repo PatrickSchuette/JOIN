@@ -169,6 +169,7 @@ function toggleCategories() {
     clearAlert(field, alert);
     field.classList.add('active'); 
     placeholder.textContent = "Select task category";
+    setTimeout(() => {document.querySelector(".page-container").scrollTo({top: 1000,behavior: "smooth"});}, 200);
     document.addEventListener("click", outsideClick);
   } else {
     document.removeEventListener("click", outsideClick);

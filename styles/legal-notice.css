@@ -43,4 +43,8 @@ body.legal-notice p:not(:is(aside p)):not(:is(footer p)){
     .main-content h1 {
         font-size: 50px;
     }
+
+    .main-content{
+        padding: 0;
+    }
 }

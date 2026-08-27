@@ -280,14 +280,32 @@ function generateIssueCollector(creatorType, email){
     }
     if (creatorType == "intern") {
         dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagMember.svg' alt='Intern Member' />"
-        dialogBoardTaskRev.creatorContact.innerHTML = ` <a href="./contacts.html?contactMail=${email}" aria-label="See Profile">
-            <img src="../assets/img/seeProfile.svg" alt="see Profile" /> </a> `;
+        dialogBoardTaskRev.creatorContact.innerHTML = setUserProfileLink(email);
         dialogBoardTaskRev.aiGenerated.innerHTML = ""
     } else  {
         dialogBoardTaskRev.tagSymbol.innerHTML = "<img src='../assets/img/tagExtern.svg' alt='Extern Member' />"
         dialogBoardTaskRev.creatorContact.innerHTML =  `<a href="mailto:${email}" aria-label="See Profile"><img src='../assets/img/sendEmail.svg' alt='send Email' /></a>`
         dialogBoardTaskRev.aiGenerated.innerHTML = "<img src='../assets/img/Note _ KI generiert.svg' alt='AI Generated' />"
     }
+}
+
+/**
+ * Generates a profile link for a given email address if the contact exists.
+ * Checks whether the provided email is a key inside the global contactUser object.
+ * If the contact exists, an HTML anchor element linking to the contact profile page
+ * is returned. If not, an empty string is returned.
+ *
+ * @function setUserProfileLink
+ * @param {string} email - The email address used to look up the contact.
+ * @returns {string} HTML string containing the profile link and icon,
+ *                   or an empty string if the email is not found.
+ */
+function setUserProfileLink(email){
+    if(contactUser.hasOwnProperty(email)){
+        return ` <a href="./contacts.html?contactMail=${email}" aria-label="See Profile">
+        <img src="../assets/img/seeProfile.svg" alt="see Profile" /> </a> `;
+    } 
+    return "";
 }
 
 /**

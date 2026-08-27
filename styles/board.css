@@ -717,7 +717,7 @@ dialog::backdrop {
 
 @media (max-width: 1500px) and (hover: none) {
     .drag-area {
-        overflow-x: scroll;
+        overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
 }

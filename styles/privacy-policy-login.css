@@ -39,7 +39,7 @@ footer {
 
 .footer-policy-links.active {
     background-color: #091931;
-    padding: 16px ;
+    padding: 16px;
     border-radius: 20px;
     color: #cdcdcd;
 }
@@ -72,15 +72,23 @@ footer {
     }
 
     .sidebar-menu-elements {
-        width:35%;
+        width: 35%;
     }
 
     .policies-container {
         padding: 12px 8px;
     }
 
-     .privacy-policy-title {
+    .privacy-policy-title {
         font-size: 50px;
+    }
+
+    .main-content {
+        padding: 0;
+    }
+
+    ul {
+        padding-left: 10px;
     }
 }
 

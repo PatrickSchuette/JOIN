@@ -6,12 +6,8 @@
 function renderGalleryFromTaskImages(images) {
     const gallery = document.getElementById("gallery");
     if (!gallery) return;
-    const oldLabel = gallery.parentElement.querySelector(
-        ".task-attachments-label",
-    );
-    if (oldLabel) {
-        oldLabel.remove();
-    }
+    const oldLabel = gallery.parentElement.querySelector(".task-attachments-label",);
+    if (oldLabel) {oldLabel.remove();}
     gallery.innerHTML = "";
     if (!images || images.length === 0) return;
     gallery.insertAdjacentHTML(
@@ -133,16 +129,13 @@ function initViewer(gallery) {
         fullscreen: false,
         rotatable: false,
         transition: true,
-        show() {
-            dialogBoardTaskRev.dialog.close();
-        },
-        viewed() {
-            updateViewerOverlay();
-        },
+        show() {hideTaskDialogOverlay(); dialogBoardTaskRev.dialog.close();},
+        viewed() {updateViewerOverlay();},
         hidden() {
             removeViewerOverlay();
-            dialogBoardTaskRev.dialog.showModal();
+            dialogBoardTaskRev.dialog.show();
             dialogBoardTaskRev.dialog.classList.add("taskDialogOpened");
+            showTaskDialogOverlay();
         },
     });
 }
@@ -236,15 +229,11 @@ function createHeaderRightControls(img) {
     const dl = document.createElement("button");
     dl.classList.add("viewer-download");
     dl.textContent = "⬇";
-    dl.onclick = function () {
-        downloadTaskImage(img.base64, img);
-    };
+    dl.onclick = function () {downloadTaskImage(img.base64, img);};
     const close = document.createElement("button");
     close.classList.add("viewer-close");
     close.textContent = "✖";
-    close.onclick = function () {
-        viewerInstance.hide();
-    };
+    close.onclick = function () {viewerInstance.hide();};
     wrap.append(dl, close);
     return wrap;
 }

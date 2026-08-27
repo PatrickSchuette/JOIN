@@ -328,18 +328,10 @@ function initDragAndDropForTasks() {
     dragArea.addEventListener(n, preventDragDefaults, false),
   );
   ["dragenter", "dragover"].forEach((n) =>
-    dragArea.addEventListener(
-      n,
-      () => dragArea.classList.add("highlight"),
-      false,
-    ),
+    dragArea.addEventListener(n,() => dragArea.classList.add("highlight"),false),
   );
   ["dragleave", "drop"].forEach((n) =>
-    dragArea.addEventListener(
-      n,
-      () => dragArea.classList.remove("highlight"),
-      false,
-    ),
+    dragArea.addEventListener(n,() => dragArea.classList.remove("highlight"),false),
   );
   dragArea.addEventListener("drop", handleDropForTasks);
 }
@@ -355,18 +347,10 @@ function initDragAndDropForProfile() {
     dragArea.addEventListener(n, preventDragDefaults, false),
   );
   ["dragenter", "dragover"].forEach((n) =>
-    dragArea.addEventListener(
-      n,
-      () => dragArea.classList.add("highlight"),
-      false,
-    ),
+    dragArea.addEventListener(n,() => dragArea.classList.add("highlight"),false),
   );
   ["dragleave", "drop"].forEach((n) =>
-    dragArea.addEventListener(
-      n,
-      () => dragArea.classList.remove("highlight"),
-      false,
-    ),
+    dragArea.addEventListener(n,() => dragArea.classList.remove("highlight"),false),
   );
   dragArea.addEventListener("drop", handleDropForProfile);
 }
@@ -408,8 +392,6 @@ function initProfilePicturePicker() {
   initDragAndDropForProfile();
   loadStoredImages();
 }
-
-//initProfilePicturePicker();
 
 /**
  * Handles keyboard events on the drag area to trigger the file picker.

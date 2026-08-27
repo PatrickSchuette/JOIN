@@ -34,9 +34,7 @@ window.onload = async () => {
  * @returns {string} return.creatorType - The origin type of the creator (always "intern").
  */
 function getTaskInput() {
-  const subtaskElements = document.querySelectorAll(
-    "#subtask_list .subtask-text",
-  );
+  const subtaskElements = document.querySelectorAll("#subtask_list .subtask-text",);
   const subtasks = Array.from(subtaskElements).map((el, index) => {
     return { task: el.textContent.trim() };
     const userString = sessionStorage.getItem("loggedInUser");
@@ -65,7 +63,6 @@ function getTaskInput() {
  */
 function setCreatorPerson() {
   const userString = sessionStorage.getItem("loggedInUser");
-
   if (userString) {
     const user = JSON.parse(userString);
     return {
@@ -73,7 +70,6 @@ function setCreatorPerson() {
       name: user.name,
     };
   }
-
   return {
     mail: "guest@test.de",
     name: "Guest",

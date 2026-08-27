@@ -134,7 +134,7 @@ function getRedirectTemplate() {
   return `<div class="add-task-overlay">
             <div class="overlay-img-text">
               <span>Task added to board</span>
-              <img class ='board-icon' src="/assets/img/board.svg" alt="the logo of the board tab">
+              <img class ='board-icon' src="../assets/img/board.svg" alt="the logo of the board tab">
             </div>
           </div>`;
 }
@@ -310,6 +310,10 @@ function setProgress(subtasks) {
   }
   let subTotal = subtasks.length;
   let subDone = getSubTaskDone(subtasks); //"1";
+
+  if (subDone == 0) {
+    return "";
+  }
 
   if (subTotal == null) {
     return `no subtasks`;

@@ -1,7 +1,7 @@
 body.privacy-policy p:not(:is(aside p)):not(:is(footer p)) {
-  color: black;
-  line-height: 20px;
-  text-align: justify;
+    color: black;
+    line-height: 20px;
+    text-align: justify;
 }
 
 
@@ -50,14 +50,14 @@ h4 {
 }
 
 .main-content {
-  width: 100%;
-  max-width: 1440px;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow-wrap: break-word;
-  word-break: break-word;
+    width: 100%;
+    max-width: 1440px;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .legal-notice-elements.active {
@@ -79,19 +79,20 @@ h4 {
 }
 
 .blue {
-     color: #29ABE2;
+    color: #29ABE2;
 }
 
-@media(max-width: 850px){
+@media(max-width: 850px) {
     .main-content {
         margin-bottom: 100px;
     }
+
     .arrow-left {
         display: block;
     }
 }
 
-@media(max-width: 400px){
+@media(max-width: 400px) {
     main {
         padding-left: 16px;
         padding-right: 16px;
@@ -100,6 +101,12 @@ h4 {
     .privacy-policy-title {
         font-size: 50px;
     }
+
+    .main-content {
+        padding: 0;
+    }
+
+    ul{
+        padding-left: 10px;
+    }
 }
-
-

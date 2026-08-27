@@ -23,6 +23,8 @@ let joinUsers = [];
  */
 let passwordConfirmed = false;
 
+let userExistance;
+
 /**
  * This function set the accepted policy and change the background image 
  * 
@@ -133,21 +135,23 @@ function clearInputs() {
  * @param {Array} userArr - An array with all user objects of firebase 
  */
 async function checkNewUser(userObj, userArr) {
-    let userExistance = false;
+    userExistance = false;
     for (let index = 0; index < userArr.length; index++) {
         if (userArr[index].mail == userObj.mail) {
-            clearInputs();
+            //clearInputs();
             userExistance = true;
             break;
         }
     }
     if (userExistance == false) {
         await postUserInDatabase(userObj);
+        await createContactFromSignup(userObj);
         clearInputs();
     } else {
         await openSignupDialog('User already exists');
     }
 }
+
 
 /**
  * These function post the new data in firebase and gives a feedback via dialog
@@ -179,11 +183,13 @@ async function openSignupDialog(text) {
  * 
  * @param {element} element includes the html element where the dialog container will be rendered 
  */
-function closeSignupDialog(element) {
+function closeSignupDialog(element){
     const contentDialogRef = element;
     contentDialogRef.close();
     contentDialogRef.classList.remove('opened');
-    window.location.href = '../index.html';
+    if (!userExistance) {
+        window.location.href = '../index.html';
+    }
 }
 
 /**
@@ -345,6 +351,32 @@ function checkPassword() {
     } else {
         passwordConfirmed = true;
     }
+}
+
+/**
+ * Creates a new contact entry in the Firebase contact list based on signup data.
+ * Intended to automatically add a user to the contact book immediately after account creation.
+ *
+ * The function generates a valid contact object including name, email, a random color,
+ * and an optional profile image placeholder. It then stores the contact in Firebase
+ * using the existing POST logic of the JOIN application.
+ *
+ * @function createContactFromSignup
+ * @param {Object} user - The newly registered user object.
+ * @param {string} user.name - The full name of the user.
+ * @param {string} user.mail - The email address of the user.
+ * @returns {Promise<void>} Resolves when the contact has been successfully stored in Firebase.
+ */
+async function createContactFromSignup(user){
+    const contactObj = {
+        name: user.name,
+        mail: user.mail,
+        phone: "",
+        color: getRandomColor(),
+        profileImage: null
+    };
+
+    await postData('/contacts', contactObj);
 }
 
 /**

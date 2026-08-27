@@ -20,8 +20,6 @@ async function showActiveProfile() {
         await createArrayOfContacts();
     }
     renderEditDialog(userObj.mail);
-    if (typeof initProfilePicturePicker === "function") {
-        initProfilePicturePicker();
-    }
+    if (typeof initProfilePicturePicker === "function") {initProfilePicturePicker();}
     openDialogEditContact();
 }

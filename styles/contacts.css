@@ -248,7 +248,7 @@ main {
         padding-right: 16px;
         position: fixed;
         left: 0px;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 
     .contacts-content::-webkit-scrollbar {
