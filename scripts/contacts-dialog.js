@@ -172,6 +172,7 @@ async function closeDialogEditContact(){
     contentEditContactRef.close();
     contentEditContactRef.classList.remove('dialogOpened');
     contentEditContactRef.classList.remove('dialogClosed');
+    localStorage.removeItem('profileImage');
 }
 
 /**

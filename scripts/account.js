@@ -5,10 +5,26 @@
  */
 async function showActiveProfile() {
     const loggedUserString = sessionStorage.getItem('loggedInUser');
+
     if (!loggedUserString) return;
     const loggedUser = JSON.parse(loggedUserString);
+
     let userObj = joinContacts.find(c => c.mail === loggedUser.mail);
-    if (!userObj) {
+
+    if (!userObj) {createContactofAccount(loggedUser);}
+    renderEditDialog(userObj.mail);
+
+    if (typeof initProfilePicturePicker === "function") {initProfilePicturePicker();}
+    
+    openDialogEditContact(userObj.mail);
+    setShowActiveProfile(userObj.mail)
+}
+
+/**
+ * Create Contact if actual user doesn't exists
+ * @param {Object} loggedUser 
+ */
+async function createContactofAccount(loggedUser){
         userObj = {
             name: loggedUser.name || "My Account",
             mail: loggedUser.mail,
@@ -17,12 +33,7 @@ async function showActiveProfile() {
         };
         await createArrayOfContacts();
         await checkNewContact(userObj, joinContacts);
-        await createArrayOfContacts();
-    }
-    renderEditDialog(userObj.mail);
-    if (typeof initProfilePicturePicker === "function") {initProfilePicturePicker();}
-    openDialogEditContact(userObj.mail);
-    setShowActiveProfile(userObj.mail)
+        await createArrayOfContacts();    
 }
 
 /**

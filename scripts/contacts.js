@@ -223,6 +223,12 @@ function changeImgOut(id){
  */
 function renderEditDialog(mail, initials){
     let obj = joinContacts.find(c => c.mail == mail);
+    if (obj && obj.profileImage != null) {
+        let imageObj = {base64: obj.profileImage};
+        localStorage.setItem("profileImage", JSON.stringify(imageObj));
+      } else {
+        localStorage.removeItem('profileImage');
+      }  
     const contentEditDialogRef = document.getElementById('edit_contact_dialog');
     contentEditDialogRef.innerHTML = getTemplateEditDialog(obj);
     openDialogEditContact();
