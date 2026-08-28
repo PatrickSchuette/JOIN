@@ -82,7 +82,6 @@ input:-webkit-autofill {
   background-image: url(../assets/img/lock.svg);                  
 }
 
-/* Added now */
 .password-wrapper,
 .mail-wrapper {
   position: relative;
@@ -111,8 +110,6 @@ input:-webkit-autofill {
   background-image: url('../assets/img/visibility_on.svg');
   width: 25px;
 }
-/* end */
-
 
 form {
   display: flex;

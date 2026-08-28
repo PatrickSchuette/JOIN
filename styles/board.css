@@ -688,3 +688,56 @@ dialog::backdrop {
         -webkit-overflow-scrolling: touch;
     }
 }
+@media (max-width: 850px) {
+    main {
+        display: block !important;
+        overflow-y: auto !important;
+        height: 100vh !important;
+    }
+
+    .mainContent {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible !important;
+        display: block !important;
+        margin-bottom: 0;
+    }
+
+    .boardHeader {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .board-content-main {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .column {
+        width: 100% !important;
+        height: auto !important;
+        margin-bottom: 24px !important;
+    }
+
+    .drag-area {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 16px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        width: 100% !important;
+        padding-bottom: 8px !important;
+    }
+
+    .board-content-main .column:last-child {
+        padding-bottom: 120px !important;
+        margin-bottom: 0px !important;
+    }
+}
