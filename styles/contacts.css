@@ -160,22 +160,11 @@ main {
     margin-bottom: 16px;
 }
 
-.info-span {
-    padding-left: 8px;
-    font-size: 14px;
-    color: #E60026;
-}
-
 .invalid-input {
     border: 1px solid #E60026 !important;
 }
 
-.file-input-container {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    cursor: pointer;
-}
+
 
 @media(max-width:1700px) {
     .contacts-content {

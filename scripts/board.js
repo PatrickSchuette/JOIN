@@ -146,6 +146,7 @@ function showDialogEdit() {
     isShowTaskActive = false;
     changeDOMIfShowTaskIsOpen(actualToDo);
     getCssTheme('cssEditTask');
+    //getCssTheme('cssAddTask');
     document.getElementById('btnDialogLeftContent').innerHTML = "OK";
     document.getElementById("btnDialogLeft").onclick = editDialogTask;
 }
@@ -250,11 +251,15 @@ document.addEventListener("DOMContentLoaded", () => {
  * @param {string} theme ID of the selected CSS File
  */
 function getCssTheme(theme) {
-    document.getElementById("cssAddTask").disabled = (theme != "cssAddTask");
-    document.getElementById("cssAddTaskBoard").disabled = (theme != "cssAddTask");
-    document.getElementById("cssEditTask").disabled = (theme != "cssEditTask");
-    document.getElementById("cssShowTask").disabled = (theme != "cssShowTask");
+    const add = (theme === "cssAddTask" || theme === "cssEditTask");
+
+    document.getElementById("cssAddTask").disabled = !add;
+    document.getElementById("cssAddTaskBoard").disabled = !add;
+
+    document.getElementById("cssEditTask").disabled = (theme !== "cssEditTask");
+    document.getElementById("cssShowTask").disabled = (theme !== "cssShowTask");
 }
+
 
 /** Manage the size of the textarea of the description for showTask in Dialog */
 function autoResizeTextarea(element) {

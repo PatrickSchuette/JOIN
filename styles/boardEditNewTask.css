@@ -1,0 +1,11 @@
+.userName{
+    display: none;
+}
+
+.subtask-list input[type="checkbox"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+}

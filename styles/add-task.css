@@ -177,7 +177,7 @@ select {
 
 .buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     width: 40%;
     padding: 0 8px;
@@ -260,5 +260,14 @@ main {
     .task-container,
     .priority-container {
         gap: 8px;
+    }
+
+    .page-container {
+        font-size: 19px;
+    }
+
+    .field-description input, 
+    .field-description textarea {
+        font-size: 16px;
     }
 }

@@ -62,7 +62,7 @@ function getTemplateEditDialog(obj) {
                     <div class="overlay-flex">
                         <div class="overlay-center">
                             <img class="join-img" src="../assets/img/join_logo_white.svg" alt="logo">
-                            <span class="span-add">Edit contact</span>
+                            <span class="span-add" id="descriptionContactDialog">Edit contact</span>
                             <hr class="add-contact-underline">
                         </div>
                     </div>
@@ -88,7 +88,7 @@ function getTemplateEditDialog(obj) {
                     </div>
                 </div>
 
-                <form onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off">
+                <form id="profileForm" onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off" novalidate>
                     <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="edit_name" value="${obj.name}">
                     <div class="mail-info">
                         <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail" id="edit_mail" value="${obj.mail}"
@@ -103,7 +103,7 @@ function getTemplateEditDialog(obj) {
                         <span id="edit_span_tel" class="info-span hidden">Invalid phone number</span>
                     </div>
                     <div class="form-ctrl-container">
-                        <div class="btn-delete" onclick="deleteContactOnDialog('${obj.mail}')">
+                        <div class="btn-delete" id="leftContactBTN" onclick="deleteContactOnDialog('${obj.mail}')">
                             <span>Delete</span>
                         </div>
                         <button id="btn_edit_form" class="btn-contact">

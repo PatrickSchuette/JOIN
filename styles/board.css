@@ -171,39 +171,6 @@ main {
     width: fit-content;
 }
 
-.contactAvater {
-    width: 42px;
-    aspect-ratio: 1/1;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    border: #fff 2px solid;
-    position: relative;
-}
-
-.AvatarArray {
-    display: flex;
-}
-
-.AvatarArray .contactAvater:not(:first-child) {
-    margin-left: -10px;
-}
-
-.AvatarArray .contactAvater {
-    z-index: 1;
-}
-
-.AvatarArray .contactAvater:nth-child(n) {
-    z-index: auto;
-}
-
-.AvatarArray .contactAvater:last-child {
-    z-index: 10;
-}
-
-
 .taskFooter {
     display: flex;
     justify-content: space-between;

@@ -149,7 +149,7 @@ input::placeholder{
     background-size: 22px 22px;
 }
 
-.bg-input:focus{
+.bg-input:not([readonly]):focus{
     outline: 1px solid #29ABE2;
 }
 
@@ -241,6 +241,7 @@ input::placeholder{
     padding: 12px 16px;
     border: 1px solid #2A3647;
     border-radius: 10px;
+    white-space: nowrap;
 }
 
 .btn-delete span{
@@ -290,6 +291,19 @@ input::placeholder{
     gap: 16px;
 }
 
+.info-span {
+    padding-left: 8px;
+    font-size: 14px;
+    color: #E60026;
+}
+
+.file-input-container {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
 @media(max-width:1180px){
     .dialog-contact{
         min-width: 800px;
@@ -334,7 +348,7 @@ input::placeholder{
 @media(max-width:850px){
     .dialog-contact{
         min-width: 500px;
-        height: calc(100vh - 198px);
+        height: calc(85vh - 1px);
     }
 
     .add-contact-container{
@@ -462,6 +476,7 @@ input::placeholder{
     form{
         width: 100%;
         gap: 18px;
+        padding-top: 48px;
     }
 
     .overlay-center{
