@@ -157,7 +157,7 @@ main {
 
 #add_name,
 #edit_name {
-    margin-bottom: 16px;
+    /*margin-bottom: 16px;*/
 }
 
 .invalid-input {

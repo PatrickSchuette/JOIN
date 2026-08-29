@@ -1,5 +1,5 @@
 let isMailValid = false;
-let isTelValid = false;
+let isNameValid = false;
 
 /**
  * This function is used to open the dialog "add contact"
@@ -46,6 +46,8 @@ function getInputFields() {
   let name = document.getElementById("add_name").value;
   let mail = document.getElementById("add_mail").value;
   let phone = document.getElementById("add_phone").value;
+
+  console.log("addadds")
 
   let inputData = createContactObj(name, mail, phone);
   return inputData;
@@ -253,10 +255,23 @@ function checkMailOnDialog(idInput, idInfo) {
   let mailInput = document.getElementById(idInput);
   let mailInfo = document.getElementById(idInfo);
   isMailValid = checkValidEmail(String(mailInput.value));
-  if (isMailValid == false && mailInput.value != "") {
+  if (isMailValid == false) {
     mailInput.classList.add("invalid-input");
     mailInfo.classList.remove("hidden");
   }
+}
+
+function checkFocus(){
+  if(document.getElementById("add_name"))
+    {checkNameOnDialog('add_name','add_name','btn_contact_form')}  
+  if(document.getElementById("edit_mail"))
+    {checkMailOnDialog('edit_mail','edit_span','btn_edit_form')}
+  if(document.getElementById("edit_phone"))
+    {checkTelOnDialog('edit_phone','edit_span_tel','btn_edit_form')}
+  if(document.getElementById("add_mail"))
+    {checkMailOnDialog('add_mail', 'mail_span', 'btn_contact_form')}
+  if(document.getElementById("add_phone"))
+    {checkTelOnDialog('add_phone', 'tel_span', 'btn_contact_form')}
 }
 
 /**
@@ -306,11 +321,27 @@ function deleteContactMobileView() {
 function checkTelOnDialog(idInput, idInfo) {
   let telInput = document.getElementById(idInput);
   let telInfo = document.getElementById(idInfo);
-  isTelValid = checkValidTel(String(telInput.value));
-  if (isTelValid == false && telInput.value != "") {
+  isNameValid = checkValidTel(String(telInput.value));
+  if (isNameValid == false) {
     telInput.classList.add("invalid-input");
     telInfo.classList.remove("hidden");
   }
+}
+
+/**
+ * This function checks the input tel if it is valid and gives a feedback if its invalid
+ *
+ * @param {String} idInput - includes the id of input field
+ * @param {String} idInfo - includes the id of the info span
+ */
+function checkNameOnDialog(idInput, idInfo) {
+  let nameInput = document.getElementById(idInput);
+  let nameInfo = document.getElementById(idInfo);
+  isNameValid = nameInput.value.trim().length > 0 ? true : false;
+  if (isNameValid == false) {
+    nameInput.classList.add("invalid-input");
+    nameInfo.classList.remove("hidden");
+  } 
 }
 
 /**

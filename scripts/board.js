@@ -149,6 +149,7 @@ function showDialogEdit() {
     //getCssTheme('cssAddTask');
     document.getElementById('btnDialogLeftContent').innerHTML = "OK";
     document.getElementById("btnDialogLeft").onclick = editDialogTask;
+    document.getElementById("addTask_h1").innerHTML = "Edit Task";
     showContactAvatar();
     showEditActualSubtask();
 }

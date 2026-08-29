@@ -37,6 +37,8 @@ function getUserItem(name) {
  * @param {string} email - Email address
  * @returns {boolean} - True if valid, false otherwise  */
 function checkValidEmail(email) {
+
+    if (!email) return false; 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }

@@ -21,7 +21,9 @@ let activatedContact = 0;
  * 
  */
 async function createContact(){
-    if(isMailValid && isTelValid){
+    checkFocus();
+
+    if(isMailValid && isNameValid){
         let contactData = getInputFields();
         await createArrayOfContacts();
         await checkNewContact(contactData, joinContacts);
@@ -243,7 +245,7 @@ async function saveChangedData(mail){
     let editDataObj = await checkIfDataChanged(mail);
     let areDataChanged = editDataObj.isChanged;
 
-    if ((isMailValid && isTelValid) || areDataChanged) {
+    if ((isMailValid && isNameValid) || areDataChanged) {
         await saveDataInStore(editDataObj);
 
         if (window.location.pathname.includes("contacts.html")) {
@@ -253,7 +255,7 @@ async function saveChangedData(mail){
         }
 
     } else if (!areDataChanged) {
-        if (isMailValid && isTelValid) {
+        if (isMailValid && isNameValid) {
             closeDialogEditContact();
         }
     }
@@ -315,9 +317,9 @@ function checkEditInputData(editDataObj){
         if(editDataObj.data.contactsResponse[editDataObj.keys[index]].mail == editDataObj.data.mailAddress){
             let changedObj = getInputFieldsEditDialog();
             isMailValid = checkValidEmail(changedObj.mail);
-            isTelValid = checkValidTel(changedObj.phone);
+            isNameValid = checkValidTel(changedObj.phone);
             if((editDataObj.data.contactsResponse[editDataObj.keys[index]].name != changedObj.name) ||(editDataObj.data.contactsResponse[editDataObj.keys[index]].mail != changedObj.mail) ||(editDataObj.data.contactsResponse[editDataObj.keys[index]].phone != changedObj.phone)){
-                if(isMailValid && isTelValid){editDataObj.isChanged = true;}
+                if(isMailValid && isNameValid){editDataObj.isChanged = true;}
             }
             break;
         }

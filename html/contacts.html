@@ -135,7 +135,12 @@
             </div>
 
             <form onsubmit="createContact(); return false" autocomplete="off" novalidate>
-              <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="add_name">
+              <div class="mail-info">
+                <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="add_name"
+                onfocus="fieldMailOnFocus('add_name', 'name_span', 'btn_contact_form')"
+                onblur="checkNameOnDialog('add_name', 'name_span', 'btn_contact_form')">
+                <span id="name_span" class="info-span hidden">Invalid Name</span>
+              </div>
               <div class="mail-info">
                 <input type="text" required placeholder="Email" maxlength="25" class="bg-input bg-img-mail"
                   id="add_mail" onfocus="fieldMailOnFocus('add_mail', 'mail_span', 'btn_contact_form')"
