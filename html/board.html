@@ -7,7 +7,6 @@
   <title>Join - Board</title>
   <link rel="icon" href="../assets/img/join_logo.svg" />
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/contact-show.css" />
   <link rel="stylesheet" href="../styles/contacts-overview.css" />
   <link rel="stylesheet" href="../styles/contacts.css" />
   <link rel="stylesheet" href="../style.css" />
@@ -204,7 +203,7 @@
         <section class="page-container">
           <section class="task-container">
 
-            <div class="field-description">
+            <div class="field-description n-Title">
               <label for="task_title" class="notForShow">Title<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="text"
                 id="task_title" required placeholder="Enter a title" maxlength="100" style="display: block;" />
@@ -212,7 +211,7 @@
               <div class="alert-container"></div>
             </div>
 
-            <div class="field-description">
+            <div class="field-description n-Description">
               <label for="task_description" class="notForShow">Description</label>
               <textarea onfocus="handleTextarea(true)" onblur="handleTextarea(false)" name="description"
                 id="task_description" placeholder="Enter a description" style="display: block;"></textarea>
@@ -220,7 +219,7 @@
             </div>
 
             <div class="creatorContent">
-              <div class="field-description">
+              <div class="field-description n-Creator">
                 <label class="color-description" for="creator">Creator:<span class="required">*</span></label>
                 <div class="mobileCreator">
                   <div id="tagSymbol" class="gap-8"> </div>
@@ -232,7 +231,7 @@
               </div>
             </div>
 
-            <div class="field-description">
+            <div class="field-description n-Date">
               <label class="color-description" for="due_date">Due date:<span class="required">*</span></label>
               <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
                 id="due_date" required style="display: block;" />
@@ -241,7 +240,7 @@
             </div>
 
             <section class="priority">
-              <div class="field-description">
+              <div class="field-description n-Prirority">
                 <span class="color-description">Priority</span>
                 <span id="taskPriority" class="task-priority"></span>
                 <div class="priority-stages">
@@ -286,7 +285,7 @@
 
           <div class="priority-container">
 
-            <div class="field-description">
+            <div class="field-description n-Attachments">
               <div class="filpicker-content d-flex-column" style="align-items: self-start;">
                 <label class="color-description" for="filepicker">Attachments</label>
                 <span  style="color: #848484;">Allowed file types are JPEG and PNG</span>
@@ -296,7 +295,7 @@
               </div>
             </div>
 
-            <div class="field-description d-flex-column" style="align-items: self-start;">
+            <div class="field-description d-flex-column  n-ImageGallery" style="align-items: self-start;">
               <div id="gallery"> </div>
             </div>
 
@@ -319,7 +318,7 @@
 
 
             <section class="subtask">
-              <div class="subtask-field-description">
+              <div class="subtask-field-description n-Subtask">
                 <label class="color-description" for="subtask">Subtasks</label>
                 <div id="subtask_wrapper" class="subtask-wrapper">
                   <input id="subtask" class="subtask-input" type="text" placeholder="Add new subtask"

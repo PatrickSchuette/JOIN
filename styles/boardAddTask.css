@@ -169,12 +169,19 @@ dialog {
 
     #buttons_dialog {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
         width: 100%;
         position: absolute;
         bottom: 40px;
         left: 4px;
         gap: 2px;
+    }
+}
+
+@media (max-width: 550px) {
+    #dialaogBoardTask{
+        width: 100vw;
+        left: 0;
     }
 }
 

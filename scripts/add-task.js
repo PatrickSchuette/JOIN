@@ -15,6 +15,7 @@ window.onload = async () => {
   setDateStart();
   renderActiveAvatar();
   initFilePicker();
+  clearAllImages();
 };
 
 /**
@@ -245,6 +246,12 @@ function showContactAvatar() {
       container.innerHTML += getContactAvatar(contact, initials);
     }
   });
+
+  if (container.children.length > 0) {
+    container.classList.add("show");
+} else {
+    container.classList.remove("show");
+}
 }
 
 /**
@@ -257,6 +264,12 @@ function addSubtask() {
   let inputValue = input.value.trim();
   if (inputValue !== "") {
     list.innerHTML += getAddedTasks(inputValue);
+
+    let container = document.querySelector(".added-tasks");
+    if (container) container.classList.add("show");
+
+
+
     list.lastElementChild.scrollIntoView({behavior: "smooth", block: "center",});
     const pageContainer = document.querySelector(".page-container");
     pageContainer.scrollTo({top: pageContainer.scrollHeight, behavior: "smooth",});
@@ -309,6 +322,12 @@ function deleteAddedSubtask(button) {
     if (normalLi && normalLi.classList.contains("subtask-list")) {
       normalLi.remove();
     }
+  }
+
+  let list = document.getElementById("subtask_list");
+  let container = document.querySelector(".added-tasks");
+  if (list && list.children.length === 0 && container) {
+      container.classList.remove("show");
   }
 }
 

@@ -61,7 +61,7 @@
     width: 100%;
 }
 
-.field-description > :first-child {
+.field-description> :first-child {
     margin-bottom: 8px;
 }
 
@@ -85,7 +85,7 @@
 
 /* === Contacts list section === */
 .assigned-to {
-    min-height: 140px;
+    min-height: auto;
 }
 
 .category {
@@ -108,7 +108,7 @@
     opacity: 0;
     pointer-events: none;
     transition: transform 125ms ease, opacity 125ms ease;
-    
+
 }
 
 .contacts-list.open {
@@ -155,7 +155,7 @@
 /* === Subtask section === */
 .subtask-wrapper {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
     align-items: center;
     position: relative;
     width: 100%;
@@ -228,11 +228,11 @@
 }
 
 .added-tasks {
-    position: absolute;
+/*    position: absolute;
     top: 100%;
-    width: 100%;
     left: 0;
-    z-index: 10;
+    z-index: 10;*/
+    width: 100%;
     overflow-y: auto;
     max-height: 150px;
 }
@@ -248,18 +248,18 @@
 }
 
 .subtask-text {
-    flex: 1; 
+    flex: 1;
     white-space: normal;
-    word-break: break-word; 
+    word-break: break-word;
 }
 
 .subtask-list::before {
-   content: "•";
-   position: absolute;
-   left: 8px;
-   top: 50%;
-   transform: translateY(-50%);
-   color: black;
+    content: "•";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: black;
 }
 
 .subtask-element-img-wrapper {
@@ -305,9 +305,9 @@
 }
 
 .subtask-edit {
-    flex: 1;         
+    flex: 1;
     white-space: normal;
-    word-break: break-word; 
+    word-break: break-word;
 }
 
 .subtask-edit-btn-wrapper {
@@ -346,6 +346,22 @@
     border-radius: 2px;
 }
 
-body:has(dialog[open]){
+body:has(dialog[open]) {
     overflow: hidden;
+}
+
+.n-ImageGallery {
+    margin-top: -14px;
+    display: none;
+    opacity: 0;
+    transform: translateY(-40px);
+    /* Startet 40px weiter oben */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+/* Die Animations-Klasse, die per JS hinzugefügt wird */
+.n-ImageGallery.animate-slide {
+    opacity: 1;
+    transform: translateY(0);
+    /* Slidet an die originale Position */
 }

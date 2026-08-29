@@ -5,7 +5,7 @@
  */
 function renderGalleryFromTaskImages(images) {
     const gallery = document.getElementById("gallery");
-    if (!gallery) return;
+    if (!gallery)return;
     const oldLabel = gallery.parentElement.querySelector(".task-attachments-label",);
     if (oldLabel) {oldLabel.remove();}
     gallery.innerHTML = "";
@@ -20,7 +20,34 @@ function renderGalleryFromTaskImages(images) {
         gallery.appendChild(wrapper);
     });
     initViewer(gallery);
+    updateElementVisibilitySlide(images, ".n-ImageGallery");
 }
+
+/**
+ * Shows or hides an element based on the length of a given array.
+ * Adds a slide animation when the element becomes visible.
+ *
+ * @param {Array} arr - The array whose length determines visibility.
+ * @param {string} selector - CSS selector of the target element.
+ * @param {string} displayType - Desired display value ("block", "flex", etc.). Default is "block".
+ */
+function updateElementVisibilitySlide(arr, selector, displayType = "block") {
+    const el = document.querySelector(selector);
+    if (!el) return;
+
+    if (!arr || arr.length === 0) {
+        el.style.display = "none";
+        el.classList.remove("animate-slide");
+        return;
+    }
+
+    el.style.display = displayType;
+
+    requestAnimationFrame(() => {
+        el.classList.add("animate-slide");
+    });
+}
+
 
 /**
  * Downloads a base64 image using its original filename.

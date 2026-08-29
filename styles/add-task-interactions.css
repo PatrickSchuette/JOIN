@@ -259,38 +259,57 @@ textarea.active {
     }
 }
 
-@media(max-width: 850px) {
+@media (max-width: 850px) {
     .required-desktop {
         display: none;
     }
 
     .required-mobile {
         display: block;
-        margin-bottom: 80px;
+        margin: 16px 0;
     }
 
     .bottom-container {
+        margin-top: 0;
         position: fixed;
         bottom: 96px;
-        left: 0;
+        left: 0px;
         width: 100%;
-        background-color: #f6f7f8;
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.15);
+        background-color: rgb(246, 247, 248);
+        box-shadow: rgba(0, 0, 0, 0.15) 0px -2px 6px;
         z-index: 20;
         display: flex;
         justify-content: flex-end;
+        padding: 10px 0;
+        align-items: center;
     }
 
+    .main-content {
+        padding-bottom: 48px;
+    }
 }
 
 @media(max-width:650px) {
     .page-container {
         flex-direction: column;
+        overflow-y: auto;
     }
 
     .buttons:nth-child(2) {
         align-self: flex-end;
         width: 60%;
+    }
+
+    .separation-bar {
+        display: none;
+    }
+
+    .n-Date {
+        padding-bottom: 14px;
+    }
+
+    .n-Description {
+        padding-bottom: 14px;
     }
 }
 
@@ -307,4 +326,27 @@ textarea.active {
         height: 18px;
         width: 16px;
     }
+}
+
+/* Startzustand: Unsichtbar, flach und ohne Außenabstand */
+#contact_icons,
+.added-tasks {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    margin-top: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    transition: max-height 0.35s ease-in-out, opacity 0.25s ease-in-out, margin 0.35s ease-in-out;
+}
+
+/* Zielzustand: Fährt smooth aus, sobald Inhalt vorhanden ist */
+#contact_icons.show,
+.added-tasks.show {
+    max-height: 180px;
+    /* Groß genug für umbrechende Avatare oder ca. 3-4 Subtasks */
+    opacity: 1;
+    margin-top: 8px;
+    overflow-y: auto;
+    /* Falls es extrem viele Elemente werden, bleibt es scrollbar */
 }

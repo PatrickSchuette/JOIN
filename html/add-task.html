@@ -7,7 +7,6 @@
   <title>Join - Add Task</title>
   <link rel="icon" href="../assets/img/join_logo.svg" />
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="../styles/contact-show.css" />
   <link rel="stylesheet" href="../styles/contacts-overview.css" />
   <link rel="stylesheet" href="../styles/contacts.css" />
   <link rel="stylesheet" href="../style.css" />
@@ -109,7 +108,7 @@
 
       <section class="page-container">
         <section class="task-container">
-          <div class="field-description">
+          <div class="field-description n-Title">
             <label for="task_title">
               Title
               <span class="required">*</span>
@@ -118,19 +117,19 @@
               id="task_title" required placeholder="Enter a title" maxlength="100" />
             <div class="alert-container"></div>
           </div>
-          <div class="field-description">
+          <div class="field-description n-Description">
             <label for="task_description">Description</label>
             <textarea onfocus="handleTextarea(true)" onblur="handleTextarea(false)" name="description"
               id="task_description" placeholder="Enter a description"></textarea>
           </div>
-          <div class="field-description">
+          <div class="field-description n-Date">
             <label for="due_date">Due date<span class="required">*</span></label>
             <input onfocus="handleFocus(event)" oninput="handleInput(event)" onblur="handleBlur(event)" type="date"
               id="due_date" required />
             <div class="alert-container"></div>
           </div>
 
-          <div class="field-description">
+          <div class="field-description n-Prirority">
             <span>Priority</span>
             <div class="priority-stages">
               <div onclick="setPrioColor(this)" class="txt-img urgent">
@@ -171,7 +170,7 @@
 
         <section class="priority-container">
 
-          <div class="field-description">
+          <div class="field-description n-Attachments">
             <label for="filepicker">Attachments</label>
             <span style="color: #848484;">Allowed file types are JPEG and PNG</span>
             <input type="file" id="filepicker" accept="image/*" />
@@ -179,7 +178,7 @@
             <div class="alert-container"></div>
           </div>
 
-          <div class="field-description">
+          <div class="field-description n-ImageGallery">
             <div id="gallery"> </div>
           </div>
 
@@ -199,7 +198,7 @@
           </div>
 
 
-          <div class="subtask-field-description">
+          <div class="subtask-field-description n-Subtask">
             <label for="subtask">Subtasks</label>
             <div id="subtask_wrapper" class="subtask-wrapper">
               <input id="subtask" class="subtask-input" type="text" placeholder="Add new subtask"
