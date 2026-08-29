@@ -357,6 +357,7 @@ async function deleteContact(mail) {
   if (contactDeleted) {
     document.getElementById("contact_container").innerHTML = "";
     await onloadFuncContact();
+    goBackToContactsList();
   }
 }
 
@@ -379,4 +380,12 @@ function initDialogBackdropClose() {
   if (msgContactDialog) {
     msgContactDialog.addEventListener("click", (event) => {if (event.target === msgContactDialog) {closeContactMsgDialog(msgContactDialog);}});
   }
+}
+
+/**
+ * Delete the Profile Picture
+ */
+function deleteProfilePicture(){
+  localStorage.removeItem("profileImage"); 
+  document.getElementById("editContactAvatar").src="../assets/img/person_icon.svg";
 }

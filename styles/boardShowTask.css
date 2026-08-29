@@ -420,7 +420,7 @@ textarea {
     margin-right: 8px;
 }
 
-.filpicker-content{
+.filpicker-content {
     display: none;
 }
 
@@ -428,7 +428,7 @@ textarea {
     display: block !important;
 }
 
-.added-tasks{
+.added-tasks {
     max-height: 150px;
     overflow-y: auto;
 }
@@ -467,6 +467,18 @@ textarea {
         flex-direction: column;
         align-items: start;
     }
+}
+
+@media(max-height:785px) {
+    .bottom-container {
+        margin-top: 4px;
+
+    }
+
+    .page-container {
+        height: calc(80vh - 60px) !important
+    }
+
 }
 
 .task-gallery-download {

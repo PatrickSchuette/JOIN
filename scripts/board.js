@@ -149,6 +149,8 @@ function showDialogEdit() {
     //getCssTheme('cssAddTask');
     document.getElementById('btnDialogLeftContent').innerHTML = "OK";
     document.getElementById("btnDialogLeft").onclick = editDialogTask;
+    showContactAvatar();
+    showEditActualSubtask();
 }
 
 /** close the dialog and re render the board */
@@ -177,6 +179,12 @@ function checkTheDialog(){
         dialogBoardTaskRev.dialog.classList.add('taskDialogClosed');
     }else{
         dialogBoardTaskRev.dialog.classList.add('addTaskDialogClosed');
+    }
+}
+
+function showEditActualSubtask(){
+    if (actualToDo.subtasks && actualToDo.subtasks.length > 0) {
+        document.getElementById('subtask_list').parentElement.classList.add('show');
     }
 }
 

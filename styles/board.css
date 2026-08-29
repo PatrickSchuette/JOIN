@@ -750,3 +750,9 @@ dialog::backdrop {
         margin-bottom: 0px !important;
     }
 }
+
+@media(max-height: 800px){
+    dialog {
+            height: auto;   
+        }    
+}

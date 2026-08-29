@@ -6,7 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Join - Board</title>
   <link rel="icon" href="../assets/img/join_logo.svg" />
-  <!-- Stylesheets -->
+
+  <link rel="preload" href="../styles/add-task.css" as="style" onload="this.rel='stylesheet'; this.disabled=true;">
+  <link rel="preload" href="../styles/boardAddTask.css" as="style" onload="this.rel='stylesheet'; this.disabled=true;">
+  <link rel="preload" href="../styles/boardEditNewTask.css" as="style"    onload="this.rel='stylesheet'; this.disabled=true;">
+  <link rel="preload" href="../styles/boardShowTask.css" as="style" onload="this.rel='stylesheet'; this.disabled=true;">
+ 
   <link rel="stylesheet" href="../styles/contacts-overview.css" />
   <link rel="stylesheet" href="../styles/contacts.css" />
   <link rel="stylesheet" href="../style.css" />
@@ -40,7 +45,6 @@
   <script src="../scripts/board.js" defer></script>
   <script src="../scripts/board-subtask.js" defer></script>
   <script src="../scripts/board-tasks.js" defer></script>
-  <script src="../scripts/templates.js" defer></script>
   <script src="../scripts/stakeholder.js" defer></script>
   <script src="../scripts/imagePicker.js" defer></script>
   <script src="../scripts/imageGalery.js" defer></script>

@@ -17,7 +17,7 @@ async function showActiveProfile() {
     if (typeof initProfilePicturePicker === "function") {initProfilePicturePicker();}
     
     openDialogEditContact(userObj.mail);
-    setShowActiveProfile(userObj.mail)
+    setShowActiveProfile(userObj.mail);
 }
 
 /**
@@ -56,6 +56,7 @@ function setShowActiveProfile(email) {
     };
     document.getElementById('edit_name').blur();
     document.querySelectorAll('.file-label').forEach(element => {element.style.display = 'none';});
+    document.querySelectorAll('.deleteProfileImg').forEach(element => {element.style.display = 'none';});
 }
 
 /**
@@ -76,6 +77,7 @@ function setEditActiveProfile(email) {
         saveChangedData(email);
     };
     document.querySelectorAll('.file-label').forEach(element => {element.style.display = 'block';});
+    document.querySelectorAll('.deleteProfileImg').forEach(element => {element.style.display = 'block';});
 }
 
 /**

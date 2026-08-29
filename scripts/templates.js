@@ -86,6 +86,9 @@ function getTemplateEditDialog(obj) {
                             <img src="../assets/img/add_photo.svg" alt="add photo">
                         </label>
                     </div>
+                    <div class="deleteProfileImg" onclick="deleteProfilePicture()">
+                      <img src="../assets/img/trash_bin.svg" alt="delete photo">
+                    </div>
                 </div>
 
                 <form id="profileForm" onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off" novalidate>
