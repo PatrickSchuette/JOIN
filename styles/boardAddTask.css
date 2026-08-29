@@ -176,7 +176,17 @@ dialog {
         left: 4px;
         gap: 2px;
     }
+
+    @media (max-height:800px) {
+        .page-container {
+
+            height: calc(80vh - 150px);
+        }
+
+    }
 }
+
+
 
 @media (max-width: 550px) {
     #dialaogBoardTask {

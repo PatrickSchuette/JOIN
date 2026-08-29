@@ -1,4 +1,4 @@
-.dialog-contact{
+.dialog-contact {
     min-width: 1131px;
     border: none;
     border-radius: 30px;
@@ -14,71 +14,71 @@
     display: none;
 }
 
-.dialogOpened{
+.dialogOpened {
     transform: translateX(-50%) translateY(-50%);
     transition: all 0.5s ease-in;
 }
 
-.dialogClosed{
+.dialogClosed {
     transform: translateX(150%) translateY(-50%);
     transition: all 0.5s ease-in;
 }
 
-dialog::backdrop{
+dialog::backdrop {
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.dialogOpened::backdrop{
+.dialogOpened::backdrop {
     opacity: 1;
     transition: all 0.25s ease-in;
 }
 
-.add-contact-container{
+.add-contact-container {
     display: flex;
     flex-direction: row;
 }
 
-.add-contact-left-box{
+.add-contact-left-box {
     background-color: #2A3647;
     padding: 150px 32px;
 }
 
-.left-box-content{
+.left-box-content {
     min-height: 225px;
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.join-img{
+.join-img {
     width: 55px;
     height: 66px;
 }
 
-.add-contact-underline{
+.add-contact-underline {
     border: 2px solid #29ABE2;
     width: 100px;
 }
 
-.span-add{
+.span-add {
     color: white;
     font-size: 61px;
     font-weight: bold;
 }
 
-.span-team{
+.span-team {
     color: white;
     font-size: 27px;
     font-weight: 400;
 }
 
-.add-contact-right-box{
+.add-contact-right-box {
     padding-top: 40px;
     padding-right: 16px;
 }
 
-.right-box-container{
+.right-box-container {
     padding-left: 64px;
     display: flex;
     flex-direction: row;
@@ -86,30 +86,30 @@ dialog::backdrop{
     gap: 64px;
 }
 
-.btn-close-container{
+.btn-close-container {
     display: flex;
     justify-content: end;
     padding-bottom: 50px;
 }
 
-.btn-close-box{
+.btn-close-box {
     border-radius: 50px;
     padding-top: 4px;
     padding-right: 4px;
     padding-left: 4px;
 }
 
-.btn-close-box:hover{
+.btn-close-box:hover {
     cursor: pointer;
     background-color: #EEEEEE;
 }
 
-.btn-close-box img{
+.btn-close-box img {
     height: 24px;
     width: 24px;
 }
 
-.person-container{
+.person-container {
     background-color: #EEEEEE;
     width: 120px;
     height: 120px;
@@ -120,24 +120,24 @@ dialog::backdrop{
     align-items: center;
 }
 
-.person-container img{
+.person-container img {
     height: 64px;
     width: 64px;
     cursor: pointer;
 }
 
-form{
+form {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
 }
 
-input::placeholder{
+input::placeholder {
     opacity: 0.4;
 }
 
-.bg-input{
+.bg-input {
     width: 420px;
     padding: 14px 20px;
     font-size: 18px;
@@ -149,30 +149,30 @@ input::placeholder{
     background-size: 22px 22px;
 }
 
-.bg-input:not([readonly]):focus{
+.bg-input:not([readonly]):focus {
     outline: 1px solid #29ABE2;
 }
 
-.bg-img-name{
+.bg-img-name {
     background-image: url('../assets/img/person_icon.svg');
 }
 
-.bg-img-mail{
+.bg-img-mail {
     background-image: url('../assets/img/mail.svg');
 }
 
-.bg-img-phone{
+.bg-img-phone {
     background-image: url('../assets/img/phone_receptor.svg');
 }
 
-.form-ctrl-container{
+.form-ctrl-container {
     width: 100%;
     display: flex;
     justify-content: start;
     gap: 16px;
 }
 
-.btn-cancel{
+.btn-cancel {
     color: #2A3647;
     border: 1px solid #2A3647;
     border-radius: 10px;
@@ -182,24 +182,24 @@ input::placeholder{
     gap: 8px;
 }
 
-.btn-cancel:hover{
+.btn-cancel:hover {
     cursor: pointer;
     border-color: #29ABE2;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-1px);
 }
 
-.btn-cancel:active{
+.btn-cancel:active {
     border-color: #091931;
     transform: translateY(0);
 }
 
-.btn-cancel span{
+.btn-cancel span {
     color: #2A3647;
     font-size: 21px;
 }
 
-.dialog-msg{
+.dialog-msg {
     background-color: #2A3647;
     border: none;
     border-radius: 20px;
@@ -210,82 +210,82 @@ input::placeholder{
     transform: translateX(300%) translateY(0px);
 }
 
-.dialog-msg span{
+.dialog-msg span {
     font-family: 'Inter';
     font-size: 20px;
     font-weight: 400;
     color: white;
 }
 
-.msg-opened{
+.msg-opened {
     transform: translateX(0px) translateY(0px);
     transition: all 0.25s ease-in;
 }
 
-.msg-closed{
+.msg-closed {
     transform: translateX(500%) translateY(0px);
     transition: all 0.5s ease-in;
 }
 
-.dialog-msg::backdrop{
+.dialog-msg::backdrop {
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.msg-opened::backdrop{
+.msg-opened::backdrop {
     opacity: 1;
     transition: all 0.25s ease-in;
 }
 
-.btn-delete{
+.btn-delete {
     padding: 12px 16px;
     border: 1px solid #2A3647;
     border-radius: 10px;
     white-space: nowrap;
 }
 
-.btn-delete span{
+.btn-delete span {
     color: #2A3647;
     font-size: 21px;
     font-weight: 400;
 }
 
-.btn-delete:hover{
+.btn-delete:hover {
     cursor: pointer;
     border-color: #29ABE2;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
     transform: translateY(-1px);
 }
 
-.btn-delete span:hover{
+.btn-delete span:hover {
     color: #29ABE2;
 }
 
-.btn-delete span:active{
+.btn-delete span:active {
     color: #091931;
 }
 
-.edit-initials{
+.edit-initials {
     font-size: 47px;
     font-weight: 500;
     color: white;
 }
 
-.btn-close-container-top{
+.btn-close-container-top {
     display: none;
 }
 
-.overlay-box{
+.overlay-box {
     flex-grow: 1;
     display: flex;
 }
 
-.overlay-flex{
+.overlay-flex {
     display: flex;
     align-items: center;
 }
 
-.overlay-center{
+.overlay-center {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -328,106 +328,106 @@ input::placeholder{
     display: block;
 }
 
-@media(max-width:1180px){
-    .dialog-contact{
+@media(max-width:1180px) {
+    .dialog-contact {
         min-width: 800px;
     }
 
-    .span-add{
+    .span-add {
         font-size: 36px;
     }
 
-    .span-team{
+    .span-team {
         font-size: 18px;
     }
 
-    .right-box-container{
+    .right-box-container {
         padding-left: 24px;
         gap: 24px;
     }
 
-    .person-container{
+    .person-container {
         width: 80px;
         height: 80px;
     }
 
-    .person-container img{
+    .person-container img {
         height: 32px;
         width: 32px;
     }
 
-    .btn-cancel span{
+    .btn-cancel span {
         font-size: 16px;
     }
 
-    .edit-initials{
+    .edit-initials {
         font-size: 32px;
     }
 
-    .btn-delete span{
+    .btn-delete span {
         font-size: 16px;
     }
 }
 
-@media(max-width:850px){
-    .dialog-contact{
+@media(max-width:850px) {
+    .dialog-contact {
         min-width: 500px;
         height: calc(85vh - 1px);
     }
 
-    .add-contact-container{
+    .add-contact-container {
         flex-direction: column;
     }
 
-    .join-img{
+    .join-img {
         display: none;
     }
 
-    .add-contact-left-box{
+    .add-contact-left-box {
         padding: 16px 16px;
         height: 30vh;
     }
 
-    .add-contact-right-box{
+    .add-contact-right-box {
         padding-top: 0px;
         padding-right: 0px;
         height: calc(70vh - 198px);
     }
 
-    .add-contact-underline{
+    .add-contact-underline {
         margin-bottom: 32px;
     }
 
-    .btn-close-container{
+    .btn-close-container {
         display: none;
     }
 
-    .btn-close-container-top{
+    .btn-close-container-top {
         display: flex;
         justify-content: end;
     }
 
-    .btn-close-box-top{
+    .btn-close-box-top {
         border-radius: 50px;
         padding-top: 4px;
         padding-right: 4px;
         padding-left: 4px;
-    }   
+    }
 
-    .btn-close-box-top:hover{
+    .btn-close-box-top:hover {
         cursor: pointer;
     }
 
-    .btn-close-box-top:active{
+    .btn-close-box-top:active {
         background-color: #29ABE2;
     }
 
-    .close-img{
+    .close-img {
         height: 16px;
         width: 16px;
     }
 
-    .right-box-container{
+    .right-box-container {
         padding-top: 60px;
         padding-left: 16px;
         padding-right: 16px;
@@ -436,15 +436,15 @@ input::placeholder{
         justify-content: center;
     }
 
-    .form-ctrl-container{
+    .form-ctrl-container {
         justify-content: center;
     }
 
-    .btn-cancel{
+    .btn-cancel {
         display: none;
     }
 
-    .person-container{
+    .person-container {
         border: 3px solid white;
         width: 100px;
         height: 100px;
@@ -453,71 +453,81 @@ input::placeholder{
 
     }
 
-    .person-container img{
+    .person-container img {
         height: 50px;
         width: 50px;
     }
 
-    .bg-input{
+    .bg-input {
         width: 100%;
         font-size: 16px;
         padding: 8px 8px;
     }
 
-    .left-box-content{
+    .left-box-content {
         min-height: 100%;
         gap: 0px;
     }
 
-    .dialog-contact{
-        transform:translate(-50%, 100%);
+    .dialog-contact {
+        transform: translate(-50%, 100%);
     }
 
-    .dialogOpened{
+    .dialogOpened {
         transform: translateX(-50%) translateY(-50%);
     }
 
-    .dialogClosed{
+    .dialogClosed {
         transform: translateX(-50%) translateY(100%);
     }
 
-    .dialog-msg{
+    .dialog-msg {
         transform: translateX(-50%) translateY(500%);
-    }   
+    }
 
-    .dialog-msg span{
+    .dialog-msg span {
         font-size: 14px;
     }
 
-    .msg-opened{
+    .msg-opened {
         transform: translateX(-50%) translateY(0px);
     }
 
-    .msg-closed{
+    .msg-closed {
         transform: translateX(-50%) translateY(500%);
     }
 
-    form{
+    form {
         width: 100%;
         gap: 18px;
         padding-top: 48px;
     }
 
-    .overlay-center{
+    .overlay-center {
         gap: 12px;
     }
 
-    .mail-info{
+    .mail-info {
         min-height: 55px;
+    }
+
+    .deleteProfileImg {
+        height: 12px;
+        color: white;
+    }
+
+    .deleteProfileImg img {
+        width: 24px;
+        height: 24px;
     }
 }
 
-@media(max-width:550px){
-    .dialog-contact{
+@media(max-width:550px) {
+    .dialog-contact {
         min-width: 300px;
     }
 
-    form{
+    form {
         gap: 12px;
     }
 }

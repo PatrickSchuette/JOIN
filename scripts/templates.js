@@ -94,7 +94,7 @@ function getTemplateEditDialog(obj) {
                 <form id="profileForm" onsubmit="saveChangedData('${obj.mail}'); return false" autocomplete="off" novalidate>
                     <div class="mail-info">
                         <input type="text" required placeholder="Name" maxlength="25" class="bg-input bg-img-name" id="edit_name" value="${obj.name}"
-                        onfocus="fieldMailOnFocus('edit_name', 'name_span', 'btn_edit_form')"
+                        onfocus="fieldMailOnFocus('edit_name', 'edit_span_name', 'btn_edit_form')"
                         onblur="checkNameOnDialog('edit_name', 'edit_span_name', 'btn_edit_form')">
                         <span id="edit_span_name" class="info-span hidden">Invalid Name</span>
                     </div>

@@ -4,18 +4,17 @@
  * @returns {void}
  */
 async function showActiveProfile() {
+    await createArrayOfContacts();
     const loggedUserString = sessionStorage.getItem('loggedInUser');
-
     if (!loggedUserString) return;
     const loggedUser = JSON.parse(loggedUserString);
-
     let userObj = joinContacts.find(c => c.mail === loggedUser.mail);
 
     if (!userObj) {createContactofAccount(loggedUser);}
     renderEditDialog(userObj.mail);
 
     if (typeof initProfilePicturePicker === "function") {initProfilePicturePicker();}
-    
+    toggleSubmenu();
     openDialogEditContact(userObj.mail);
     setShowActiveProfile(userObj.mail);
 }
