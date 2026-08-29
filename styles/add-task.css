@@ -293,3 +293,7 @@ main {
     overflow-y: auto;
     /* Erlaubt Scrollen, falls es extrem viele Elemente werden */
 }
+
+.n-Subtask{
+    padding-top: 20px;
+}
