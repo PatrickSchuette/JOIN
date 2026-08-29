@@ -240,8 +240,8 @@ function createViewerInfo(img) {
 function createZoomControls(...classNames) {
     const wrap = document.createElement("div");
     wrap.classList.add("viewer-zoom-controls", ...classNames);
-    wrap.appendChild(createZoomButton("+", 0.1));
-    wrap.appendChild(createZoomButton("−", -0.1));
+    wrap.appendChild(createZoomButton("viewer-zoomIn", 0.1));
+    wrap.appendChild(createZoomButton("viewer-zoomOut", -0.1));
     return wrap;
 }
 
@@ -253,13 +253,11 @@ function createZoomControls(...classNames) {
 function createHeaderRightControls(img) {
     const wrap = document.createElement("div");
     wrap.classList.add("viewer-header-right");
-    const dl = document.createElement("button");
-    dl.classList.add("viewer-download");
-    dl.textContent = "⬇";
+    const dl = document.createElement("button");createNavButton
+    dl.classList.add("viewer-btn", "viewer-download");
     dl.onclick = function () {downloadTaskImage(img.base64, img);};
     const close = document.createElement("button");
-    close.classList.add("viewer-close");
-    close.textContent = "✖";
+    close.classList.add("viewer-btn", "viewer-close");
     close.onclick = function () {viewerInstance.hide();};
     wrap.append(dl, close);
     return wrap;
@@ -280,16 +278,14 @@ function createViewerHeader(img) {
 }
 
 /**
- * Creates a single navigation button with the given class, label and click handler.
+ * Creates a single navigation button with the given class and click handler.
  * @param {string} className
- * @param {string} label
  * @param {Function} onClick
  * @returns {HTMLElement}
  */
-function createNavButton(className, label, onClick) {
+function createNavButton(className, onClick) {
     const btn = document.createElement("button");
-    btn.classList.add(className);
-    btn.textContent = label;
+    btn.classList.add("viewer-btn", className);
     btn.onclick = onClick;
     return btn;
 }
@@ -301,8 +297,8 @@ function createNavButton(className, label, onClick) {
 function createViewerSideNav() {
     const wrap = document.createElement("div");
     wrap.classList.add("desktop-only");
-    wrap.appendChild(createNavButton("viewer-left", "<", viewerPrev));
-    wrap.appendChild(createNavButton("viewer-right", ">", viewerNext));
+    wrap.appendChild(createNavButton("viewer-left", viewerPrev));
+    wrap.appendChild(createNavButton("viewer-right", viewerNext));
     return wrap;
 }
 
@@ -313,22 +309,21 @@ function createViewerSideNav() {
 function createViewerFooter() {
     const footer = document.createElement("div");
     footer.classList.add("viewer-footer", "mobile-only");
-    footer.appendChild(createNavButton("viewer-footer-nav", "<", viewerPrev));
+    footer.appendChild(createNavButton("viewer-footer-nav-prev", viewerPrev));
     footer.appendChild(createZoomControls());
-    footer.appendChild(createNavButton("viewer-footer-nav", ">", viewerNext));
+    footer.appendChild(createNavButton("viewer-footer-nav-next", viewerNext));
     return footer;
 }
 
 /**
  * Creates a single zoom button wired to the viewer instance.
- * @param {string} label
+ * @param {string} iconClass
  * @param {number} ratio
  * @returns {HTMLElement}
  */
-function createZoomButton(label, ratio) {
+function createZoomButton(iconClass, ratio) {
     const btn = document.createElement("button");
-    btn.classList.add("viewer-zoom");
-    btn.textContent = label;
+    btn.classList.add("viewer-btn", iconClass);
     btn.onclick = function () {
         viewerInstance.zoom(ratio);
     };

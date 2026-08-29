@@ -98,7 +98,6 @@
     background: #c00;
     color: white;
     border: none;
-
 }
 
 .task-gallery-tooltip {
@@ -172,7 +171,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), transparent);
+    background: #1a5276;
 }
 
 .viewer-info {
@@ -187,8 +186,23 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
-    white-space: nowrap;
     gap: 6px;
+}
+
+.viewer-btn {
+    background-color: transparent;
+    aspect-ratio: 1/1;
+    color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
+    width: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .viewer-zoom-controls {
@@ -199,15 +213,12 @@
     transform: translateX(-50%);
 }
 
-.viewer-zoom {
-    background: #0008;
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 1;
+.viewer-zoomIn {
+    background-image: url("../assets/img/zoom_in.svg");
+}
+
+.viewer-zoomOut {
+    background-image: url("../assets/img/zoom_out.svg");
 }
 
 .viewer-header-right {
@@ -215,20 +226,12 @@
     gap: 8px;
 }
 
-.viewer-download,
-.viewer-close {
-    background: #0008;
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
+.viewer-download {
+    background-image: url("../assets/img/download.svg");
 }
 
-.viewer-close::before {
-    content: none;
+.viewer-close {
+    background-image: url("../assets/img/close.svg");
 }
 
 .viewer-left,
@@ -236,21 +239,16 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #0008;
-    color: #fff;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 20px;
 }
 
 .viewer-left {
     left: 16px;
+    background-image: url("../assets/img/arrow-previous.svg");
 }
 
 .viewer-right {
     right: 16px;
+    background-image: url("../assets/img/arrow-next.svg");
 }
 
 .viewer-footer {
@@ -259,25 +257,19 @@
     left: 0;
     right: 0;
     height: 56px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
     background: #1a5276;
-    display: none;
 }
 
-.viewer-header {
-    background: #1a5276;
+.viewer-footer-nav-prev {
+    background-image: url("../assets/img/arrow-previous.svg");
 }
 
-.viewer-footer-nav {
-    background: transparent;
-    color: #fff;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 8px 12px;
+.viewer-footer-nav-next {
+    background-image: url("../assets/img/arrow-next.svg");
 }
 
 .mobile-only {
@@ -334,9 +326,7 @@
         max-width: 45vw;
     }
 
-    .viewer-download,
-    .viewer-close {
-        font-size: 16px;
+    .viewer-btn {
         padding: 6px 10px;
     }
 
