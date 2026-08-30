@@ -250,6 +250,7 @@ button {
     width: 100%;
     max-height: 75vh;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
@@ -333,7 +334,7 @@ textarea {
 .contacts-icons {
     padding-left: 16px;
     max-height: 150px;
-    width: 100%;
+    width: calc(100% - 12px);
     overflow-y: auto;
 }
 
@@ -431,6 +432,7 @@ textarea {
 .added-tasks {
     max-height: 150px;
     overflow-y: auto;
+    margin-right: 8px;
 }
 
 @media(max-width:650px) {

@@ -272,7 +272,6 @@ main {
     }
 }
 
-/* Basis-Status: Unsichtbar und nimmt keinen Platz weg */
 #contact_icons,
 .added-tasks {
     max-height: 0;
@@ -282,16 +281,13 @@ main {
     margin-top: 0px;
 }
 
-/* Sichtbarer Status: Wird per JavaScript aktiviert */
 #contact_icons.show,
 .added-tasks.show {
     max-height: 150px;
-    /* Groß genug für ein paar Zeilen/Icons */
     opacity: 1;
     margin-top: 8px;
-    /* Schiebt die Elemente darunter smooth nach unten */
     overflow-y: auto;
-    /* Erlaubt Scrollen, falls es extrem viele Elemente werden */
+    width: calc(100% - 16px);
 }
 
 .n-Subtask{
